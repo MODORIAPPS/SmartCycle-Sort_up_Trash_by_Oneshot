@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/CameraActivity.dart';
+import 'package:smartcycle/HistoryCard.dart';
+import 'package:smartcycle/model/SearchHistory.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,6 +21,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var history = new List<SearchHistory>();
+
+  // Future로 서버에 데이터 요청후, 콜백에 리스트뷰 생성.
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,23 +89,42 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(
             height: 20,
           ),
-
           Padding(
             padding: EdgeInsets.only(left: 15),
             child: Text(
               "최근 검색한 재활용품",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
             ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: searchItems.length,
+              itemBuilder: (context, index) {
+                var product = searchItems[index];
+                return HistoryCard(
+                  id: product.id,
+                  itemName: product.itemName,
+                  date: product.date,
+                  itemImage: product.itemImage,
+                );
+              },
+            ),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
+
         onPressed: () {
-          _showSearchSheet(this.context);
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => CameraActivity()),
+          );
         },
         tooltip: 'openSearch',
-        child: Icon(Icons.camera),
+        child: Icon(Icons.photo_camera),
+
+
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
