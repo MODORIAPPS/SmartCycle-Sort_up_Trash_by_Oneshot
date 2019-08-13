@@ -1,79 +1,83 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:permission/permission.dart';
-
-void main() async {
-  var permissionNames = await Permission.requestPermissions([PermissionName.Camera, PermissionName.Camera]);
-  Permission.openSettings();
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
-  runApp(CameraActivity(
-    camera: firstCamera,
-  ));
-}
 
 class CameraActivity extends StatefulWidget {
-  final CameraDescription camera;
-
-  const CameraActivity({
-    Key key,
-    @required this.camera,
-  }) : super(key: key);
-
   @override
   _CameraActivityState createState() => _CameraActivityState();
 }
 
 class _CameraActivityState extends State<CameraActivity> {
-  CameraController _controller;
-  Future<void> _initializeControllerFuture;
-
+  List<CameraDescription> cameras;
+  CameraController controller;
+  bool _isReady = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "카메라",
-            style: TextStyle(color: Colors.blue),
-          ),
-          iconTheme: IconThemeData(color: Colors.blue),
-          backgroundColor: Colors.white,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.info_outline),
-              color: Colors.blue,
-              onPressed: () {
-                print("!!");
-              },
-            )
-          ],
-        ),
-        body: FutureBuilder<void>(
-          future: _initializeControllerFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              // If the Future is complete, display the preview.
-              return CameraPreview(_controller);
-            } else {
-              // Otherwise, display a loading indicator.
-              return Center(child: CircularProgressIndicator());
-            }
-          },
-        ));
+    return new Scaffold(
+      body: new Stack(
+        children: <Widget>[
+          (!_isReady)
+              ? new Container(
+                  child: Text("Dd"),
+                )
+              : buildCameraView(controller),
+        ],
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    // controller dispose;
+  }
+
+  Future<void> _setupCameras() async {
+    try {
+      // initialize cameras.
+      cameras = await availableCameras();
+      // initialize camera controllers.
+      controller = new CameraController(cameras[0], ResolutionPreset.medium);
+      await controller.initialize();
+    } on CameraException catch (_) {
+      // do something on error.
+    }
+    if (!mounted) return;
+    setState(() {
+      _isReady = true;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(widget.camera, ResolutionPreset.high);
-
-    _initializeControllerFuture = _controller.initialize();
+    _setupCameras();
   }
+}
+
+Widget buildCameraView(CameraController controller) {
+  return new Container(
+    child: new Row(
+      children: [
+        new Expanded(
+          child: new Column(
+            children: <Widget>[
+              new AspectRatio(
+                aspectRatio: controller.value.aspectRatio,
+                child: new CameraPreview(controller),
+              ),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    RaisedButton(
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }
