@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:smartcycle/permission_service.dart';
+import 'permission_service.dart';
 
 class CameraActivity extends StatefulWidget {
   @override
@@ -14,12 +17,16 @@ class _CameraActivityState extends State<CameraActivity> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      appBar: AppBar(
+        title: Text("사진"),
+      ),
       body: new Stack(
         children: <Widget>[
           (!_isReady)
               ? new Container(
-                  child: Text("Dd"),
-                )
+            color: Colors.black,
+            child: Text(""),
+          )
               : buildCameraView(controller),
         ],
       ),
@@ -51,6 +58,13 @@ class _CameraActivityState extends State<CameraActivity> {
   @override
   void initState() {
     super.initState();
+    PermissionsService().requestPermission(
+        permission: PermissionGroup.camera,
+        onPermissionDenied: () {
+          _showDialog(context);
+        });
+
+
     _setupCameras();
   }
 }
@@ -68,10 +82,7 @@ Widget buildCameraView(CameraController controller) {
               ),
               Container(
                 child: Row(
-                  children: <Widget>[
-                    RaisedButton(
-                    )
-                  ],
+                  children: <Widget>[RaisedButton()],
                 ),
               )
             ],
@@ -80,4 +91,24 @@ Widget buildCameraView(CameraController controller) {
       ],
     ),
   );
+}
+
+void _showDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("권한필요"),
+          content: new Text("이 앱을 정상적으로 실행하기 위해 권한이 필요합니다."),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("닫기"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      });
 }
