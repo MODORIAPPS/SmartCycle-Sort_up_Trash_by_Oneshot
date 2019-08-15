@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartcycle/CameraActivity.dart';
 import 'package:smartcycle/HistoryCard.dart';
+import 'package:smartcycle/RecycleDetail.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 
 void main() => runApp(MyApp());
@@ -40,7 +41,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(
                       height: 30,
                     ),
-                    Image.asset("assets/images/icecream.png")
+                    Image.asset("assets/images/icecream.png"),
+                    RaisedButton(
+                      child: Text("임시 버튼"),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) =>
+                              RecycleDetail(
+                                keyword: "페트병",
+                              )),
+                        );
+                      },
+                    )
                   ],
                 ),
               ),

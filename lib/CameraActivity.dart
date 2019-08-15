@@ -35,8 +35,8 @@ class _CameraActivityState extends State<CameraActivity> {
 
   @override
   void dispose() {
+    controller?.dispose();
     super.dispose();
-    // controller dispose;
   }
 
   Future<void> _setupCameras() async {
@@ -58,14 +58,21 @@ class _CameraActivityState extends State<CameraActivity> {
   @override
   void initState() {
     super.initState();
-    PermissionsService().requestPermission(
-        permission: PermissionGroup.camera,
-        onPermissionDenied: () {
-          _showDialog(context);
-        });
 
+    var value = PermissionsService().hasPermission(PermissionGroup.camera);
+    value.then((value) {
+      if (!value) {
+        PermissionsService().requestPermission(
+            permission: PermissionGroup.camera,
+            onPermissionGranted: _setupCameras(),
+            onPermissionDenied: () {
+              _showDialog(context);
+            });
 
-    _setupCameras();
+        return;
+      }
+      _setupCameras();
+    });
   }
 }
 

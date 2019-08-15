@@ -24,10 +24,12 @@ class PermissionsService {
 
   /// (권한, 거절시 실행할 메소드)
   Future<bool> requestPermission(
-      {PermissionGroup permission, Function onPermissionDenied}) async {
+      {PermissionGroup permission, Function onPermissionDenied, Future onPermissionGranted}) async {
     var granted = await _requestPermission(permission);
     if (!granted) {
       onPermissionDenied();
+    } else if (granted) {
+      onPermissionGranted;
     }
     return granted;
   }
