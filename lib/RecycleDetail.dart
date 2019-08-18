@@ -1,21 +1,27 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:smartcycle/model/TrashType.dart';
 import 'model/RcleDetail.dart';
 import 'styles/CustomStyle.dart';
+import 'package:http/http.dart' as http;
 
 // sampleData inserted.
-RclDetail detailData = detailItems;
+//RclDetail detailData = detailItems;
+var detailData;
+bool okay = false;
 
 class RecycleDetail extends StatelessWidget {
   final String keyword;
+  final int numberCode;
 
-  RecycleDetail({this.keyword});
+  RecycleDetail({this.keyword, this.numberCode});
 
   // 키워드 대로 요청
 
   @override
   Widget build(BuildContext context) {
-    print("받은 키워드  : " + keyword);
+    //print("받은 키워드  : " + keyword);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -26,14 +32,18 @@ class RecycleDetail extends StatelessWidget {
         ),
         elevation: 2,
       ),
-      body: DetailPage(),
+      body: DetailPage(number: numberCode,),
     );
   }
 }
 
 class DetailPage extends StatelessWidget {
+  final number;
+  DetailPage({this.number});
+
   @override
   Widget build(BuildContext context) {
+    getData(number);
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(left: 15, top: 10, right: 15),
@@ -62,17 +72,46 @@ class DetailPage extends StatelessWidget {
   }
 }
 
+void _onLoading(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    child: new Dialog(
+      child: new Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          new CircularProgressIndicator(),
+          new Text("Loading"),
+        ],
+      ),
+    ),
+  );
+}
+
+Future<bool> getData(int number) async {
+  http.Response response = await http.get(
+      Uri.encodeFull('http://172.16.0.231:8080/getDetail/&TYPE=1'),
+      headers: {"Accept": "application/json"});
+
+  print("받은 쓰레기 이름" + TrashType().getTrashName(number));
+  print(response.body);
+
+  detailData = jsonDecode(response.body);
+  okay = true;
+  print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
+}
+
 Widget _title() {
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Text(
-        detailData.mainTitle,
+        detailData["mainTitle"],
         style: header1,
       ),
       Text(
-        detailData.subTitle,
+        detailData["subTitle"],
         style: normal,
       )
     ],
@@ -94,7 +133,7 @@ Widget _element() {
             width: 5,
           ),
           Text(
-            detailData.elementTitle,
+            detailData["elementTitle"],
             style: header2,
           ),
         ],
@@ -106,7 +145,7 @@ Widget _element() {
         width: double.infinity,
         height: 200,
         fit: BoxFit.contain,
-        image: NetworkImage(detailData.elementImage),
+        image: NetworkImage(detailData["elementImage"]),
       )
     ],
   );
@@ -124,14 +163,17 @@ Widget _step1() {
         height: 5,
       ),
       Text(
-        detailData.step1Content,
+        detailData["step1Content"],
         style: normal,
       ),
       SizedBox(
         height: 5,
       ),
       Row(
-        children: <Widget>[Icon(Icons.search), Text(detailData.step1Content)],
+        children: <Widget>[
+          Icon(Icons.search),
+          Text(detailData["step1Content"])
+        ],
       )
     ],
   );
@@ -149,14 +191,14 @@ Widget _step2() {
         height: 5,
       ),
       Text(
-        detailData.step2Content,
+        detailData["step2Content"],
         style: normal,
       ),
       SizedBox(
         height: 5,
       ),
       Row(
-        children: <Widget>[Icon(Icons.search), Text(detailData.step2tip)],
+        children: <Widget>[Icon(Icons.search), Text(detailData["step2tip"])],
       )
     ],
   );
@@ -171,7 +213,7 @@ Widget _doYouKnow() {
         style: header2,
       ),
       Text(
-        detailData.knowContent,
+        detailData["knowContent"],
         style: normal,
       ),
       SizedBox(
@@ -187,7 +229,7 @@ Widget _doYouKnow() {
             width: 5,
           ),
           Text(
-            detailData.knowItems[0],
+            detailData["knowItems"],
             style: header2,
           )
         ],

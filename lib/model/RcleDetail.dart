@@ -17,20 +17,21 @@ class RclDetail {
   String knowContent;
   List<String> knowItems;
 
-  RclDetail(
-      {this.mainTitle,
-      this.subTitle,
-      this.elementTitle,
-      this.elementItems,
-      this.elementImage,
-      this.step1Content,
-      this.step1tip,
-      this.step1Image,
-      this.step2Content,
-      this.step2tip,
-      this.step2Image,
-      this.knowContent,
-      this.knowItems});
+  RclDetail({this.mainTitle,
+    this.subTitle,
+    this.elementTitle,
+    this.elementItems,
+    this.elementImage,
+    this.step1Content,
+    this.step1tip,
+    this.step1Image,
+    this.step2Content,
+    this.step2tip,
+    this.step2Image,
+    this.knowContent,
+    this.knowItems});
+
+
 }
 
 List<String> sampleKnow = ["약 500년"];

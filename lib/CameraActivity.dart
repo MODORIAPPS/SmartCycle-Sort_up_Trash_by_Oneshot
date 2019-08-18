@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:smartcycle/CameraResultActivity.dart';
 import 'package:smartcycle/permission_service.dart';
 import 'permission_service.dart';
 
@@ -24,10 +25,10 @@ class _CameraActivityState extends State<CameraActivity> {
         children: <Widget>[
           (!_isReady)
               ? new Container(
-            color: Colors.black,
-            child: Text(""),
-          )
-              : buildCameraView(controller),
+                  color: Colors.black,
+                  child: Text(""),
+                )
+              : buildCameraView(controller, context),
         ],
       ),
     );
@@ -76,20 +77,49 @@ class _CameraActivityState extends State<CameraActivity> {
   }
 }
 
-Widget buildCameraView(CameraController controller) {
+Widget buildCameraView(CameraController controller, BuildContext context) {
   return new Container(
     child: new Row(
       children: [
         new Expanded(
           child: new Column(
             children: <Widget>[
-              new AspectRatio(
-                aspectRatio: controller.value.aspectRatio,
+              AspectRatio(
+                aspectRatio: 1 / 1.34,
                 child: new CameraPreview(controller),
               ),
-              Container(
-                child: Row(
-                  children: <Widget>[RaisedButton()],
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.camera_enhance,
+                          color: Colors.white,
+                        ),
+                      ),
+                      FloatingActionButton(
+                        /// 로직 없이 일단은 그냥 바로 다음으로 넘긴다.
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => CameraResult()),
+                          );
+                        },
+                        tooltip: 'Camera',
+                        child: Icon(Icons.camera),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.camera_enhance,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],

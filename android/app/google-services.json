@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1083399708208",
+    "firebase_url": "https://smartcycle-283e6.firebaseio.com",
+    "project_id": "smartcycle-283e6",
+    "storage_bucket": "smartcycle-283e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083399708208:android:4827429a0fc35bc8",
+        "android_client_info": {
+          "package_name": "com.dimipo.smartcycle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1083399708208-qkddt9upp6g6tn5b3onuk8rp9gvt18fv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dimipo.smartcycle",
+            "certificate_hash": "360a6288fa6d6fc351079d41afe3b23eda9b56a2"
+          }
+        },
+        {
+          "client_id": "1083399708208-a4h7k640k6h5dc10gbsq15etchmnkbin.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDewhAPzbulkKxE0QzINOsXniIgrLuBFtg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1083399708208-a4h7k640k6h5dc10gbsq15etchmnkbin.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

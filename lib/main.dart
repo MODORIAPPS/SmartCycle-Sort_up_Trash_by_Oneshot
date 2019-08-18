@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/UserPage.dart';
+import 'package:smartcycle/styles/CustomStyle.dart';
 import 'package:smartcycle/CameraActivity.dart';
 import 'package:smartcycle/HistoryCard.dart';
 import 'package:smartcycle/RecycleDetail.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
+import 'package:smartcycle/model/TrashType.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,6 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -32,6 +36,34 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "Smartcycle",
+                  style: header1,
+                ),
+                InkWell(
+                  child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: new NetworkImage(
+                                  "https://i.imgur.com/BoN9kdC.png")))),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => UserPage()),
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
           Row(
             children: <Widget>[
               Flexible(
@@ -46,13 +78,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text("임시 버튼"),
                       onPressed: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) =>
-                              RecycleDetail(
-                                keyword: "페트병",
-                              )),
+                          MaterialPageRoute(
+                              builder: (context) => RecycleDetail(
+                                    keyword: "페트병",
+                                  )),
                         );
                       },
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -108,24 +140,10 @@ class _MyHomePageState extends State<MyHomePage> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: searchItems.length,
-              itemBuilder: (context, index) {
-                var product = searchItems[index];
-                return HistoryCard(
-                  id: product.id,
-                  itemName: product.itemName,
-                  date: product.date,
-                  itemImage: product.itemImage,
-                );
-              },
-            ),
-          )
+          _historyGridView(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => CameraActivity()),
@@ -133,13 +151,45 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         tooltip: 'openSearch',
         child: Icon(Icons.photo_camera),
-
-
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
+
+Widget _historyGridView() {
+  return Expanded(
+    child: GridView.count(
+      crossAxisCount: 2,
+      children: List.generate(searchItems.length, (index) {
+        var history = searchItems[index];
+        return Center(
+          child: HistoryCard(
+              itemName: history.itemName,
+              itemImage: history.itemImage,
+              date: history.date),
+        );
+      }),
+    ),
+  );
+}
+
+// Widget _ListView() {
+//   return Expanded(
+//     child: ListView.builder(
+//       itemCount: searchItems.length,
+//       itemBuilder: (context, index) {
+//         var product = searchItems[index];
+//         return HistoryListCard(
+//           id: product.id,
+//           itemName: product.itemName,
+//           date: product.date,
+//           itemImage: product.itemImage,
+//         );
+//       },
+//     ),
+//   );
+// }
 
 void _showSearchSheet(context) {
   showModalBottomSheet(
