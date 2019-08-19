@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/StartPage.dart';
 import 'package:smartcycle/UserPage.dart';
 import 'package:smartcycle/styles/CustomStyle.dart';
 import 'package:smartcycle/CameraActivity.dart';
@@ -82,6 +83,15 @@ class _MyHomePageState extends State<MyHomePage> {
                               builder: (context) => RecycleDetail(
                                     keyword: "페트병",
                                   )),
+                        );
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text("임시 버튼"),
+                      onPressed: () {
+                        // Google auth 로그인 상태 아닌 경우 로그인 창으로 이동(사실상 최초 실행시 소개 페이지와 같음)
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => StartPage()),
                         );
                       },
                     ),
