@@ -1,13 +1,17 @@
 import 'package:smartcycle/UserPage.dart';
 import 'package:flutter/material.dart';
+import 'package:smartcycle/styles/Styles.dart';
 
 class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("사용자 설정"),
+        title: Text("사용자 설정", style: appBarRegular,),
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black87),
       ),
+      
       body: UserSetting(),
     );
   }

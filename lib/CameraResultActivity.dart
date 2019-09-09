@@ -72,7 +72,7 @@ class _ResultPageState extends State<ResultPage> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                           builder: (context) =>
-                              RecycleDetail(numberCode: number)),
+                              RecycleDetail(itemID: number)),
                     );
                   },
                   color: Colors.green,
