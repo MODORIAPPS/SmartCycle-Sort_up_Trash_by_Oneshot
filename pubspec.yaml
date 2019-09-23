@@ -23,13 +23,20 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  camera:
+  camera: ^0.5.4+2
   path_provider:
   path:
   permission_handler: ^3.1.0
   http: ^0.12.0+1
   modal_progress_hud: ^0.1.3
   carousel_slider: ^1.3.0
+  googleapis: any
+  googleapis_auth: any
+  google_sign_in: any
+  qr_flutter: any
+  torch: ^0.1.1
+  url_launcher: ^5.1.3
+  image_picker: ^0.6.0+9
 
 
 

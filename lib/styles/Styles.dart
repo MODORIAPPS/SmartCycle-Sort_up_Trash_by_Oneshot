@@ -18,3 +18,20 @@ const TextStyle appBarRegular = TextStyle(color: Colors.black87, fontSize: 18, f
 const TextStyle startBold = TextStyle(color: Colors.white, fontSize: 27, fontWeight: FontWeight.bold, fontFamily: "NotoCjkKR",);
 const TextStyle startRegular = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: "NotoCjkKR", height: 1.2);
 const TextStyle startLight = TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w300, fontFamily: "NotoCjkKR", );
+
+
+// QrDialog()
+
+const TextStyle diaBold = TextStyle(color: Colors.white,
+  fontSize: 22,
+  fontWeight: FontWeight.bold,
+  fontFamily: "NotoCjkKR",);
+const TextStyle diaRegular = TextStyle(color: Colors.white,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    fontFamily: "NotoCjkKR",
+    height: 1.2);
+const TextStyle diaLight = TextStyle(color: Colors.white,
+  fontSize: 14,
+  fontWeight: FontWeight.w300,
+  fontFamily: "NotoCjkKR",);

@@ -14,7 +14,6 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(itemIndex);
     return Padding(
       padding: itemIndex % 2 == 0 ? EdgeInsets.only(left: 14, right: 7, top: 10) : EdgeInsets.only(right: 14, left: 7, top: 10),
       child: InkWell(
@@ -50,7 +49,6 @@ class HistoryCard extends StatelessWidget {
         onTap: () {
           /// todo
           var number = TrashType().getTrashNumber(itemName);
-          print(number);
 
           Navigator.of(context).push(
             MaterialPageRoute(

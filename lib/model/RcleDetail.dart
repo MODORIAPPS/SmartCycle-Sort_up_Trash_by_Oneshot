@@ -1,54 +1,103 @@
-class RclDetail {
-  String mainTitle;
-  String subTitle;
+import 'package:smartcycle/model/TrashItemDTO.dart';
 
-  String elementTitle;
-  List<String> elementItems;
-  String elementImage;
+class RclDetails {
+  final List<RclDetail> rcls;
 
-  String step1Content;
-  String step1tip;
-  String step1Image;
+  RclDetails({this.rcls});
 
-  String step2Content;
-  String step2tip;
-  String step2Image;
-
-  String knowContent;
-  List<String> knowItems;
-
-  RclDetail({this.mainTitle,
-    this.subTitle,
-    this.elementTitle,
-    this.elementItems,
-    this.elementImage,
-    this.step1Content,
-    this.step1tip,
-    this.step1Image,
-    this.step2Content,
-    this.step2tip,
-    this.step2Image,
-    this.knowContent,
-    this.knowItems});
-
-
+  factory RclDetails.fromJson(List<dynamic> parsedJson) {
+    List<RclDetail> rcls = new List<RclDetail>();
+    rcls = parsedJson.map((i) => RclDetail.fromJson(i)).toList();
+    return new RclDetails(
+      rcls: rcls,
+    );
+  }
 }
 
-List<String> sampleKnow = ["약 500년"];
-List<String> sampleItems1 = ["페트병 PET", "라벨지 비닐류", "뚜껑 플라스틱"];
-String sampleImage1 =
-    "https://images-na.ssl-images-amazon.com/images/I/819sPu1FTJL._SL1500_.jpg";
+class RclDetail {
+  // 쓰레기 분리수거 자세한 정보
 
-/// for only sample
-var detailItems = RclDetail(
-    mainTitle: "페트병을 분리하는 방법(500ml형)",
-    subTitle: "폴리에틸렌 테레프탈레이트(PET) 계",
-    elementTitle: "페트병을 구성하는 요소",
-    elementItems: sampleItems1,
-    elementImage: sampleImage1,
-    step1Content: "페트병안에 음료가 묻어있다면 모두 깨끗이 씻어내요.",
-    step1tip: "물기를 모두 제거하면 더욱 좋습니다.",
-    step2Content: "라벨지를 페트병으로부터 분리합니다.",
-    step2tip: "찌그러트리면 더 쉽게 떼어낼 수 있어요.",
-    knowContent: "페트병이 자연에서 완전히 분해되는데 까지 걸리는 시간",
-    knowItems: sampleKnow);
+  Information information;
+
+  String published_date;
+  String id;
+  String name;
+  String imageURL;
+
+  // __v
+  int v;
+
+  RclDetail({this.information,
+    this.published_date,
+    this.id,
+    this.name,
+    this.imageURL,
+    this.v});
+
+  factory RclDetail.fromJson(Map<dynamic, dynamic> json) {
+    return RclDetail(
+      information: Information.fromJson(json['information']),
+      published_date: json['published_date'] as String,
+      id: json['id'] as String,
+      name: json['name'] as String,
+      imageURL: json['imageURL'] as String,
+      v: json['__v'] as int,
+    );
+  }
+}
+
+class Information {
+  List<Composition> composition;
+  List<Step> step;
+  int compo_number;
+  int step_number;
+  String time_rot;
+
+  Information({this.compo_number,
+    this.step_number,
+    this.composition,
+    this.step,
+    this.time_rot});
+
+  factory Information.fromJson(Map<dynamic, dynamic> json) {
+    var compoList = json['composition'] as List;
+    print(compoList.runtimeType); //returns List<dynamic>
+    List<Composition> mCompoList =
+    compoList.map((i) => Composition.fromJson(i)).toList();
+
+    var stepList = json['step'] as List;
+    print(stepList.runtimeType); //returns List<dynamic>
+    List<Step> mStepList = stepList.map((i) => Step.fromJson(i)).toList();
+
+    return Information(
+        composition: mCompoList,
+        step: mStepList,
+        compo_number: json['compo_number'],
+        step_number: json['step_number'],
+        time_rot: json['time_rot']);
+  }
+}
+
+class Composition {
+  String part;
+  String value;
+
+  Composition({this.part, this.value});
+
+  factory Composition.fromJson(Map<String, dynamic> json) {
+    return Composition(part: json['part'], value: json['value']);
+  }
+}
+
+class Step {
+  String contents;
+  String imageURL_step;
+
+  Step({this.contents, this.imageURL_step});
+
+  factory Step.fromJson(Map<String, dynamic> json) {
+    return Step(
+        imageURL_step: json['imageURL_step'],
+        contents: json['contents']);
+  }
+}

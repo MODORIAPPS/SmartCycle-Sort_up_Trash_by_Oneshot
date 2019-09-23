@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/DoYouKnowDetail.dart';
+import 'package:smartcycle/IntroducePage.dart';
+import 'package:smartcycle/QrDialog.dart';
 import 'package:smartcycle/StartPage.dart';
 import 'package:smartcycle/UserPage.dart';
 import 'package:smartcycle/styles/CustomStyle.dart';
@@ -29,22 +32,150 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   var history = new List<SearchHistory>();
 
-  // Future로 서버에 데이터 요청후, 콜백에 리스트뷰 생성.
+  bool isOpened = false;
+  AnimationController _animationController;
+  Animation<Color> _buttonColor;
+  Animation<double> _animateIcon;
+  Animation<double> _translateButton;
+  Curve _curve = Curves.easeOut;
+  double _fabHeight = 56.0;
+
+  @override
+  initState() {
+    _animationController =
+    AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+      ..addListener(() {
+        setState(() {});
+      });
+    _animateIcon =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _buttonColor = ColorTween(
+      begin: Colors.blue,
+      end: Colors.red,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        0.00,
+        1.00,
+        curve: Curves.linear,
+      ),
+    ));
+    _translateButton = Tween<double>(
+      begin: _fabHeight,
+      end: -14.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        0.0,
+        0.75,
+        curve: _curve,
+      ),
+    ));
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  animate() {
+    if (!isOpened) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
+    isOpened = !isOpened;
+  }
+
+  Widget image() {
+    return Container(
+      child: new FloatingActionButton(
+        heroTag: "imageFab",
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => CameraActvity()),
+          );
+        },
+        tooltip: 'camera',
+        child: Icon(Icons.camera_alt),
+      ),
+    );
+  }
+
+  Widget qrCode() {
+    return Container(
+      child: new FloatingActionButton(
+          heroTag: "qrFab",
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  QrDialog(
+                    title: "QR코드",
+                    description: "이 QR코드를 기기의 카메라 앞에 대세요.",
+                    posiBtn: "알겠습니다.",
+                  ),
+            );
+          },
+          tooltip: 'qrCode',
+          child: Image.asset(
+            "assets/images/qrCode.png",
+            color: Colors.white,
+            width: 30,
+          )),
+    );
+  }
+
+  Widget toggle() {
+    return Container(
+      child: FloatingActionButton(
+        backgroundColor: _buttonColor.value,
+        onPressed: animate,
+        tooltip: 'open menu',
+        child: AnimatedIcon(
+          icon: AnimatedIcons.menu_close,
+          progress: _animateIcon,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
       floatingActionButton: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: FloatingActionButton(
-          child: const Icon(Icons.filter_tilt_shift),
-          onPressed: () {},
-        ),
-      ),
+          padding: const EdgeInsets.all(14.0),
+          child: new Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Transform(
+                transform: Matrix4.translationValues(
+                  0.0,
+                  _translateButton.value * 2.0,
+                  0.0,
+                ),
+                child: image(),
+              ),
+              Transform(
+                transform: Matrix4.translationValues(
+                  0.0,
+                  _translateButton.value,
+                  0.0,
+                ),
+                child: qrCode(),
+              ),
+              toggle(),
+            ],
+          )),
+
       // bottomNavigationBar: BottomAppBar(
       //   shape: CircularNotchedRectangle(),
       //   notchMargin: 5.0,
@@ -78,26 +209,38 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    // Container(
-                    //     width: 42,
-                    //     height: 42,
-                    //     decoration: new BoxDecoration(
-                    //         shape: BoxShape.circle,
-                    //         image: new DecorationImage(
-                    //             fit: BoxFit.fill,
-                    //             image: new AssetImage(
-                    //                 "assets/images/globe_earth.png")))),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5),
-                      child: Text(
-                        "SmartCycle",
-                        style: appBarRegular,
+                InkWell(
+                  child: Row(
+                    children: <Widget>[
+                      // Container(
+                      //     width: 42,
+                      //     height: 42,
+                      //     decoration: new BoxDecoration(
+                      //         shape: BoxShape.circle,
+                      //         image: new DecorationImage(
+                      //             fit: BoxFit.fill,
+                      //             image: new AssetImage(
+                      //                 "assets/images/globe_earth.png")))),
+                      Image.asset(
+                        "assets/images/SmartCycle_logo_skyblue.png",
+                        width: 35.0,
                       ),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text(
+                          "SmartCycle",
+                          style: appBarRegular,
+                        ),
+                      )
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => IntroducePage()),
+                    );
+                  },
                 ),
                 InkWell(
                   child: Container(
@@ -158,7 +301,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: mainBold,
             ),
           ),
-          _historyGridView(),
+          _historyGridView(context),
         ],
       ),
     );
@@ -245,22 +388,25 @@ Widget _row(BuildContext context) {
   );
 }
 
-Widget _historyGridView() {
+Widget _historyGridView(BuildContext context) {
   return Expanded(
-    child: GridView.count(
-      crossAxisCount: 2,
-      children: List.generate(searchItems.length, (index) {
-        var history = searchItems[index];
-        return Center(
-          child: HistoryCard(
-              itemName: history.itemName,
-              itemImage: history.itemImage,
-              date: history.date,
-              itemIndex: index),
-        );
-      }),
-    ),
-  );
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: GridView.count(
+          crossAxisCount: 2,
+          children: List.generate(searchItems.length, (index) {
+            var history = searchItems[index];
+            return Center(
+              child: HistoryCard(
+                  itemName: history.itemName,
+                  itemImage: history.itemImage,
+                  date: history.date,
+                  itemIndex: index),
+            );
+          }),
+        ),
+      ));
 }
 
 // Widget _ListView() {

@@ -10,12 +10,10 @@ import 'package:http/http.dart' as http;
 
 // sampleData inserted.
 //RclDetail detailData = detailItems;
-TrashItemDTO detailData;
+RclDetail rclData;
 bool okay = false;
 
 class RecycleDetail extends StatefulWidget {
-
-
   final String keyword;
   final int itemID;
 
@@ -27,19 +25,29 @@ class RecycleDetail extends StatefulWidget {
 
 class _RecycleDetailState extends State<RecycleDetail> {
   int itemId;
+
   _RecycleDetailState({this.itemId});
+
+
+  @override
+  void initState() {
+    okay = false;
+  }
 
   @override
   Widget build(BuildContext context) {
     print("받은 키워드  : " + itemId.toString());
 
+    print(okay);
     if (okay == false) {
       getData(itemId).then((value) {
         if (value != null) {
           okay = true;
-          print(value.toString());
+          //print(value.toString());
           setState(() {});
         }
+      }).catchError((onError) {
+        print("getData 에러 : " + onError.toString());
       });
     }
 
@@ -68,10 +76,10 @@ class DetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _title(),
-            // SizedBox(
-            //   height: 30,
-            // ),
-            // _element(),
+            SizedBox(
+              height: 30,
+            ),
+            _element(),
             // _step1(),
             // SizedBox(
             //   height: 30,
@@ -80,7 +88,7 @@ class DetailPage extends StatelessWidget {
             // SizedBox(
             //   height: 30,
             // ),
-            // _doYouKnow()
+            _doYouKnow()
           ],
         ),
       ),
@@ -89,16 +97,18 @@ class DetailPage extends StatelessWidget {
 }
 
 Future<Object> getData(int itemId) async {
-  print("요청 진입");
+  print("요청 진입 : " + itemId.toString());
   http.Response response = await http.get(
-      Uri.encodeFull('http://smartcycle.ljhnas.com:3000/api/trash/$itemId'),
+      Uri.encodeFull('http://smartcycle.ljhnas.com/api/trash/$itemId'),
       headers: {"Accept": "application/json"});
 
-  print("받은 쓰레기 이름" + TrashType().getTrashName(itemId));
+  //print("받은 쓰레기 이름" + TrashType().getTrashName(itemId));
   print(response.body);
-  List<TrashItem> data = json.decode(response.body);  
-  print(data[0].name);
+  final jsonData = json.decode(response.body.toString());
 
+  RclDetails data = RclDetails.fromJson(jsonData);
+  rclData = data.rcls[0];
+  print(data.rcls[0].name.toString());
 
   return response.body;
   //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
@@ -110,14 +120,13 @@ Widget _title() {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Text(
-        
-      "Ddd",
+        rclData.name + " 을(를) 분리수거 하는 방법",
         style: header1,
       ),
-      Text(
-        "이게 뭐야",
-        style: normal,
-      )
+//      Text(
+//        "이게 뭐야",
+//        style: normal,
+//      )
     ],
   );
 }
@@ -128,38 +137,33 @@ Widget _showProgress() {
   );
 }
 
-// Widget _element() {
-//   return Column(
-//     mainAxisAlignment: MainAxisAlignment.start,
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: <Widget>[
-//       Row(
-//         children: <Widget>[
-//           Icon(
-//             Icons.search,
-//             size: 28,
-//           ),
-//           SizedBox(
-//             width: 5,
-//           ),
-//           Text(
-//             detailData["elementTitle"],
-//             style: header2,
-//           ),
-//         ],
-//       ),
-//       SizedBox(
-//         height: 10,
-//       ),
-//       Image(
-//         width: double.infinity,
-//         height: 200,
-//         fit: BoxFit.contain,
-//         image: NetworkImage(detailData["elementImage"]),
-//       )
-//     ],
-//   );
-// }
+Widget _element() {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      Row(
+        children: <Widget>[
+          Icon(
+            Icons.search,
+            size: 28,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            rclData.name + "을(를) 구성하는 요소",
+            style: header2,
+          ),
+        ],
+      ),
+      SizedBox(
+        height: 10,
+      ),
+
+    ],
+  );
+}
 
 // Widget _step1() {
 //   return Column(
@@ -214,36 +218,36 @@ Widget _showProgress() {
 //   );
 // }
 
-// Widget _doYouKnow() {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: <Widget>[
-//       Text(
-//         "알고계셨나요?",
-//         style: header2,
-//       ),
-//       Text(
-//         detailData["knowContent"],
-//         style: normal,
-//       ),
-//       SizedBox(
-//         height: 10,
-//       ),
-//       Row(
-//         children: <Widget>[
-//           Icon(
-//             Icons.timelapse,
-//             size: 30,
-//           ),
-//           SizedBox(
-//             width: 5,
-//           ),
-//           Text(
-//             detailData["knowItems"],
-//             style: header2,
-//           )
-//         ],
-//       )
-//     ],
-//   );
-// }
+Widget _doYouKnow() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      Text(
+        "알고계셨나요?",
+        style: header2,
+      ),
+      Text(
+        rclData.name + "이(가) 자연에서 완전히 분해되기까지 걸리는 시간",
+        style: normal,
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      Row(
+        children: <Widget>[
+          Icon(
+            Icons.timelapse,
+            size: 30,
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            rclData.information.time_rot,
+            style: header2,
+          )
+        ],
+      )
+    ],
+  );
+}
