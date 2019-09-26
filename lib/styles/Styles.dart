@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:googleapis/drive/v2.dart';
 
 const TextStyle mainBold = TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold, fontFamily: "NotoCjkKR");
 const TextStyle mainRegular = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: "NotoCjkKR", height: 1.2);
@@ -34,4 +35,35 @@ const TextStyle diaRegular = TextStyle(color: Colors.white,
 const TextStyle diaLight = TextStyle(color: Colors.white,
   fontSize: 14,
   fontWeight: FontWeight.w300,
+  fontFamily: "NotoCjkKR",);
+
+
+// StartPage
+const TextStyle authBtn = TextStyle(color: Colors.black54,
+  fontSize: 20,
+  fontWeight: FontWeight.w600,
+  fontFamily: "NotoCjkKR",);
+const TextStyle authBold = TextStyle(color: Colors.white,
+  fontSize: 35,
+  fontWeight: FontWeight.bold,
+  fontFamily: "NotoCjkKR",);
+const TextStyle authRegular = TextStyle(color: Colors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+    fontFamily: "NotoCjkKR",
+    height: 1.2);
+
+// RecycleDetail
+const TextStyle rclBold = TextStyle(color: Colors.black,
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    fontFamily: "NotoCjkKR");
+const TextStyle rclRegular = TextStyle(color: Colors.black87,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    fontFamily: "NotoCjkKR",
+    height: 1.2);
+const TextStyle rclRate = TextStyle(color: Colors.black87,
+  fontSize: 20,
+  fontWeight: FontWeight.w700,
   fontFamily: "NotoCjkKR",);

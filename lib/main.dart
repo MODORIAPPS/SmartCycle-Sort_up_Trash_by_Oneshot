@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/DoYouKnowDetail.dart';
 import 'package:smartcycle/IntroducePage.dart';
 import 'package:smartcycle/QrDialog.dart';
 import 'package:smartcycle/StartPage.dart';
 import 'package:smartcycle/UserPage.dart';
+import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/styles/CustomStyle.dart';
 import 'package:smartcycle/CameraActivity.dart';
 import 'package:smartcycle/HistoryCard.dart';
@@ -13,8 +18,13 @@ import 'package:smartcycle/model/SearchHistory.dart';
 import 'package:smartcycle/model/TrashType.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smartcycle/styles/Styles.dart';
+import 'package:smartcycle/AuthUtils.dart';
 
 void main() => runApp(MyApp());
+
+bool doYouKnowGo = false;
+bool isUserAvail = false;
+var userProfileURL;
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -75,6 +85,30 @@ class _MyHomePageState extends State<MyHomePage>
         curve: _curve,
       ),
     ));
+
+//    var jsonData;
+//    getDoYouKnow().then((value) {
+//      jsonData = value;
+//      print(jsonData);
+//    });
+//    jsonData = json.decode(jsonData);
+//    List<DoYouKnow> data = DoYouKnows.fromJson(jsonData).datas;
+
+    // 유저 존재 여부 체크
+
+    AuthUtils().getAccessToken().then((value) {
+      if (value == null) {
+        isUserAvail = false;
+      } else {
+        isUserAvail = true;
+        AuthUtils().getUserPhoto().then((value) {
+          userProfileURL = value;
+        });
+      }
+    });
+
+    print(isUserAvail);
+
     super.initState();
   }
 
@@ -150,7 +184,6 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
       floatingActionButton: Padding(
           padding: const EdgeInsets.all(14.0),
           child: new Column(
@@ -175,30 +208,6 @@ class _MyHomePageState extends State<MyHomePage>
               toggle(),
             ],
           )),
-
-      // bottomNavigationBar: BottomAppBar(
-      //   shape: CircularNotchedRectangle(),
-      //   notchMargin: 5.0,
-      //   child: new Row(
-      //     mainAxisSize: MainAxisSize.max,
-      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //     children: <Widget>[
-      //       IconButton(
-      //         icon: Icon(Icons.settings),
-      //         onPressed: () {
-      //           // open Settings.dart
-      //           Navigator.of(context).push(
-      //             MaterialPageRoute(builder: (context) => UserPage()),
-      //           );
-      //         },
-      //       ),
-      //       IconButton(
-      //         icon: Icon(Icons.search),
-      //         onPressed: () {},
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -257,12 +266,14 @@ class _MyHomePageState extends State<MyHomePage>
                           ],
                           image: new DecorationImage(
                               fit: BoxFit.fill,
-                              image: new NetworkImage(
-                                  "http://www.jobnjoy.com/files/editor/1489453572220_1.jpg")))),
+                              image: isUserAvail
+                                  ? new NetworkImage(userProfileURL)
+                                  : AssetImage(
+                                  "assets/images/google_user_default.png")))),
                   onTap: () {
                     // Toast message
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => StartPage()),
+                      MaterialPageRoute(builder: (context) => AuthPage()),
                     );
                   },
                 )
@@ -281,16 +292,22 @@ class _MyHomePageState extends State<MyHomePage>
               ],
             ),
           ),
-          CarouselSlider(
-            height: 200.0,
-            enlargeCenterPage: true,
-            autoPlay: true,
-            initialPage: 0,
-            onPageChanged: (index) {
-              setState(() {});
-            },
-            items: <Widget>[_page1(context), _page2(), _page3()],
-          ),
+//          doYouKnowGo
+//              ? CarouselSlider(
+//                  height: 200.0,
+//                  enlargeCenterPage: true,
+//                  autoPlay: true,
+//                  initialPage: 0,
+//                  onPageChanged: (index) {
+//                    setState(() {});
+//                  },
+//                  items: <Widget>[
+//                    _page1(context, data[0]),
+//                    _page2(context, data[1]),
+//                    _page3(context, data[2])
+//                  ],
+//                )
+//              : Container(),
           SizedBox(
             height: 14,
           ),
@@ -337,8 +354,8 @@ Widget _row(BuildContext context) {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => RecycleDetail(
-                            keyword: "페트병",
-                          )),
+                        keyword: "페트병",
+                      )),
                 );
               },
             ),
@@ -347,7 +364,7 @@ Widget _row(BuildContext context) {
               onPressed: () {
                 // Google auth 로그인 상태 아닌 경우 로그인 창으로 이동(사실상 최초 실행시 소개 페이지와 같음)
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => StartPage()),
+                  MaterialPageRoute(builder: (context) => AuthPage()),
                 );
               },
             ),
@@ -409,23 +426,6 @@ Widget _historyGridView(BuildContext context) {
       ));
 }
 
-// Widget _ListView() {
-//   return Expanded(
-//     child: ListView.builder(
-//       itemCount: searchItems.length,
-//       itemBuilder: (context, index) {
-//         var product = searchItems[index];
-//         return HistoryListCard(
-//           id: product.id,
-//           itemName: product.itemName,
-//           date: product.date,
-//           itemImage: product.itemImage,
-//         );
-//       },
-//     ),
-//   );
-// }
-
 void _showSearchSheet(context) {
   showModalBottomSheet(
       context: context,
@@ -448,7 +448,7 @@ void _showSearchSheet(context) {
       });
 }
 
-Widget _page1(BuildContext context) {
+Widget _page1(BuildContext context, DoYouKnow know) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: InkWell(
@@ -484,14 +484,14 @@ Widget _page1(BuildContext context) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "이런 형태의 쓰레기는 어떻게 분리수거해야할까?",
+                        know.title,
                         style: mainRegular,
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
-                        "2020년 4월 3일",
+                        know.published_date,
                         style: mainLight,
                       )
                     ],
@@ -518,7 +518,7 @@ Widget _page1(BuildContext context) {
   );
 }
 
-Widget _page2() {
+Widget _page2(BuildContext context, DoYouKnow know) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
@@ -553,14 +553,14 @@ Widget _page2() {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "A better future for graduate-student mental health",
+                      know.title,
                       style: mainRegular,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      "04 September 2019",
+                      know.published_date,
                       style: mainLight,
                     )
                   ],
@@ -581,7 +581,7 @@ Widget _page2() {
   );
 }
 
-Widget _page3() {
+Widget _page3(BuildContext context, DoYouKnow know) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
@@ -616,14 +616,14 @@ Widget _page3() {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "First hint that body’s ‘biological age’ can be reversed",
+                      know.title,
                       style: mainRegular,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      "04 September 2019",
+                      know.published_date,
                       style: mainLight,
                     )
                   ],
@@ -643,3 +643,15 @@ Widget _page3() {
     ),
   );
 }
+
+//Future<String> getDoYouKnow() async {
+//  String loadStr = await rootBundle.loadString('assets/data/doYouKnow.json');
+//  print(loadStr);
+//  return loadStr;
+//}
+//  Stream<List<int>> stream = new File("assets/json/doYouKnow.json").openRead();
+//  StringBuffer buffer = new StringBuffer();
+//  stream.transform(utf8.decoder).transform(LineSplitter()).listen((data) {
+//    print("ReadData : $data");
+//    buffer.write(data);
+//  }, onDone: () => print(buffer.toString()), onError: (e) => print(e));

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -12,38 +13,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:url_launcher/url_launcher.dart';
 
-class StartPage extends StatelessWidget {
-  // GoogleSignIn _googleSignIn = new GoogleSignIn(
-  //   scopes: [
-
-  //   ],
-  // );
-  String access_key = "";
-
-  GoogleSignIn _googleSignIn = new GoogleSignIn(
-    scopes: [
-      'email',
-      'openid',
-      'profile',
-    ],
-  );
-
-  Future<void> _handleSignIn() async {
-    try {
-      GoogleSignInAccount account = await _googleSignIn.signIn();
-      GoogleSignInAuthentication authentication = await account.authentication;
-      access_key = authentication.accessToken;
-      print(account.toString());
-      print(authentication.toString());
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> _handleSignOut() async {
-    _googleSignIn.disconnect();
-  }
-
+class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +26,7 @@ class StartPage extends StatelessWidget {
                     image: DecorationImage(
                         alignment: Alignment(-.2, 0),
                         image: NetworkImage(
-                            'https://images.unsplash.com/photo-1564419429381-98dbcf916478?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'),
+                            'https://images.unsplash.com/photo-1569493086584-33e0b36f3145?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=701&q=80'),
                         fit: BoxFit.cover),
                   ),
                 )),
@@ -67,56 +37,81 @@ class StartPage extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 25, right: 25, top: 25, bottom: 20),
+              padding: EdgeInsets.only(
+                  left: 25, right: 25, top: 25, bottom: 20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            "SmartCycle과 함께 깨끗한 \n지구 만들기.",
-                            style: startBold,
+                          Expanded(
+                            child: Text(
+                              "SmartCycle과 함께 깨끗한 지구 만들기.",
+                              style: authBold,
+                            ),
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 15,
                       ),
                       Text(
                         "설치해주셔서 감사합니다.",
-                        style: startRegular,
+                        style: authRegular,
                       )
                     ],
                   ),
-                  RaisedButton(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Row(
-                        children: <Widget>[
-                          Image.asset(
-                            "assets/images/googleLogo.png",
-                            width: 50,
-                            height: 50,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: InkWell(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black12,
+                                  offset: Offset(0, 6),
+                                  blurRadius: 6)
+                            ]),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 15, top: 5, bottom: 5),
+                                child: Image.asset(
+                                  "assets/images/googleLogo.png",
+                                  width: 50,
+                                  height: 50,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: Text(
+                                  "구글 계정으로 로그인",
+                                  textAlign: TextAlign.center,
+                                  style: authBtn,
+                                ),
+                              ),
+                              SizedBox()
+                            ],
                           ),
-                          Text("구글 계정으로 시작하기")
-                        ],
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      /// Launch Google Auth API
-                      // Navigator.of(context).push(
-                      //   MaterialPageRoute(builder: (context) => IntroducePage()),
-                      // );
-                      _handleSignIn();
-                    },
-                  ),
-                  RaisedButton(
-                    child: Text("Google+ API"),
-                    onPressed: () {
-                      _launchURL();
-                    },
-                  ),
+                      onTap: () {
+                        _openGoogleAuth();
+                      },
+                    ),),
                   Column(
                     children: <Widget>[
                       InkWell(
@@ -124,9 +119,12 @@ class StartPage extends StatelessWidget {
                           "이용약관",
                           style: startLight,
                         ),
+                        onTap: () {
+                          launch("https://smartcycle.ljhnas.com/terms");
+                        },
                       ),
                       Text(
-                        "Photo by 'Boxed Water Is Better' on Unsplash",
+                        "Photo by 'Christopher Rusev' on Unsplash",
                         style: startLight,
                       ),
                     ],
@@ -152,17 +150,16 @@ class StartPage extends StatelessWidget {
 
 // }
 
-_launchURL() async {
-  String authUrl;
-  getGoogleAuthPage().then((value) {
-    authUrl = value;
-    launch("http://172.16.0.227:8080/getAccessToken");
+Future<String> _openGoogleAuth() async {
+  String data;
+  await launch("https://smartcycle.ljhnas.com/getGoogleAuth").then((value) {
+
   });
+  //print(data.toString());
+  return data;
 }
 
-Future<String> getGoogleAuthPage() async {
-  http.Response response = await http.Client().get(
-      "http://172.16.0.227:8080/getAccessToken");
-  print(response.body.toString());
-  return response.body.toString();
-}
+// GET /getGoogleAuth 의 응답 결과 예시
+// { "access_token": ya29.Il-PBzH0ujxpeon-TCBdu7eL9fydzpfKJmoGY5rrQTVp29ANANarLREQ6Ipo-iTgnHe_YNOLjrzBvsEe4W74-behloGRib5Z258uVa5lR5TGzTMZ8AkSn7sKLqrQDaKpJw,
+// "refresh_token" : 1/VKCgCK35dvRxZVp6xc-0zWizdSbX96enrvp_vHBQOMc,
+// "expires_in" : 3600 }
