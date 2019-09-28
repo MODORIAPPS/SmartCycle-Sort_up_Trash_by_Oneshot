@@ -9,7 +9,10 @@ const TextStyle settingBlue = TextStyle(color: Colors.blue, fontSize: 17, fontWe
 
  
 const TextStyle cardRegular = TextStyle(color: Colors.black87, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: "NotoCjkKR", height: 1.2);
-const TextStyle cardLight = TextStyle(color: Colors.black87, fontSize: 13, fontWeight: FontWeight.w300, fontFamily: "NotoCjkKR", );
+const TextStyle cardLight = TextStyle(color: Colors.black87,
+  fontSize: 14,
+  fontWeight: FontWeight.w600,
+  fontFamily: "NotoCjkKR",);
 
 
 const TextStyle appBarRegular = TextStyle(color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w700, fontFamily: "NotoCjkKR", );
@@ -47,11 +50,46 @@ const TextStyle authBold = TextStyle(color: Colors.white,
   fontSize: 35,
   fontWeight: FontWeight.bold,
   fontFamily: "NotoCjkKR",);
+
 const TextStyle authRegular = TextStyle(color: Colors.white,
     fontSize: 20,
     fontWeight: FontWeight.w500,
     fontFamily: "NotoCjkKR",
     height: 1.2);
+
+const TextStyle noDeviceAlert = TextStyle(color: Colors.redAccent,
+    fontSize: 17,
+    fontWeight: FontWeight.w800,
+    fontFamily: "NotoCjkKR",
+    height: 1.2);
+
+const TextStyle normalText = TextStyle(color: Colors.black87,
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    fontFamily: "NotoCjkKR",
+    height: 1.2);
+
+const TextStyle smallHigh = TextStyle(color: Colors.black87,
+    fontSize: 14,
+    fontWeight: FontWeight.w800,
+    fontFamily: "NotoCjkKR",
+    height: 1.2);
+
+const TextStyle completeHigh = TextStyle(color: Colors.black87,
+    fontSize: 17,
+    fontWeight: FontWeight.w800,
+    fontFamily: "NotoCjkKR",
+    height: 1.2);
+
+
+const TextStyle blueHigh = TextStyle(color: Colors.blue,
+    fontSize: 30,
+    fontWeight: FontWeight.w800,
+    fontFamily: "NotoCjkKR",
+    height: 1.2);
+
+
+
 
 // RecycleDetail
 const TextStyle rclBold = TextStyle(color: Colors.black,
@@ -67,3 +105,16 @@ const TextStyle rclRate = TextStyle(color: Colors.black87,
   fontSize: 20,
   fontWeight: FontWeight.w700,
   fontFamily: "NotoCjkKR",);
+
+// CameraActivity
+const TextStyle fabText = TextStyle(color: Colors.blue,
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  fontFamily: "NotoCjkKR",);
+
+
+// TutorialsPage
+const TextStyle tutoBold = TextStyle(color: Colors.blue,
+    fontSize: 25,
+    fontWeight: FontWeight.bold,
+    fontFamily: "NotoCjkKR");

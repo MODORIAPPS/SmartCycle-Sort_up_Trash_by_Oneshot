@@ -10,12 +10,15 @@ class HistoryCard extends StatelessWidget {
   final String itemImage;
   final int itemIndex;
 
-  HistoryCard({this.id, this.itemImage, this.date, this.itemName, this.itemIndex});
+  HistoryCard(
+      {this.id, this.itemImage, this.date, this.itemName, this.itemIndex});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: itemIndex % 2 == 0 ? EdgeInsets.only(left: 14, right: 7, top: 10) : EdgeInsets.only(right: 14, left: 7, top: 10),
+      padding: itemIndex % 2 == 0
+          ? EdgeInsets.only(left: 14, right: 7, top: 10)
+          : EdgeInsets.only(right: 14, left: 7, top: 10),
       child: InkWell(
         child: Container(
           width: double.infinity,
@@ -35,6 +38,26 @@ class HistoryCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
+
+              /*
+              *
+              * ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      alignment: Alignment(-.2, 0),
+                      image: NetworkImage(
+                          'https://media.nature.com/w800/magazine-assets/d41586-019-02584-7/d41586-019-02584-7_17110722.jpg'),
+                      fit: BoxFit.cover),
+                ),
+              )),
+              *
+              *
+              *
+              *
+              * */
+
               Text(
                 itemName,
                 style: settingBlue,

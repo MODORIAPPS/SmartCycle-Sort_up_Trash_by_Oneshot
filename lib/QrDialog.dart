@@ -69,7 +69,7 @@ class QrDialog extends StatelessWidget {
               // ),
               //SizedBox(height: 15.0),
               QrImage(
-                data: "Hello from this QR",
+                data: url,
                 size: 0.5 * MediaQuery
                     .of(context)
                     .size
@@ -81,7 +81,7 @@ class QrDialog extends StatelessWidget {
               ),
               Text("더 상세한 정보를 얻고 싶다면 카메라에 QR코드를 보여주세요.",
                   textAlign: TextAlign.center, style: mainBold),
-              SizedBox(height: 25.0),
+              SizedBox(height: 10.0),
               SizedBox(
                 width: double.infinity,
                 child: RaisedButton(

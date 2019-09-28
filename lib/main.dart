@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/DoYouKnowDetail.dart';
-import 'package:smartcycle/IntroducePage.dart';
+import 'package:smartcycle/TutorialsPage.dart';
 import 'package:smartcycle/QrDialog.dart';
-import 'package:smartcycle/StartPage.dart';
+import 'package:smartcycle/AuthPage.dart';
 import 'package:smartcycle/UserPage.dart';
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/styles/CustomStyle.dart';
@@ -19,12 +19,19 @@ import 'package:smartcycle/model/TrashType.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import 'package:smartcycle/AuthUtils.dart';
+import 'package:http/http.dart' as http;
+
+import 'model/RcleDetail.dart';
 
 void main() => runApp(MyApp());
 
 bool doYouKnowGo = false;
 bool isUserAvail = false;
+bool isHistoryReady = false;
+
+SearchHistorys historys;
 var userProfileURL;
+var user_email;
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -86,6 +93,8 @@ class _MyHomePageState extends State<MyHomePage>
       ),
     ));
 
+    isUserAvail = false;
+
 //    var jsonData;
 //    getDoYouKnow().then((value) {
 //      jsonData = value;
@@ -96,25 +105,13 @@ class _MyHomePageState extends State<MyHomePage>
 
     // 유저 존재 여부 체크
 
-    AuthUtils().getAccessToken().then((value) {
-      if (value == null) {
-        isUserAvail = false;
-      } else {
-        isUserAvail = true;
-        AuthUtils().getUserPhoto().then((value) {
-          userProfileURL = value;
-        });
-      }
-    });
-
-    print(isUserAvail);
-
     super.initState();
   }
 
   @override
   dispose() {
     _animationController.dispose();
+    isUserAvail = false;
     super.dispose();
   }
 
@@ -154,6 +151,7 @@ class _MyHomePageState extends State<MyHomePage>
                     title: "QR코드",
                     description: "이 QR코드를 기기의 카메라 앞에 대세요.",
                     posiBtn: "알겠습니다.",
+                    url: user_email,
                   ),
             );
           },
@@ -182,6 +180,40 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    if (userProfileURL == null) {
+      AuthUtils().getAccessToken().then((access_token) {
+        if (access_token.length <= 4) {
+          isUserAvail = false;
+        } else {
+          isUserAvail = true;
+          AuthUtils().getGoogleProfile(access_token).then((profile) {
+            var json = jsonDecode(profile);
+            //userProfileURL = json['profile'];
+            print(userProfileURL);
+
+            user_email = json['email'];
+
+            print(userProfileURL);
+            userProfileURL = json['picture'];
+
+            AuthUtils().getUserHistory(user_email).then((history) {
+              historys = history;
+              isHistoryReady = true;
+            });
+          });
+        }
+      });
+    }
+
+    if (isUserAvail == true) {
+      AuthUtils().getUserHistory(user_email).then((history) {
+        historys = history;
+        isHistoryReady = true;
+      });
+    }
+
+    print(isUserAvail);
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
@@ -247,7 +279,11 @@ class _MyHomePageState extends State<MyHomePage>
                   ),
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => IntroducePage()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              TutorialsPage(
+                                pageCode: 1,
+                              )),
                     );
                   },
                 ),
@@ -267,7 +303,9 @@ class _MyHomePageState extends State<MyHomePage>
                           image: new DecorationImage(
                               fit: BoxFit.fill,
                               image: isUserAvail
-                                  ? new NetworkImage(userProfileURL)
+                                  ? new NetworkImage(userProfileURL != null
+                                  ? userProfileURL
+                                  : "https://image.flaticon.com/icons/png/512/64/64572.png")
                                   : AssetImage(
                                   "assets/images/google_user_default.png")))),
                   onTap: () {
@@ -291,6 +329,16 @@ class _MyHomePageState extends State<MyHomePage>
                 ),
               ],
             ),
+          ),
+          CarouselSlider(
+            height: 200.0,
+            enlargeCenterPage: true,
+            autoPlay: true,
+            initialPage: 0,
+            onPageChanged: (index) {
+              setState(() {});
+            },
+            items: <Widget>[_page1(context), _page2(context), _page3(context)],
           ),
 //          doYouKnowGo
 //              ? CarouselSlider(
@@ -406,24 +454,49 @@ Widget _row(BuildContext context) {
 }
 
 Widget _historyGridView(BuildContext context) {
-  return Expanded(
+  return isHistoryReady
+      ? (historys.historys.length == 0)
+      ? Center(
+    child: Column(
+      children: <Widget>[
+        SizedBox(
+          height: 50,
+        ),
+        Icon(Icons.info_outline),
+        SizedBox(
+          height: 8,
+        ),
+        Text(
+          "검색한 정보가 없어요.",
+          style: cardRegular,
+        ),
+      ],
+    ),
+  )
+      : Expanded(
       child: MediaQuery.removePadding(
         context: context,
         removeTop: true,
         child: GridView.count(
           crossAxisCount: 2,
-          children: List.generate(searchItems.length, (index) {
-            var history = searchItems[index];
+          children: List.generate(historys.historys.length, (index) {
+            var history = historys.historys[index];
             return Center(
               child: HistoryCard(
-                  itemName: history.itemName,
-                  itemImage: history.itemImage,
+                  id: int.parse(history.trash_id),
+                  itemName: TrashType()
+                      .getTrashName(int.parse(history.trash_id)),
+                  itemImage: TrashType().getTrashImage(
+                      int.parse(history.trash_id)),
                   date: history.date,
                   itemIndex: index),
             );
           }),
         ),
-      ));
+      ))
+      : Center(
+    child: Text("개인화된 기능을 사용하려면 로그인 하세요"),
+  );
 }
 
 void _showSearchSheet(context) {
@@ -448,7 +521,7 @@ void _showSearchSheet(context) {
       });
 }
 
-Widget _page1(BuildContext context, DoYouKnow know) {
+Widget _page1(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: InkWell(
@@ -484,14 +557,14 @@ Widget _page1(BuildContext context, DoYouKnow know) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        know.title,
+                        "우리가 분리수거를 해야하는 확실한 이유",
                         style: mainRegular,
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
-                        know.published_date,
+                        "2020년 1월 1일",
                         style: mainLight,
                       )
                     ],
@@ -510,15 +583,16 @@ Widget _page1(BuildContext context, DoYouKnow know) {
             ]),
       ),
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => DoYouKnowDetail()),
-        );
+//        Navigator.of(context).push(
+//          MaterialPageRoute(builder: (context) => DoYouKnowDetail()),
+//        );
+
       },
     ),
   );
 }
 
-Widget _page2(BuildContext context, DoYouKnow know) {
+Widget _page2(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
@@ -553,14 +627,14 @@ Widget _page2(BuildContext context, DoYouKnow know) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      know.title,
+                      "설레임은 어떻게 분리수거해야할까?",
                       style: mainRegular,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      know.published_date,
+                      "2020년 1월 1일",
                       style: mainLight,
                     )
                   ],
@@ -581,7 +655,7 @@ Widget _page2(BuildContext context, DoYouKnow know) {
   );
 }
 
-Widget _page3(BuildContext context, DoYouKnow know) {
+Widget _page3(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
@@ -616,14 +690,14 @@ Widget _page3(BuildContext context, DoYouKnow know) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      know.title,
+                      "쓰레기가 자연적으로 분해되는 시간",
                       style: mainRegular,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      know.published_date,
+                      "2020년 1월 1일",
                       style: mainLight,
                     )
                   ],
@@ -642,6 +716,24 @@ Widget _page3(BuildContext context, DoYouKnow know) {
           ]),
     ),
   );
+}
+
+Future<RclDetail> getData(String itemId) async {
+  print("요청 진입 : " + itemId.toString());
+  http.Response response = await http.get(
+      Uri.encodeFull('http://smartcycle.ljhnas.com/api/trash/$itemId'),
+      headers: {"Accept": "application/json"});
+
+  //printch
+  // ("받은 쓰레기 이름" + TrashType().getTrashName(itemId));
+  print(response.body);
+  final jsonData = json.decode(response.body.toString());
+  RclDetails data = RclDetails.fromJson(jsonData);
+  rclData = data.rcls[0];
+  print(data.rcls[0].name.toString());
+
+  return rclData;
+  //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
 }
 
 //Future<String> getDoYouKnow() async {

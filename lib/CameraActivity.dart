@@ -2,7 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:googleapis/compute/v1.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:smartcycle/CameraModify.dart';
+import 'package:smartcycle/TutorialsPage.dart';
+import 'package:smartcycle/styles/Styles.dart';
 import 'package:torch/torch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -34,15 +37,29 @@ class CameraApp extends StatefulWidget {
 }
 
 class _CameraAppState extends State<CameraApp> {
-  Future<File> imageFile;
+  File _image;
   CameraController controller;
 
-  getImageFromAlbum(ImageSource source) {
+  getImageFromAlbum(ImageSource source) async {
+    var imageFile = await ImagePicker.pickImage(source: source);
+    goCrop(imageFile);
+  }
+
+  goCrop(File source) async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: source.path,
+        ratioX: 3,
+        ratioY: 2,
+        toolbarTitle: "사진 편집하기",
+        toolbarColor: Colors.black54,
+        maxWidth: 640,
+        maxHeight: 480);
+
     setState(() {
-      imageFile = ImagePicker.pickImage(source: source);
+      _image = croppedFile;
 
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CameraModify(imageFile: imageFile)));
+          builder: (context) => CameraModify(imageFile: _image)));
     });
   }
 
@@ -51,14 +68,8 @@ class _CameraAppState extends State<CameraApp> {
     super.initState();
     controller = CameraController(cameras[0], ResolutionPreset.high);
     controller.initialize().then((_) {
-      if (!mounted) {
-        okay = true;
-        return;
-      }
-
-      setState(() {
-
-      });
+      okay = true;
+      setState(() {});
     });
   }
 
@@ -70,10 +81,8 @@ class _CameraAppState extends State<CameraApp> {
 
   @override
   Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
-    }
-    return Stack(
+    return okay
+        ? Stack(
       children: <Widget>[
         RotationTransition(
           turns: AlwaysStoppedAnimation(1),
@@ -84,7 +93,7 @@ class _CameraAppState extends State<CameraApp> {
           child: Padding(
             padding: const EdgeInsets.all(0),
             child: Container(
-              color: Colors.black,
+              color: Colors.white,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 3, top: 3),
                 child: Row(
@@ -92,8 +101,9 @@ class _CameraAppState extends State<CameraApp> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     IconButton(
-                      color: Colors.white,
-                      icon: Icon(Icons.photo_album, color: Colors.white),
+                      color: Colors.blueAccent,
+                      icon: Icon(Icons.photo_album,
+                          color: Colors.blueAccent),
                       onPressed: () {
                         getImageFromAlbum(ImageSource.gallery);
                       },
@@ -102,7 +112,7 @@ class _CameraAppState extends State<CameraApp> {
                         onPressed: () {},
                         icon: Icon(
                           Icons.camera,
-                          color: Colors.white,
+                          color: Colors.blueAccent,
                         )),
                     InkWell(
                       child: hasTorch
@@ -110,13 +120,13 @@ class _CameraAppState extends State<CameraApp> {
                           onPressed: () {},
                           icon: Icon(
                             Icons.flash_off,
-                            color: Colors.white,
+                            color: Colors.blueAccent,
                           ))
                           : IconButton(
                           onPressed: () {},
                           icon: Icon(
                             Icons.flash_on,
-                            color: Colors.white,
+                            color: Colors.blueAccent,
                           )),
                       onTap: () {
                         setState(() {
@@ -136,7 +146,38 @@ class _CameraAppState extends State<CameraApp> {
             ),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => TutorialsPage(pageCode: 2,)),
+                  );
+                },
+                elevation: 10,
+
+                backgroundColor: Colors.white,
+                label: Text(
+                  "탐색할 물건 촬영",
+                  style: fabText,
+                  textAlign: TextAlign.center,
+                ),
+                icon: Icon(
+                  Icons.info,
+                  color: Colors.blue,
+                ),
+              )
+            ],
+          ),
+        ),
       ],
+    )
+        : Container(
+      child: CircularProgressIndicator(),
     );
   }
 }
