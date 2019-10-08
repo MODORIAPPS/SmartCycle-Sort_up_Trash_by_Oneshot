@@ -12,15 +12,15 @@ class SearchHistorys {
 }
 
 class SearchHistory {
+  // 쓰레기 반환 예시
   /*
-  * "_id":"5d8e2ddcc8762806d819b625",
+  *
+  *  "_id":"5d8e2ddcc8762806d819b625",
       "user_email":"test@gmail.com",
       "trash_id":"1",
       "date":"2019/8/27",
       "__v":0
-  * 
-  * 
-  * 
+  *
   * */
   String id;
   String user_email;

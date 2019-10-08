@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/AddDevice.dart';
-import 'package:smartcycle/AuthUtils.dart';
+import 'package:smartcycle/Utils/AuthUtils.dart';
+import 'package:smartcycle/SmartDialog.dart';
 import 'package:smartcycle/TutorialsPage.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/styles/CustomStyle.dart';
@@ -443,7 +444,15 @@ Widget LoginPage() {
                   ),
                 ),
                 onTap: () {
-                  _handleSignIn();
+                  showDialog(
+                    context: mContext,
+                    builder: (BuildContext context) =>
+                        SmartDialog(
+                          title: "네트워크 없음.",
+                          content: "로그인 또는 회원가입을 위해 인터넷 접속이 필요합니다.",
+                          colors: Colors.red,
+                        ),
+                  );
                 },
               ),
             ),

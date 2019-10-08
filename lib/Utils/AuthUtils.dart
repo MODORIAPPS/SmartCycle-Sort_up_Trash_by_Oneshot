@@ -110,6 +110,7 @@ class AuthUtils {
     return reply;
   }
 
+  // Has moved to SmartCycleServer.dart
   Future<SearchHistorys> getUserHistory(String userEmail) async {
     print(userEmail);
     HttpClientRequest request = await client

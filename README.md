@@ -1,16 +1,10 @@
-# smartcycle
+# 나를 위한 분리수거 서비스 - SmartCycle
 
-A new Flutter application amde with flutter.
+더 이상 불편하게 직접 검색하지 않아도 됩니다.
+분리수거 방법을 알고 싶은 물건의 사진을 찍기만 하면 쉽고 빠르게 알려주니까요.
 
-## Getting Started
+지금 열심히 Flutter로 만들고 있어요.
 
-This project is a starting point for a Flutter application.
+## 설치하기
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+이곳에 앱스토어 접속 버튼

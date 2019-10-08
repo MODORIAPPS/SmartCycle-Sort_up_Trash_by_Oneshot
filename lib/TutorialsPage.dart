@@ -53,17 +53,47 @@ Widget CameraUsing() {
 
 Widget _cPage1() {
   return Padding(
-    padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+    padding: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 15),
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Icon(Icons.blur_circular, color: Colors.blue, size: 40,),
-        Text("카메라로 직접 검색하기", style: tutoBold,),
-        SizedBox(
-          height: 5,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            Icon(
+              Icons.blur_circular,
+              color: Colors.blue,
+              size: 50,
+            ),
+            Text(
+              "카메라로 직접 검색하기",
+              style: tutoBold,
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              "갤러리에서도, 카메라로 직접 찍으셔도 좋아요. 불편하게 직접 입력하지 않아도 되죠.",
+              style: rclRegular,
+            ),
+          ],
         ),
-        Text("갤러리에서도, 카메라로 직접 찍으셔도 좋아요.", style: rclRegular,)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.clear),
+              iconSize: 20,
+              onPressed: () {},
+            ),
+          ],
+        ),
       ],
     ),
   );

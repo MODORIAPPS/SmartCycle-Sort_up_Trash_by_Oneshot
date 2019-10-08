@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/DoYouKnowDetail.dart';
+import 'package:smartcycle/SmartDialog.dart';
 import 'package:smartcycle/TutorialsPage.dart';
 import 'package:smartcycle/QrDialog.dart';
 import 'package:smartcycle/AuthPage.dart';
@@ -18,8 +20,9 @@ import 'package:smartcycle/model/SearchHistory.dart';
 import 'package:smartcycle/model/TrashType.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smartcycle/styles/Styles.dart';
-import 'package:smartcycle/AuthUtils.dart';
+import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartcycle/ui/main/main_gridview.dart';
 
 import 'model/RcleDetail.dart';
 
@@ -53,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   var history = new List<SearchHistory>();
 
+  // FabBtn Controll
   bool isOpened = false;
   AnimationController _animationController;
   Animation<Color> _buttonColor;
@@ -63,6 +67,9 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   initState() {
+    networkCheck();
+
+    // FabBtn Controll
     _animationController =
     AnimationController(vsync: this, duration: Duration(milliseconds: 500))
       ..addListener(() {
@@ -94,16 +101,6 @@ class _MyHomePageState extends State<MyHomePage>
     ));
 
     isUserAvail = false;
-
-//    var jsonData;
-//    getDoYouKnow().then((value) {
-//      jsonData = value;
-//      print(jsonData);
-//    });
-//    jsonData = json.decode(jsonData);
-//    List<DoYouKnow> data = DoYouKnows.fromJson(jsonData).datas;
-
-    // 유저 존재 여부 체크
 
     super.initState();
   }
@@ -180,6 +177,8 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    //networkCheck();
+
     if (userProfileURL == null) {
       AuthUtils().getAccessToken().then((access_token) {
         if (access_token.length <= 4) {
@@ -246,78 +245,7 @@ class _MyHomePageState extends State<MyHomePage>
           SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                InkWell(
-                  child: Row(
-                    children: <Widget>[
-                      // Container(
-                      //     width: 42,
-                      //     height: 42,
-                      //     decoration: new BoxDecoration(
-                      //         shape: BoxShape.circle,
-                      //         image: new DecorationImage(
-                      //             fit: BoxFit.fill,
-                      //             image: new AssetImage(
-                      //                 "assets/images/globe_earth.png")))),
-                      Image.asset(
-                        "assets/images/SmartCycle_logo_skyblue.png",
-                        width: 35.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text(
-                          "SmartCycle",
-                          style: appBarRegular,
-                        ),
-                      )
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              TutorialsPage(
-                                pageCode: 1,
-                              )),
-                    );
-                  },
-                ),
-                InkWell(
-                  child: Container(
-                      width: 42,
-                      height: 42,
-                      decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(0, 8),
-                                blurRadius: 10)
-                          ],
-                          image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: isUserAvail
-                                  ? new NetworkImage(userProfileURL != null
-                                  ? userProfileURL
-                                  : "https://image.flaticon.com/icons/png/512/64/64572.png")
-                                  : AssetImage(
-                                  "assets/images/google_user_default.png")))),
-                  onTap: () {
-                    // Toast message
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => AuthPage()),
-                    );
-                  },
-                )
-              ],
-            ),
-          ),
+
           Padding(
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: Row(
@@ -366,7 +294,9 @@ class _MyHomePageState extends State<MyHomePage>
               style: mainBold,
             ),
           ),
-          _historyGridView(context),
+
+          // TEST DATA
+          HistoryGridView(isUserAvail: true, userEmail: "Dd",),
         ],
       ),
     );
@@ -453,51 +383,51 @@ Widget _row(BuildContext context) {
   );
 }
 
-Widget _historyGridView(BuildContext context) {
-  return isHistoryReady
-      ? (historys.historys.length == 0)
-      ? Center(
-    child: Column(
-      children: <Widget>[
-        SizedBox(
-          height: 50,
-        ),
-        Icon(Icons.info_outline),
-        SizedBox(
-          height: 8,
-        ),
-        Text(
-          "검색한 정보가 없어요.",
-          style: cardRegular,
-        ),
-      ],
-    ),
-  )
-      : Expanded(
-      child: MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        child: GridView.count(
-          crossAxisCount: 2,
-          children: List.generate(historys.historys.length, (index) {
-            var history = historys.historys[index];
-            return Center(
-              child: HistoryCard(
-                  id: int.parse(history.trash_id),
-                  itemName: TrashType()
-                      .getTrashName(int.parse(history.trash_id)),
-                  itemImage: TrashType().getTrashImage(
-                      int.parse(history.trash_id)),
-                  date: history.date,
-                  itemIndex: index),
-            );
-          }),
-        ),
-      ))
-      : Center(
-    child: Text("개인화된 기능을 사용하려면 로그인 하세요"),
-  );
-}
+//Widget _historyGridView(BuildContext context) {
+//  return isHistoryReady
+//      ? (historys.historys.length == 0)
+//          ? Center(
+//              child: Column(
+//                children: <Widget>[
+//                  SizedBox(
+//                    height: 50,
+//                  ),
+//                  Icon(Icons.info_outline),
+//                  SizedBox(
+//                    height: 8,
+//                  ),
+//                  Text(
+//                    "검색한 정보가 없어요.",
+//                    style: cardRegular,
+//                  ),
+//                ],
+//              ),
+//            )
+//          : Expanded(
+//              child: MediaQuery.removePadding(
+//              context: context,
+//              removeTop: true,
+//              child: GridView.count(
+//                crossAxisCount: 2,
+//                children: List.generate(historys.historys.length, (index) {
+//                  var history = historys.historys[index];
+//                  return Center(
+//                    child: HistoryCard(
+//                        id: int.parse(history.trash_id),
+//                        itemName: TrashType()
+//                            .getTrashName(int.parse(history.trash_id)),
+//                        itemImage: TrashType()
+//                            .getTrashImage(int.parse(history.trash_id)),
+//                        date: history.date,
+//                        itemIndex: index),
+//                  );
+//                }),
+//              ),
+//            ))
+//      : Center(
+//          child: Text("개인화된 기능을 사용하려면 로그인 하세요"),
+//        );
+//}
 
 void _showSearchSheet(context) {
   showModalBottomSheet(
@@ -586,7 +516,6 @@ Widget _page1(BuildContext context) {
 //        Navigator.of(context).push(
 //          MaterialPageRoute(builder: (context) => DoYouKnowDetail()),
 //        );
-
       },
     ),
   );
@@ -734,6 +663,23 @@ Future<RclDetail> getData(String itemId) async {
 
   return rclData;
   //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
+}
+
+Future<Widget> networkCheck() async {
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult != ConnectivityResult.mobile &&
+      connectivityResult != ConnectivityResult.wifi) {
+    // noNetwork
+    return showDialog(
+      context: mContext,
+      builder: (BuildContext context) =>
+          SmartDialog(
+            title: "네트워크 없음.",
+            content: "네트워크가 필요한 작업이 있기 때문에 기능이 제한됩니다.",
+            colors: Colors.red,
+          ),
+    );
+  }
 }
 
 //Future<String> getDoYouKnow() async {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartcycle/AuthPage.dart';
-import 'package:smartcycle/AuthUtils.dart';
+import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:smartcycle/RegiCompleted.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
