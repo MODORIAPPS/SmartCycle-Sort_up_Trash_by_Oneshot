@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smartcycle/TutorialsPage.dart';
 import 'package:smartcycle/styles/Styles.dart';
-import '../../AuthPage.dart';
+import '../auth/auth_main.dart';
 
 class SmartCycleAppBar extends StatefulWidget {
   final String userProfileURL;

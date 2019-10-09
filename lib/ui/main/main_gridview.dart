@@ -41,8 +41,15 @@ class _HistoryGridViewState extends State<HistoryGridView> {
     return widget.isUserAvail
         ? (_historys != null)
             ? _historyGridView(context, _historys)
-            : Center(
-                child: CircularProgressIndicator(),
+        : Column(
+      children: <Widget>[
+        SizedBox(
+          height: 50,
+        ),
+        Center(
+          child: CircularProgressIndicator(),
+        )
+      ],
               )
         : Center(
             child: Text("개인화된 기능을 사용하려면 로그인 하세요"),

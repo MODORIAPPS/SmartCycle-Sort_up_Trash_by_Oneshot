@@ -16,6 +16,11 @@ class SmartCycleServer {
     client = new HttpClient();
   }
 
+  void _timeOut() {
+
+  }
+
+
   AuthUtils() {
     // for https certificate
     client.badCertificateCallback =
@@ -23,14 +28,15 @@ class SmartCycleServer {
   }
 
   // %%%% 최근 검색한 분리수거 %%%%
-
   Future<SearchHistorys> getUserHistory(String userEmail) async {
     print(userEmail);
     HttpClientRequest request =
         await client.getUrl(Uri.parse("{$base}trash/lately/$userEmail"));
     request.headers.set('content-type', 'application/json');
 
+
     HttpClientResponse response = await request.close();
+    response.timeout(const Duration(seconds: 20));
 
     String reply = await response.transform(utf8.decoder).join();
     print(reply);
@@ -38,6 +44,7 @@ class SmartCycleServer {
     print("사용자 기록 : " + jsondata.toString());
     return jsondata;
   }
+
 
   // %% ONLY FOR TEST %% getUserHistoryTest
   Future<SearchHistorys> getUserHistoryTest(String userEmail) async {

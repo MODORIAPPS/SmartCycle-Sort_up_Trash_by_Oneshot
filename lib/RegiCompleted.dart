@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartcycle/AuthPage.dart';
+import 'package:smartcycle/ui/auth/auth_main.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
 class RegiCompleted extends StatelessWidget {

@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/customsearch/v1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartcycle/model/GoogleAccountDTO.dart';
+import 'package:smartcycle/model/GoogleProfileDTO.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 
 const email_uri = 'https://www.googleapis.com/oauth2/v3/userinfo';
@@ -11,14 +14,57 @@ const base = 'http://smartcycle.ljhnas.com';
 
 HttpClient client = new HttpClient();
 
-
 class AuthUtils {
+  GoogleSignIn _googleSignIn = new GoogleSignIn(
+    scopes: [
+      'email',
+      'openid',
+      'profile',
+    ],
+  );
 
   AuthUtils() {
     client.badCertificateCallback =
     ((X509Certificate cert, String host, int port) => true);
   }
 
+  Future<String> openGoogleSignIn() async {
+    try {
+      //_googleSignIn.
+      GoogleSignInAccount account = await _googleSignIn.signIn();
+      GoogleSignInAuthentication authentication = await account.authentication;
+      String access_token = authentication.accessToken;
+      print(account.toString());
+      print(authentication.toString());
+
+      if (access_token != "INIT") {
+        saveAccessToken(access_token);
+        saveUserId(account.id);
+        return access_token;
+      }
+      return "ERROR";
+    } catch (error) {
+      print(error);
+      return "ERROR";
+    }
+  }
+
+  Future<GoogleProfileDTO> getUserProfile(String userId,
+      String access_token) async {
+    print("userId" + userId.toString());
+    print("access_token" + access_token);
+    http.Response response = await http.get(
+        "https://www.googleapis.com/plus/v1/people/${userId}?access_token=${access_token}");
+    print(response.body);
+    if (response.statusCode == 401) {
+      return null;
+    }
+
+
+    GoogleProfileDTO googleProfileDTO = json.decode(response.body);
+
+    return googleProfileDTO;
+  }
 
 // access_token 불러오기
   Future<String> getAccessToken() async {
@@ -42,6 +88,21 @@ class AuthUtils {
     String userEmail = prefs.getString('user_email');
     return userEmail;
   }
+
+
+  // userId 블러오기
+  Future<String> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('user_id');
+    return userId;
+  }
+
+  // userId 저장하기
+  saveUserId(String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('user_id', userId);
+  }
+
 
   // userEmail 저장하기
   saveUserEmail(String user_email) async {
@@ -79,7 +140,7 @@ class AuthUtils {
 
     http.Response response =
     await http.get(base + "/getGoogleProfile?access_token=" + access_token);
-    print("엑세스 토큰" + response.body);
+    //print("엑세스 토큰" + response.body);
     return response.body;
   }
 
@@ -91,9 +152,8 @@ class AuthUtils {
   }
 
   Future<String> getGoogleProfile(String access_token) async {
-    print("받은 액세스 토큰 : " + access_token);
-    HttpClientRequest request = await client
-        .getUrl(Uri.parse(
+    //print("받은 액세스 토큰 : " + access_token);
+    HttpClientRequest request = await client.getUrl(Uri.parse(
         "https://smartcycle.ljhnas.com/getGoogleProfile?access_token=$access_token"));
     request.headers.set('content-type', 'application/json');
 
@@ -108,23 +168,6 @@ class AuthUtils {
       return code;
     }
     return reply;
-  }
-
-  // Has moved to SmartCycleServer.dart
-  Future<SearchHistorys> getUserHistory(String userEmail) async {
-    print(userEmail);
-    HttpClientRequest request = await client
-        .getUrl(
-        Uri.parse("http://smartcycle.ljhnas.com/trash/lately/$userEmail"));
-    request.headers.set('content-type', 'application/json');
-
-    HttpClientResponse response = await request.close();
-
-    String reply = await response.transform(utf8.decoder).join();
-    print(reply);
-    final jsondata = SearchHistorys.fromJson(json.decode(reply));
-    print("사용자 기록 : " + jsondata.toString());
-    return jsondata;
   }
 
   // SignOut Action

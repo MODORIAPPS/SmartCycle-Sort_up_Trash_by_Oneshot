@@ -9,7 +9,7 @@ import 'package:smartcycle/DoYouKnowDetail.dart';
 import 'package:smartcycle/SmartDialog.dart';
 import 'package:smartcycle/TutorialsPage.dart';
 import 'package:smartcycle/QrDialog.dart';
-import 'package:smartcycle/AuthPage.dart';
+import 'package:smartcycle/ui/auth/auth_main.dart';
 import 'package:smartcycle/UserPage.dart';
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/styles/CustomStyle.dart';
@@ -22,6 +22,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartcycle/ui/main/main_app_bar.dart';
 import 'package:smartcycle/ui/main/main_gridview.dart';
 
 import 'model/RcleDetail.dart';
@@ -185,34 +186,20 @@ class _MyHomePageState extends State<MyHomePage>
           isUserAvail = false;
         } else {
           isUserAvail = true;
-          AuthUtils().getGoogleProfile(access_token).then((profile) {
-            var json = jsonDecode(profile);
-            //userProfileURL = json['profile'];
-            print(userProfileURL);
-
-            user_email = json['email'];
-
-            print(userProfileURL);
-            userProfileURL = json['picture'];
-
-            AuthUtils().getUserHistory(user_email).then((history) {
-              historys = history;
-              isHistoryReady = true;
-            });
-          });
+//          AuthUtils().getGoogleProfile(access_token).then((profile) {
+//            var json = jsonDecode(profile);
+//            //userProfileURL = json['profile'];
+//            print(userProfileURL);
+//
+//            user_email = json['email'];
+//
+//            print(userProfileURL);
+//            userProfileURL = json['picture'];
+//
+//          });
         }
       });
     }
-
-    if (isUserAvail == true) {
-      AuthUtils().getUserHistory(user_email).then((history) {
-        historys = history;
-        isHistoryReady = true;
-      });
-    }
-
-    print(isUserAvail);
-
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
@@ -245,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage>
           SizedBox(
             height: 20,
           ),
-
+          SmartCycleAppBar(isUserAvail: true, userProfileURL: "",),
           Padding(
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: Row(
@@ -383,52 +370,6 @@ Widget _row(BuildContext context) {
   );
 }
 
-//Widget _historyGridView(BuildContext context) {
-//  return isHistoryReady
-//      ? (historys.historys.length == 0)
-//          ? Center(
-//              child: Column(
-//                children: <Widget>[
-//                  SizedBox(
-//                    height: 50,
-//                  ),
-//                  Icon(Icons.info_outline),
-//                  SizedBox(
-//                    height: 8,
-//                  ),
-//                  Text(
-//                    "검색한 정보가 없어요.",
-//                    style: cardRegular,
-//                  ),
-//                ],
-//              ),
-//            )
-//          : Expanded(
-//              child: MediaQuery.removePadding(
-//              context: context,
-//              removeTop: true,
-//              child: GridView.count(
-//                crossAxisCount: 2,
-//                children: List.generate(historys.historys.length, (index) {
-//                  var history = historys.historys[index];
-//                  return Center(
-//                    child: HistoryCard(
-//                        id: int.parse(history.trash_id),
-//                        itemName: TrashType()
-//                            .getTrashName(int.parse(history.trash_id)),
-//                        itemImage: TrashType()
-//                            .getTrashImage(int.parse(history.trash_id)),
-//                        date: history.date,
-//                        itemIndex: index),
-//                  );
-//                }),
-//              ),
-//            ))
-//      : Center(
-//          child: Text("개인화된 기능을 사용하려면 로그인 하세요"),
-//        );
-//}
-
 void _showSearchSheet(context) {
   showModalBottomSheet(
       context: context,
@@ -513,6 +454,9 @@ Widget _page1(BuildContext context) {
             ]),
       ),
       onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => AuthPage()),
+        );
 //        Navigator.of(context).push(
 //          MaterialPageRoute(builder: (context) => DoYouKnowDetail()),
 //        );
