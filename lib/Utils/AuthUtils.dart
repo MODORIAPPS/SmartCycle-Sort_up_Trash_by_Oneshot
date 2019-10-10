@@ -7,10 +7,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartcycle/model/GoogleAccountDTO.dart';
 import 'package:smartcycle/model/GoogleProfileDTO.dart';
+import 'package:smartcycle/model/InitUserDTO.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 
 const email_uri = 'https://www.googleapis.com/oauth2/v3/userinfo';
 const base = 'http://smartcycle.ljhnas.com';
+const test_base = "http://172.17.1.172:8080/";
 
 HttpClient client = new HttpClient();
 
@@ -26,6 +28,25 @@ class AuthUtils {
   AuthUtils() {
     client.badCertificateCallback =
     ((X509Certificate cert, String host, int port) => true);
+  }
+
+  Future<InitUserDTO> getInitialUserData() async {
+    InitUserDTO userDTO = InitUserDTO();
+    await getAccessToken().then((access_token) {
+      if (access_token != null) {
+        userDTO.user_access_token = access_token;
+      }
+    });
+
+    await getUserId().then((userId) {
+      userDTO.user_id = userId;
+    });
+
+    await getUserEmail().then((userEmail) {
+      userDTO.user_email = userEmail;
+    });
+
+    return userDTO;
   }
 
   Future<String> openGoogleSignIn() async {
@@ -49,6 +70,8 @@ class AuthUtils {
     }
   }
 
+
+  // %%%% 사용자 구글 프로필 %%%%
   Future<GoogleProfileDTO> getUserProfile(String userId,
       String access_token) async {
     print("userId" + userId.toString());
@@ -66,7 +89,25 @@ class AuthUtils {
     return googleProfileDTO;
   }
 
-// access_token 불러오기
+  // %% ONLY FOR TEST %% getUserHistoryTest
+  Future<GoogleProfileDTO> getUserProfileTest(InitUserDTO initUserDTO) async {
+    // userId와 access_token은 실질적으로 의미가 없습니다.
+    // JSON 파싱 테스트용
+    http.Response response = await http.get(
+        "${test_base}test/getUserProfile");
+    print(response.body);
+    if (response.statusCode == 401) {
+      return null;
+    }
+
+
+    GoogleProfileDTO googleProfileDTO = json.decode(response.body);
+
+    return googleProfileDTO;
+  }
+
+
+  // access_token 불러오기
   Future<String> getAccessToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String accessToken = prefs.getString('access_token');

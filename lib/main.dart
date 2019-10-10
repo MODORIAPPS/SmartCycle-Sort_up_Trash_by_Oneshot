@@ -3,17 +3,20 @@ import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix1;
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/DoYouKnowDetail.dart';
 import 'package:smartcycle/SmartDialog.dart';
 import 'package:smartcycle/TutorialsPage.dart';
-import 'package:smartcycle/QrDialog.dart';
+import 'package:smartcycle/model/GoogleProfileDTO.dart' as prefix0;
+import 'package:smartcycle/model/InitUserDTO.dart';
+import 'package:smartcycle/ui/main/main_qr_code.dart';
 import 'package:smartcycle/ui/auth/auth_main.dart';
 import 'package:smartcycle/UserPage.dart';
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/styles/CustomStyle.dart';
-import 'package:smartcycle/CameraActivity.dart';
+import 'package:smartcycle/ui/camera/camera_start.dart';
 import 'package:smartcycle/HistoryCard.dart';
 import 'package:smartcycle/RecycleDetail.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
@@ -25,17 +28,18 @@ import 'package:http/http.dart' as http;
 import 'package:smartcycle/ui/main/main_app_bar.dart';
 import 'package:smartcycle/ui/main/main_gridview.dart';
 
+import 'model/GoogleProfileDTO.dart';
 import 'model/RcleDetail.dart';
 
 void main() => runApp(MyApp());
 
-bool doYouKnowGo = false;
-bool isUserAvail = false;
-bool isHistoryReady = false;
-
-SearchHistorys historys;
-var userProfileURL;
-var user_email;
+//bool doYouKnowGo = false;
+//bool isUserAvail = false;
+//bool isHistoryReady = false;
+//
+//SearchHistorys historys;
+//var userProfileURL;
+//var user_email;
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -55,6 +59,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
+  InitUserDTO _initUserDTO;
+  GoogleProfileDTO _googleProfileDTO;
+
   var history = new List<SearchHistory>();
 
   // FabBtn Controll
@@ -69,6 +76,16 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   initState() {
     networkCheck();
+
+    AuthUtils().getInitialUserData().then((initData) {
+      _initUserDTO = initData;
+      if (_initUserDTO.user_access_token != null) {
+        isUserAvail = true;
+        AuthUtils().getUserProfileTest(_initUserDTO).then((profileData) {
+          if (profileData != null) _googleProfileDTO = profileData;
+        });
+      }
+    });
 
     // FabBtn Controll
     _animationController =
@@ -101,14 +118,13 @@ class _MyHomePageState extends State<MyHomePage>
       ),
     ));
 
-    isUserAvail = false;
-
     super.initState();
   }
 
   @override
   dispose() {
     _animationController.dispose();
+
     isUserAvail = false;
     super.dispose();
   }
@@ -142,16 +158,19 @@ class _MyHomePageState extends State<MyHomePage>
       child: new FloatingActionButton(
           heroTag: "qrFab",
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) =>
-                  QrDialog(
-                    title: "QR코드",
-                    description: "이 QR코드를 기기의 카메라 앞에 대세요.",
-                    posiBtn: "알겠습니다.",
-                    url: user_email,
-                  ),
-            );
+            AuthUtils().getUserProfileTest(_initUserDTO).then((profileData) {
+              if (profileData != null) _googleProfileDTO = profileData;
+            });
+//            showDialog(
+//              context: context,
+//              builder: (BuildContext context) => QrDialog(
+//                title: "QR코드",
+//                description: "이 QR코드를 기기의 카메라 앞에 대세요.",
+//                posiBtn: "알겠습니다.",
+//                // userEmail
+//                url: "DDDDDd",
+//              ),
+//            );
           },
           tooltip: 'qrCode',
           child: Image.asset(
@@ -178,28 +197,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    //networkCheck();
-
-    if (userProfileURL == null) {
-      AuthUtils().getAccessToken().then((access_token) {
-        if (access_token.length <= 4) {
-          isUserAvail = false;
-        } else {
-          isUserAvail = true;
-//          AuthUtils().getGoogleProfile(access_token).then((profile) {
-//            var json = jsonDecode(profile);
-//            //userProfileURL = json['profile'];
-//            print(userProfileURL);
-//
-//            user_email = json['email'];
-//
-//            print(userProfileURL);
-//            userProfileURL = json['picture'];
-//
-//          });
-        }
-      });
-    }
+    networkCheck();
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
@@ -232,7 +230,10 @@ class _MyHomePageState extends State<MyHomePage>
           SizedBox(
             height: 20,
           ),
-          SmartCycleAppBar(isUserAvail: true, userProfileURL: "",),
+          SmartCycleAppBar(
+            isUserAvail: true,
+            userProfileURL: "",
+          ),
           Padding(
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: Row(
@@ -283,7 +284,10 @@ class _MyHomePageState extends State<MyHomePage>
           ),
 
           // TEST DATA
-          HistoryGridView(isUserAvail: true, userEmail: "Dd",),
+          HistoryGridView(
+            isUserAvail: true,
+            userEmail: "Dd",
+          ),
         ],
       ),
     );
@@ -302,95 +306,95 @@ class _MyHomePageState extends State<MyHomePage>
 //   );
 // }
 
-Widget _row(BuildContext context) {
-  return Row(
-    children: <Widget>[
-      Flexible(
-        flex: 1,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 30,
-            ),
-            Image.asset("assets/images/icecream.png"),
-            RaisedButton(
-              child: Text("임시 버튼"),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => RecycleDetail(
-                        keyword: "페트병",
-                      )),
-                );
-              },
-            ),
-            RaisedButton(
-              child: Text("임시 버튼"),
-              onPressed: () {
-                // Google auth 로그인 상태 아닌 경우 로그인 창으로 이동(사실상 최초 실행시 소개 페이지와 같음)
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => AuthPage()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      Flexible(
-          flex: 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "오늘의 분리수거\n알아보기",
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Text("날마다 헷갈리는 재활용품의 \n분리수거 방법을 알려드립니다."),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                "오늘의 분리수거",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Text(":  '설레임'",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
-            ],
-          )),
-    ],
-  );
-}
+//Widget _row(BuildContext context) {
+//  return Row(
+//    children: <Widget>[
+//      Flexible(
+//        flex: 1,
+//        child: Column(
+//          children: <Widget>[
+//            SizedBox(
+//              height: 30,
+//            ),
+//            Image.asset("assets/images/icecream.png"),
+//            RaisedButton(
+//              child: Text("임시 버튼"),
+//              onPressed: () {
+//                Navigator.of(context).push(
+//                  MaterialPageRoute(
+//                      builder: (context) => RecycleDetail(
+//                        keyword: "페트병",
+//                      )),
+//                );
+//              },
+//            ),
+//            RaisedButton(
+//              child: Text("임시 버튼"),
+//              onPressed: () {
+//                // Google auth 로그인 상태 아닌 경우 로그인 창으로 이동(사실상 최초 실행시 소개 페이지와 같음)
+//                Navigator.of(context).push(
+//                  MaterialPageRoute(builder: (context) => AuthPage()),
+//                );
+//              },
+//            ),
+//          ],
+//        ),
+//      ),
+//      Flexible(
+//          flex: 1,
+//          child: Column(
+//            mainAxisAlignment: MainAxisAlignment.start,
+//            crossAxisAlignment: CrossAxisAlignment.start,
+//            children: <Widget>[
+//              SizedBox(
+//                height: 30,
+//              ),
+//              Text(
+//                "오늘의 분리수거\n알아보기",
+//                textAlign: TextAlign.left,
+//                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+//              ),
+//              SizedBox(
+//                height: 15,
+//              ),
+//              Text("날마다 헷갈리는 재활용품의 \n분리수거 방법을 알려드립니다."),
+//              SizedBox(
+//                height: 30,
+//              ),
+//              Text(
+//                "오늘의 분리수거",
+//                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//              ),
+//              Text(":  '설레임'",
+//                  textAlign: TextAlign.left,
+//                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+//            ],
+//          )),
+//    ],
+//  );
+//}
 
-void _showSearchSheet(context) {
-  showModalBottomSheet(
-      context: context,
-      builder: (BuildContext bc) {
-        return Container(
-          child: new Wrap(
-            children: <Widget>[
-              new ListTile(
-                  leading: new Icon(Icons.music_note),
-                  title: new Text('Music'),
-                  onTap: () => {}),
-              new ListTile(
-                leading: new Icon(Icons.videocam),
-                title: new Text('Video'),
-                onTap: () => {},
-              ),
-            ],
-          ),
-        );
-      });
-}
+//void _showSearchSheet(context) {
+//  showModalBottomSheet(
+//      context: context,
+//      builder: (BuildContext bc) {
+//        return Container(
+//          child: new Wrap(
+//            children: <Widget>[
+//              new ListTile(
+//                  leading: new Icon(Icons.music_note),
+//                  title: new Text('Music'),
+//                  onTap: () => {}),
+//              new ListTile(
+//                leading: new Icon(Icons.videocam),
+//                title: new Text('Video'),
+//                onTap: () => {},
+//              ),
+//            ],
+//          ),
+//        );
+//      });
+//}
 
 Widget _page1(BuildContext context) {
   return Padding(
@@ -454,9 +458,11 @@ Widget _page1(BuildContext context) {
             ]),
       ),
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => AuthPage()),
-        );
+//        Navigator.of(context).push(
+//          MaterialPageRoute(builder: (context) => AuthPage()),
+//        );
+
+
 //        Navigator.of(context).push(
 //          MaterialPageRoute(builder: (context) => DoYouKnowDetail()),
 //        );

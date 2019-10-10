@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:googleapis/compute/v1.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:smartcycle/CameraModify.dart';
 import 'package:smartcycle/TutorialsPage.dart';
 import 'package:smartcycle/styles/Styles.dart';
+import 'package:smartcycle/ui/camera/CameraModify.dart';
 import 'package:torch/torch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -93,53 +93,71 @@ class _CameraAppState extends State<CameraApp> {
           child: Padding(
             padding: const EdgeInsets.all(0),
             child: Container(
-              color: Colors.white,
+              color: Colors.transparent,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 3, top: 3),
+                padding: const EdgeInsets.only(bottom: 10, top: 3),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    IconButton(
-                      color: Colors.blueAccent,
-                      icon: Icon(Icons.photo_album,
-                          color: Colors.blueAccent),
-                      onPressed: () {
-                        getImageFromAlbum(ImageSource.gallery);
-                      },
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: IconButton(
+                        color: Colors.blueAccent,
+                        icon: Icon(Icons.photo_album,
+                            color: Colors.blueAccent),
+                        onPressed: () {
+                          getImageFromAlbum(ImageSource.gallery);
+                        },
+                      ),
                     ),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.camera,
-                          color: Colors.blueAccent,
-                        )),
-                    InkWell(
-                      child: hasTorch
-                          ? IconButton(
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: IconButton(
                           onPressed: () {},
                           icon: Icon(
-                            Icons.flash_off,
-                            color: Colors.blueAccent,
-                          ))
-                          : IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.flash_on,
+                            Icons.camera,
                             color: Colors.blueAccent,
                           )),
-                      onTap: () {
-                        setState(() {
-                          if (hasTorch) {
-                            hasTorch = false;
-                            Torch.turnOff();
-                          } else {
-                            hasTorch = true;
-                            Torch.turnOn();
-                          }
-                        });
-                      },
-                    )
+                    ),
+                    Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: InkWell(
+                          child: hasTorch
+                              ? IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.flash_off,
+                              color: Colors.blueAccent,
+                            ),
+                          )
+                              : IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.flash_on,
+                                color: Colors.blueAccent,
+                              )),
+                          onTap: () {
+                            setState(() {
+                              if (hasTorch) {
+                                hasTorch = false;
+                                Torch.turnOff();
+                              } else {
+                                hasTorch = true;
+                                Torch.turnOn();
+                              }
+                            });
+                          },
+                        )),
                   ],
                 ),
               ),
@@ -155,11 +173,13 @@ class _CameraAppState extends State<CameraApp> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => TutorialsPage(pageCode: 2,)),
+                        builder: (context) =>
+                            TutorialsPage(
+                              pageCode: 2,
+                            )),
                   );
                 },
                 elevation: 10,
-
                 backgroundColor: Colors.white,
                 label: Text(
                   "탐색할 물건 촬영",
