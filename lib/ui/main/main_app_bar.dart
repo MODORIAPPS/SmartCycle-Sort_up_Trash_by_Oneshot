@@ -5,10 +5,10 @@ import 'package:smartcycle/styles/Styles.dart';
 import '../auth/auth_main.dart';
 
 class SmartCycleAppBar extends StatefulWidget {
-  final String userProfileURL;
-  final bool isUserAvail;
+  final bool isSignIn;
+  final String photoUrl;
 
-  const SmartCycleAppBar({Key key, this.userProfileURL, this.isUserAvail})
+  const SmartCycleAppBar({Key key, this.isSignIn, this.photoUrl})
       : super(key: key);
 
   @override
@@ -16,10 +16,11 @@ class SmartCycleAppBar extends StatefulWidget {
 }
 
 class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
+
+
   @override
   Widget build(BuildContext context) {
-    // print(widget.userProfileURL);
-    // print(widget.isUserAvail);
+    print(widget.isSignIn);
 
     return Padding(
       padding: EdgeInsets.only(left: 15, right: 15, top: 10),
@@ -67,10 +68,8 @@ class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
                     ],
                     image: new DecorationImage(
                         fit: BoxFit.fill,
-                        image: widget.isUserAvail
-                            ? new NetworkImage(widget.userProfileURL != null
-                            ? "https://d2ut1jne2opyld.cloudfront.net/images/community/photos/7029/7997/fcfc9e347bde68fe319fca344b1292b6_large.jpg"
-                                : "https://image.flaticon.com/icons/png/512/64/64572.png")
+                        image: widget.isSignIn
+                            ? new NetworkImage(widget.photoUrl)
                             : AssetImage(
                                 "assets/images/google_user_default.png")))),
             onTap: () {
@@ -83,5 +82,10 @@ class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

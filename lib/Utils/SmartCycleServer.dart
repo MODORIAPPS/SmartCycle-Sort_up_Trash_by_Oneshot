@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartcycle/model/SearchHistory.dart';
 
-const test_base = "http://192.168.15.70:8080/";
+const test_base = "http://172.16.3.159:8080/";
 const base = 'http://smartcycle.ljhnas.com/';
 
 class SmartCycleServer {
@@ -59,7 +59,9 @@ class SmartCycleServer {
     String reply = await response.transform(utf8.decoder).join();
     print(reply);
     final jsondata = SearchHistorys.fromJson(json.decode(reply));
+    if (response.statusCode == 200) {
+      return jsondata;
+    }
     print("사용자 기록 : " + jsondata.toString());
-    return jsondata;
   }
 }

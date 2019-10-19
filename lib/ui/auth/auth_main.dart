@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/AddDevice.dart';
@@ -40,32 +41,35 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  Future<AuthMainData> _initAccessToken;
+  Future<bool> _isSignIn;
 
-  Future<AuthMainData> initAccessToken() async {
-    String access_token = await AuthUtils().getAccessToken();
-    String user_id = await AuthUtils().getUserId();
-    if (access_token == null || access_token.isEmpty) return null;
-    return AuthMainData(access_token: access_token, user_id: user_id);
-  }
+//  Future<AuthMainData> initAccessToken() async {
+//    String access_token = await AuthUtils().getAccessToken();
+//    String user_id = await AuthUtils().getUserId();
+//    if (access_token == null || access_token.isEmpty) return null;
+//    return AuthMainData(access_token: access_token, user_id: user_id);
+//  }
 
   @override
   void initState() {
     super.initState();
-    _initAccessToken = initAccessToken();
+    _isSignIn = AuthUtils().isSignIn();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: FutureBuilder<AuthMainData>(
+    return Scaffold(
+        body: FutureBuilder<bool>(
+          future: _isSignIn,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data == null) {
+          print("ddd");
+          if (!snapshot.data) {
             return LoginPage();
           } else {
             return AuthProfile(
-              access_token: snapshot.data.access_token,
-              user_id: snapshot.data.user_id,
+              access_token: "DD",
+              user_id: "dd",
             );
           }
         } else {
@@ -109,10 +113,7 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   void dispose() {
-    access_token = "INIT";
-    userId = "";
-    isAccessTokenAvail = false;
-    isProfileAlreadyLoaded = false;
+    super.dispose();
   }
 }
 

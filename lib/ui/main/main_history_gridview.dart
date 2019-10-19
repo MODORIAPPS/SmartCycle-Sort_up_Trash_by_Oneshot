@@ -7,11 +7,10 @@ import 'package:smartcycle/model/TrashType.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
 class HistoryGridView extends StatefulWidget {
-  final bool isUserAvail;
+  final bool isSignIn;
   final String userEmail;
 
-  HistoryGridView({Key key, this.isUserAvail, this.userEmail})
-      : super(key: key);
+  HistoryGridView({Key key, this.isSignIn, this.userEmail}) : super(key: key);
 
   @override
   _HistoryGridViewState createState() => _HistoryGridViewState();
@@ -20,9 +19,7 @@ class HistoryGridView extends StatefulWidget {
 class _HistoryGridViewState extends State<HistoryGridView> {
   Future<SearchHistorys> _getUserHistory;
   bool isDataReady = false;
-  SearchHistorys _historys; // getFrom SmartCycle internal server.
   SmartCycleServer smartCycleServer = new SmartCycleServer();
-
 
   @override
   void initState() {
@@ -31,65 +28,40 @@ class _HistoryGridViewState extends State<HistoryGridView> {
     // %% ONLY FOR TEST %% getUserHistoryTest
     _getUserHistory = smartCycleServer.getUserHistoryTest(widget.userEmail);
     //_getUserHistory = smartCycleServer.getUserHistory(widget.userEmail);
-
   }
 
   @override
   Widget build(BuildContext context) {
-//    if (widget.userEmail != null && _historys == null) {
-//
-//      // %% ONLY FOR TEST %% getUserHistoryTest
-//      smartCycleServer.getUserHistoryTest(widget.userEmail).then((historyData) {
-//        _historys = historyData;
-//
-//        setState(() {});
-//      });
-//
-////      smartCycleServer.getUserHistory(widget.userEmail).then((historyData) {
-////        _historys = historyData;
-////        setState(() {});
-////      });
-//
-//    }
-
-//    return widget.isUserAvail
-//        ? (_historys != null)
-//            ? _historyGridView(context, _historys)
-//        : Column(
-//      children: <Widget>[
-//        SizedBox(
-//          height: 50,
-//        ),
-//        Center(
-//          child: CircularProgressIndicator(),
-//        )
-//      ],
-//              )
-//        : Center(
-//            child: Text("개인화된 기능을 사용하려면 로그인 하세요"),
-//          );
-
-    return FutureBuilder<SearchHistorys>(
+    return widget.isSignIn
+        ? FutureBuilder<SearchHistorys>(
       future: _getUserHistory,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return (snapshot.data.historys != null) ? _historyGridView(
-              context, snapshot.data) : Column(
+          return snapshot.data != null
+              ? (snapshot.data.historys.length != 0)
+              ? _historyGridView(context, snapshot.data)
+              : Column(
             children: <Widget>[
-              SizedBox(height: 40,),
+              SizedBox(
+                height: 40,
+              ),
               Text("검색하신 쓰레기가 없어요.")
             ],
-          );
+          )
+              : Text("서버에 접근할 수 없었습니다.");
         } else {
           return Column(
             children: <Widget>[
-              SizedBox(height: 50,),
+              SizedBox(
+                height: 50,
+              ),
               SCircularProgress()
             ],
           );
         }
       },
-    );
+    )
+        : Text("기록을 사용하시려면 먼저 로그인해주세요.");
   }
 }
 

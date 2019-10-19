@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -41,7 +43,6 @@ class LoginPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
-
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 25, right: 25),
@@ -69,7 +70,6 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
                 ],
               ),
               Padding(
@@ -123,7 +123,11 @@ class LoginPage extends StatelessWidget {
 //                          colors: Colors.red,
 //                        ),
 //                  );
-                    AuthUtils().openGoogleSignIn();
+//                    AuthUtils().openGoogleSignIn();
+                    AuthUtils()
+                        .handleSignIn()
+                        .then((FirebaseUser user) => print(user))
+                        .catchError((e) => print(e));
                   },
                 ),
               ),

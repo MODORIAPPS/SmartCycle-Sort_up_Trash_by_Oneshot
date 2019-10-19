@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/customsearch/v1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,11 @@ const base = 'http://smartcycle.ljhnas.com';
 const test_base = "http://172.17.1.172:8080/";
 
 HttpClient client = new HttpClient();
+final GoogleSignIn _googleSignIn = GoogleSignIn();
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+
 
 class AuthUtils {
   GoogleSignIn _googleSignIn = new GoogleSignIn(
@@ -29,6 +35,40 @@ class AuthUtils {
     client.badCertificateCallback =
     ((X509Certificate cert, String host, int port) => true);
   }
+
+  Future<FirebaseUser> handleSignIn() async {
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth = await googleUser
+        .authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final FirebaseUser user = (await _auth.signInWithCredential(credential))
+        .user;
+    print("signed in " + user.displayName);
+    return user;
+  }
+
+  void signOut() {
+    _auth.signOut();
+    _googleSignIn.signOut();
+  }
+
+  Future<bool> isSignIn() async {
+    bool check = await _googleSignIn.isSignedIn();
+    print(check);
+    return check;
+  }
+
+  Future<UserInfo> currentUser() async {
+    print(_auth.currentUser().toString());
+    return _auth.currentUser();
+  }
+
+
 
   Future<InitUserDTO> getInitialUserData() async {
     InitUserDTO userDTO = InitUserDTO();
@@ -211,12 +251,12 @@ class AuthUtils {
     return reply;
   }
 
-  // SignOut Action
-  signOut() {
-    saveAccessToken("0");
-    saveUserEmail("0");
-    saveRefreshToken("0");
-  }
+//  // SignOut Action
+//  signOut() {
+//    saveAccessToken("0");
+//    saveUserEmail("0");
+//    saveRefreshToken("0");
+//  }
 
   Future<String> registerDevice(String user_email, String berry_id) async {
     // POST /socket/

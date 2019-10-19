@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/driveactivity/v2.dart';
@@ -21,261 +22,234 @@ class AuthProfile extends StatefulWidget {
 }
 
 class _AuthProfileState extends State<AuthProfile> {
-  Future<GoogleProfileDTO> _getUserGoogleProfile;
+  Future<UserInfo> _userInfo;
   String access_token_new = "";
-
 
   @override
   void initState() {
     super.initState();
+    _userInfo = AuthUtils().currentUser();
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<GoogleProfileDTO>(
-      future: _getUserGoogleProfile,
+    return FutureBuilder<UserInfo>(
+      future: _userInfo,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return SCircularProgress();
+          return UserProfile(context, snapshot.data);
         } else {
           return SCircularProgress();
         }
       },
     );
   } //  @override
-//  Widget build(BuildContext context) {
-//    AuthUtils()
-//        .getUserProfile(
-//            "115693788852145598865",
-//            access_token_new.isNotEmpty
-//                ? access_token_new
-//                : widget.access_token)
-//        .then((userProfile) {
-//      print(userProfile);
-//      if (userProfile == null) {
-//        AuthUtils().openGoogleSignIn().then((NewAccessToken) {
-//          access_token_new = NewAccessToken;
-//        });
-//      } else {
-//        isProfileAlreadyLoaded = true;
-//        googleProfile = userProfile;
-//        setState(() {});
-//      }
-//    });
-//
-//    return isProfileAlreadyLoaded
-//        ? Scaffold(
-//            appBar: AppBar(
-//              title: Text(
-//                "사용자 계정정보",
-//                style: TextAssets.mainRegular,
-//              ),
-//              backgroundColor: Colors.white,
-//              elevation: 0,
-//              iconTheme: IconThemeData(color: Colors.black),
-//            ),
-//            body: SingleChildScrollView(
-//              child: Column(
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: <Widget>[
-//                  Padding(
-//                    padding: const EdgeInsets.only(left: 15, top: 10),
-//                    child: InkWell(
-//                      child: Container(
-//                          width: 42,
-//                          height: 42,
-//                          decoration: new BoxDecoration(
-//                              shape: BoxShape.circle,
-//                              color: Colors.white,
-//                              boxShadow: [
-//                                BoxShadow(
-//                                    color: Colors.black12,
-//                                    offset: Offset(0, 8),
-//                                    blurRadius: 10)
-//                              ],
-//                              image: new DecorationImage(
-//                                  fit: BoxFit.fill,
-//                                  image:
-//                                      NetworkImage(googleProfile.image.url)))),
-//                      onTap: () {
-//                        // Toast message
-////                Navigator.of(context).push(
-////                  MaterialPageRoute(builder: (context) => AuthPage()),
-////                );
-//                      },
-//                    ),
-//                  ),
-//
-//                  Padding(
-//                    padding: const EdgeInsets.all(15),
-//                    child: Container(
-//                      child: Padding(
-//                          padding: const EdgeInsets.only(
-//                            left: 15,
-//                            top: 7,
-//                          ),
-//                          child: Column(
-//                            crossAxisAlignment: CrossAxisAlignment.start,
-//                            children: <Widget>[
-//                              Padding(
-//                                padding:
-//                                    const EdgeInsets.only(left: 5, bottom: 5),
-//                                child: Text(
-//                                  googleProfile.displayName,
-//                                  style: TextAssets.mainBold,
-//                                ),
-//                              ),
-//                              Padding(
-//                                padding:
-//                                    const EdgeInsets.only(left: 5, bottom: 5),
-//                                child: Row(
-//                                  children: <Widget>[
-//                                    Icon(Icons.email),
-//                                    SizedBox(
-//                                      width: 10,
-//                                    ),
-//                                    Text(
-//                                      googleProfile.emails[0].value,
-//                                      style: normalText,
-//                                    )
-//                                  ],
-//                                ),
-//                              ),
-//                              Padding(
-//                                padding:
-//                                    const EdgeInsets.only(left: 5, bottom: 5),
-//                                child: Row(
-//                                  children: <Widget>[
-//                                    Icon(Icons.pages),
-//                                    SizedBox(
-//                                      width: 10,
-//                                    ),
-//                                    Text(
-//                                      googleProfile.id,
-//                                      style: normalText,
-//                                    )
-//                                  ],
-//                                ),
-//                              ),
-//                              SizedBox(
-//                                height: 10,
-//                              ),
-//                            ],
-//                          )),
-//                      decoration: BoxDecoration(
-//                          color: Colors.white,
-//                          borderRadius: BorderRadius.circular(20),
-//                          boxShadow: [
-//                            BoxShadow(
-//                                color: Colors.black12,
-//                                offset: Offset(0, 6),
-//                                blurRadius: 6)
-//                          ]),
-//                    ),
-//                  ),
-//
-//                  Padding(
-//                      padding: const EdgeInsets.only(left: 20),
-//                      child: Row(
-//                        crossAxisAlignment: CrossAxisAlignment.center,
-//                        children: <Widget>[
-//                          Text(
-//                            "기기 연결",
-//                            style: TextAssets.mainBold,
-//                          ),
-//                          IconButton(
-//                            icon: Icon(
-//                              Icons.info_outline,
-//                              color: Colors.black,
-//                            ),
-//                            onPressed: () {},
-//                          )
-//                        ],
-//                      )),
-//                  Padding(
-//                    padding: const EdgeInsets.only(left: 15, right: 15),
-//                    child: Container(
-//                      width: double.infinity,
-//                      child: Padding(
-//                          padding: const EdgeInsets.only(
-//                            left: 15,
-//                            top: 7,
-//                          ),
-//                          child: Column(
-//                            crossAxisAlignment: CrossAxisAlignment.start,
-//                            children: <Widget>[
-//                              noDeviceAvail(context),
-//                              //myDeviceInfo()
-//                            ],
-//                          )),
-//                      decoration: BoxDecoration(
-//                          color: Colors.white,
-//                          borderRadius: BorderRadius.circular(20),
-//                          boxShadow: [
-//                            BoxShadow(
-//                                color: Colors.black12,
-//                                offset: Offset(0, 6),
-//                                blurRadius: 6)
-//                          ]),
-//                    ),
-//                  ),
-//
-//                  Padding(
-//                    padding: const EdgeInsets.all(15.0),
-//                    child: ButtonTheme(
-//                      minWidth: double.infinity,
-//                      child: RaisedButton(
-//                        child: Text(
-//                          "로그아웃",
-//                          style: TextStyle(color: Colors.orange),
-//                        ),
-//                        shape: RoundedRectangleBorder(
-//                            borderRadius: new BorderRadius.circular(30.0),
-//                            side: BorderSide(color: Colors.orange, width: 1)),
-//                        color: Colors.white,
-//                        //splashColor: Colors.yellow,
-//                        onPressed: () {
-//                          // Logout
-//                          _asyncConfirmDialog(context);
-//                        },
-//                      ),
-//                    ),
-//                  ),
-//
-////          Padding(
-////            padding: const EdgeInsets.all(15.0),
-////            child: ButtonTheme(
-////              minWidth: double.infinity,
-////              child: RaisedButton(
-////                child: Text(
-////                  "서비스 탈퇴",
-////                  style: TextStyle(color: Colors.red),
-////                ),
-////                shape: RoundedRectangleBorder(
-////                    borderRadius: new BorderRadius.circular(30.0),
-////                    side: BorderSide(color: Colors.red, width: 1)),
-////                color: Colors.white,
-////                onPressed: () {
-////                  // Logout
-////                  _asyncConfirmDialog(context);
-////                },
-////              ),
-////            ),
-////          ),
-//                ],
-//              ),
-//            ),
-//          )
-//        : Container(
-//            child: SCircularProgress(),
-//          );
-//  }
 
   @override
   void dispose() {
     super.dispose();
   }
+}
+
+Widget UserProfile(BuildContext context, UserInfo userinfo) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(
+        "사용자 계정정보",
+        style: TextAssets.mainRegular,
+      ),
+      backgroundColor: Colors.white,
+      elevation: 0,
+      iconTheme: IconThemeData(color: Colors.black),
+    ),
+    body: SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 15, top: 10),
+            child: InkWell(
+              child: Container(
+                  width: 42,
+                  height: 42,
+                  decoration: new BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(0, 8),
+                            blurRadius: 10)
+                      ],
+                      image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(userinfo.photoUrl)))),
+              onTap: () {
+                // Toast message
+//                Navigator.of(context).push(
+//                  MaterialPageRoute(builder: (context) => AuthPage()),
+//                );
+              },
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: Container(
+              child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15,
+                    top: 7,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5, bottom: 5),
+                        child: Text(
+                          userinfo.displayName,
+                          style: TextAssets.mainBold,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5, bottom: 5),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.email),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              userinfo.email,
+                              style: normalText,
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5, bottom: 5),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.pages),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              userinfo.uid,
+                              style: normalText,
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  )),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black12,
+                        offset: Offset(0, 6),
+                        blurRadius: 6)
+                  ]),
+            ),
+          ),
+
+          Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "기기 연결",
+                    style: TextAssets.mainBold,
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.info_outline,
+                      color: Colors.black,
+                    ),
+                    onPressed: () {},
+                  )
+                ],
+              )),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: Container(
+              width: double.infinity,
+              child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15,
+                    top: 7,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      noDeviceAvail(context),
+                      //myDeviceInfo()
+                    ],
+                  )),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black12,
+                        offset: Offset(0, 6),
+                        blurRadius: 6)
+                  ]),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ButtonTheme(
+              minWidth: double.infinity,
+              child: RaisedButton(
+                child: Text(
+                  "로그아웃",
+                  style: TextStyle(color: Colors.orange),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.orange, width: 1)),
+                color: Colors.white,
+                //splashColor: Colors.yellow,
+                onPressed: () {
+                  // Logout
+                  _asyncConfirmDialog(context);
+                },
+              ),
+            ),
+          ),
+
+//          Padding(
+//            padding: const EdgeInsets.all(15.0),
+//            child: ButtonTheme(
+//              minWidth: double.infinity,
+//              child: RaisedButton(
+//                child: Text(
+//                  "서비스 탈퇴",
+//                  style: TextStyle(color: Colors.red),
+//                ),
+//                shape: RoundedRectangleBorder(
+//                    borderRadius: new BorderRadius.circular(30.0),
+//                    side: BorderSide(color: Colors.red, width: 1)),
+//                color: Colors.white,
+//                onPressed: () {
+//                  // Logout
+//                  _asyncConfirmDialog(context);
+//                },
+//              ),
+//            ),
+//          ),
+        ],
+      ),
+    ),
+  );
 }
 
 Widget noDeviceAvail(BuildContext context) {
@@ -365,9 +339,9 @@ Widget myDeviceInfo() {
   );
 }
 
-Future<bool> _asyncConfirmDialog(BuildContext context) async {
+Future<bool> _asyncConfirmDialog(BuildContext mContext) async {
   return showDialog<bool>(
-    context: context,
+    context: mContext,
     barrierDismissible: false, // user must tap button for close dialog!
     builder: (BuildContext context) {
       return AlertDialog(
@@ -384,9 +358,7 @@ Future<bool> _asyncConfirmDialog(BuildContext context) async {
             child: const Text('로그아웃'),
             onPressed: () {
               AuthUtils().signOut();
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => MyHomePage()),
-              );
+              Navigator.of(mContext).pop(true);
             },
           )
         ],

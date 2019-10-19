@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix1;
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/DoYouKnowDetail.dart';
+import 'package:smartcycle/SCircularProgress.dart';
 import 'package:smartcycle/ScaleRoute.dart';
 import 'package:smartcycle/SmartDialog.dart';
 import 'package:smartcycle/TutorialsPage.dart';
@@ -61,8 +63,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   Future<InitUserDTO> _getinitUserData;
-  InitUserDTO _initUserDTO;
-  GoogleProfileDTO _googleProfileDTO;
+  Future<bool> _isSignIn;
+  Future<UserInfo> _userInfo;
 
   var history = new List<SearchHistory>();
 
@@ -80,16 +82,11 @@ class _MyHomePageState extends State<MyHomePage>
     networkCheck(context);
     super.initState();
 
-    _getinitUserData = AuthUtils().getInitialUserData();
-//    AuthUtils().getInitialUserData().then((initData) {
-//      _initUserDTO = initData;
-//      if (_initUserDTO.user_access_token != null) {
-//        isUserAvail = true;
-//        AuthUtils().getUserProfileTest(_initUserDTO).then((profileData) {
-//          if (profileData != null) _googleProfileDTO = profileData;
-//        });
-//      }
-//    });
+    _isSignIn = AuthUtils().isSignIn();
+
+    //_userInfo = AuthUtils().currentUser();
+    //_isSignIn = AuthUtils().isSignIn();
+    //_getinitUserData = AuthUtils().getInitialUserData();
 
     // FabBtn Controll
     _animationController =
@@ -126,8 +123,6 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   dispose() {
     _animationController.dispose();
-
-    isUserAvail = false;
     super.dispose();
   }
 
@@ -156,14 +151,11 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
-  Widget _launchQrCode() {
+  Widget _launchQrCode(String email) {
     return Container(
       child: new FloatingActionButton(
           heroTag: "qrFab",
           onPressed: () {
-            AuthUtils().getUserProfileTest(_initUserDTO).then((profileData) {
-              if (profileData != null) _googleProfileDTO = profileData;
-            });
             showDialog(
               context: context,
               builder: (BuildContext context) =>
@@ -172,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage>
                     description: "이 QR코드를 기기의 카메라 앞에 대세요.",
                     posiBtn: "알겠습니다.",
                     // userEmail
-                    url: "DDDDDd",
+                    url: email,
                   ),
             );
           },
@@ -202,6 +194,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   Widget build(BuildContext context) {
     networkCheck(context);
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
@@ -223,59 +216,84 @@ class _MyHomePageState extends State<MyHomePage>
                   _translateButton.value,
                   0.0,
                 ),
-                child: _launchQrCode(),
+                child: _launchQrCode("Dd"),
               ),
               toggle(),
             ],
           )),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            height: 20,
-          ),
+      body: FutureBuilder<bool>(
+        future: _isSignIn,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data) {
+              // already signed
 
-//          FutureBuilder<InitUserDTO>(
-//            future: _getinitUserData,
-//            builder: (context, snapshot){
-//              if(snapshot.connectionState == ConnectionState.done){
-//                if(snapshot.data.user_access_token --)
-//              }else{
-//                SmartCycleAppBar(
-//                  isUserAvail: false,
-//                  userProfileURL: "",
-//                );
-//              }
-//            },
-//
+              // Call currentUser
+              _userInfo = AuthUtils().currentUser();
+              return FutureBuilder<UserInfo>(
+                future: _userInfo,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return mainColumn(context, snapshot.data.photoUrl, true,
+                        true, snapshot.data.email);
+                  } else {
+                    return mainColumn(context, "NO", false, true, "NO");
+                  }
+                },
+              );
+            } else {
+              // not signed
+              return mainColumn(context, "NO", false, true, "NO");
+            }
+          } else {
+            // connecting to server
+            return mainColumn(context, "NO", false, false, "NO");
+          }
+        },
+      ),
+    );
+  }
+}
+
+Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
+    bool done, String email) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      SizedBox(
+        height: 20,
+      ),
+//          SmartCycleAppBar(
+//            isUserAvail: snapshot.data,
+//            userProfileURL: "",
 //          ),
-          SmartCycleAppBar(
-            isUserAvail: false,
-            userProfileURL: "",
-          ),
+      SmartCycleAppBar(
+        isSignIn: isSigned,
+        photoUrl: photoUrl,
+      ),
 
-          Padding(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  "알고계셨나요?",
-                  style: TextAssets.mainBold,
-                ),
-              ],
+      Padding(
+        padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              "알고계셨나요?",
+              style: TextAssets.mainBold,
             ),
-          ),
-          CarouselSlider(
-            height: 200.0,
-            enlargeCenterPage: true,
-            autoPlay: true,
-            initialPage: 0,
-            onPageChanged: (index) {
-              setState(() {});
-            },
-            items: <Widget>[_page1(context), _page2(context), _page3(context)],
-          ),
+          ],
+        ),
+      ),
+      CarouselSlider(
+        height: 200.0,
+        enlargeCenterPage: true,
+        autoPlay: true,
+        initialPage: 0,
+        onPageChanged: (index) {
+          //setState(() {});
+        },
+        items: <Widget>[_page1(context), _page2(context), _page3(context)],
+      ),
 //          doYouKnowGo
 //              ? CarouselSlider(
 //                  height: 200.0,
@@ -292,26 +310,26 @@ class _MyHomePageState extends State<MyHomePage>
 //                  ],
 //                )
 //              : Container(),
-          SizedBox(
-            height: 14,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 15),
-            child: Text(
-              "최근 검색한 분리수거",
-              style: TextAssets.mainBold,
-            ),
-          ),
-
-          // TEST DATA
-          HistoryGridView(
-            isUserAvail: true,
-            userEmail: "Dd",
-          ),
-        ],
+      SizedBox(
+        height: 14,
       ),
-    );
-  }
+      Padding(
+        padding: EdgeInsets.only(left: 15),
+        child: Text(
+          "최근 검색한 분리수거",
+          style: TextAssets.mainBold,
+        ),
+      ),
+
+      // TEST DATA
+      (done)
+          ? HistoryGridView(
+        isSignIn: isSigned,
+        userEmail: email,
+      )
+          : Text("서버에 접속중입니다."),
+    ],
+  );
 }
 
 // Widget _pageView(){
