@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
@@ -20,7 +21,7 @@ class TutorialsPage extends StatelessWidget {
       case 1:
         return AppUsing(context);
       case 2:
-        return CameraUsing();
+        return CameraUsing(context);
     }
   }
 }
@@ -41,17 +42,17 @@ Widget AppUsing(BuildContext context) {
 }
 
 // 카메라 설명
-Widget CameraUsing() {
+Widget CameraUsing(BuildContext context) {
   return Scaffold(
     body: PageView(
       children: <Widget>[
-        _cPage1(),
+        _cPage1(context),
       ],
     ),
   );
 }
 
-Widget _cPage1() {
+Widget _cPage1(BuildContext context) {
   return Padding(
     padding: EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 15),
     child: Column(
@@ -65,8 +66,9 @@ Widget _cPage1() {
             SizedBox(
               height: 20,
             ),
+            Text("사용자 설명서", style: TextAssets.subBold,),
             Icon(
-              Icons.blur_circular,
+              Icons.center_focus_strong,
               color: Colors.blue,
               size: 50,
             ),
@@ -90,7 +92,9 @@ Widget _cPage1() {
             IconButton(
               icon: Icon(Icons.clear),
               iconSize: 20,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
             ),
           ],
         ),
@@ -111,14 +115,14 @@ Widget _page1() {
         ),
         Text(
           "SmartCycle 시작하기",
-          style: mainBold,
+          style: TextAssets.mainBold,
         ),
         SizedBox(
           height: 20,
         ),
         Text(
           "설치해주셔서 감사합니다.",
-          style: appBarRegular,
+          style: TextAssets.mainRegular,
         )
       ],
     ),
@@ -137,7 +141,7 @@ Widget _page2() {
           children: <Widget>[
             Text(
               "[1] NUGU에서 시작하기",
-              style: mainBold,
+              style: TextAssets.mainBold,
             )
           ],
         ),
@@ -158,7 +162,7 @@ Widget _page3() {
           children: <Widget>[
             Text(
               "[2] 앱에서 시작하기",
-              style: mainBold,
+              style: TextAssets.mainBold,
             )
           ],
         ),

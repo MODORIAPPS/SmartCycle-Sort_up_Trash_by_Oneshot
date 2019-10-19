@@ -7,7 +7,7 @@ import 'package:smartcycle/model/TrashItemDTO.dart';
 import 'package:smartcycle/model/TrashType.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import 'model/RcleDetail.dart';
-import 'styles/CustomStyle.dart';
+import 'assets.dart';
 import 'package:http/http.dart' as http;
 
 // sampleData inserted.
@@ -170,7 +170,7 @@ Widget _title() {
     children: <Widget>[
       Text(
         rclData.name + " 을(를) 분리수거 하는 방법",
-        style: mainBold,
+        style: TextAssets.mainBold,
       ),
 
 //      Text(
@@ -230,7 +230,7 @@ Widget CompositionWidget(String part, String value) {
         ),
         Text(
           value,
-          style: mainBold,
+          style: TextAssets.mainBold,
         )
       ],
     ),
@@ -248,7 +248,7 @@ Widget StepWidget(String image, String step, int i) {
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(
             "STEP " + i.toString(),
-            style: mainBold,
+            style: TextAssets.mainBold,
           ),
         ),
         Padding(

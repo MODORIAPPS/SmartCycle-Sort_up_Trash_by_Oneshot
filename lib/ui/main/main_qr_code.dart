@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
 class Consts {
@@ -80,7 +81,7 @@ class QrDialog extends StatelessWidget {
                         .bottom,
               ),
               Text("더 상세한 정보를 얻고 싶다면 카메라에 QR코드를 보여주세요.",
-                  textAlign: TextAlign.center, style: mainBold),
+                  textAlign: TextAlign.center, style: TextAssets.mainBold),
               SizedBox(height: 10.0),
               SizedBox(
                 width: double.infinity,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/auth/auth_main.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:smartcycle/RegiCompleted.dart';
@@ -18,7 +19,7 @@ class AddDevice extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             "내 기기 추가하기",
-            style: appBarRegular,
+            style: TextAssets.mainRegular,
           ),
           iconTheme: IconThemeData(color: Colors.black87),
           backgroundColor: Colors.white,
@@ -64,7 +65,7 @@ class AddDevice extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 13, top: 7, bottom: 7),
                     child: Text(
                       "연동은 어떻게 하나요?",
-                      style: appBarRegular,
+                      style: TextAssets.mainRegular,
                     ),
                   ),
                   Padding(

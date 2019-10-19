@@ -7,28 +7,26 @@ const base = 'http://smartcycle.ljhnas.com';
 
 class CameraModify extends StatefulWidget {
   File imageFile;
+  String imagePath;
 
-  CameraModify({this.imageFile});
+  CameraModify({this.imageFile, this.imagePath});
 
   @override
-  _CameraModifyState createState() => _CameraModifyState(file: imageFile);
+  _CameraModifyState createState() => _CameraModifyState();
 }
 
 class _CameraModifyState extends State<CameraModify> {
-  File file;
-
-  _CameraModifyState({this.file});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          Image.file(file),
+          Image.file(widget.imageFile),
           RaisedButton(
             child: Text("이미지 업로드"),
             onPressed: () {
-              _uploadImage(file);
+              _uploadImage(widget.imageFile);
             },
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartcycle/HistoryCard.dart';
+import 'package:smartcycle/SCircularProgress.dart';
+import 'package:smartcycle/ui/main/main_history_card.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 import 'package:smartcycle/model/TrashType.dart';
@@ -17,43 +18,78 @@ class HistoryGridView extends StatefulWidget {
 }
 
 class _HistoryGridViewState extends State<HistoryGridView> {
+  Future<SearchHistorys> _getUserHistory;
   bool isDataReady = false;
   SearchHistorys _historys; // getFrom SmartCycle internal server.
   SmartCycleServer smartCycleServer = new SmartCycleServer();
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    // %% ONLY FOR TEST %% getUserHistoryTest
+    _getUserHistory = smartCycleServer.getUserHistoryTest(widget.userEmail);
+    //_getUserHistory = smartCycleServer.getUserHistory(widget.userEmail);
+
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (widget.userEmail != null && _historys == null) {
-      // %% ONLY FOR TEST %% getUserHistoryTest
-      smartCycleServer.getUserHistoryTest(widget.userEmail).then((historyData) {
-        _historys = historyData;
-
-        setState(() {});
-      });
-
-//      smartCycleServer.getUserHistory(widget.userEmail).then((historyData) {
+//    if (widget.userEmail != null && _historys == null) {
+//
+//      // %% ONLY FOR TEST %% getUserHistoryTest
+//      smartCycleServer.getUserHistoryTest(widget.userEmail).then((historyData) {
 //        _historys = historyData;
+//
 //        setState(() {});
 //      });
+//
+////      smartCycleServer.getUserHistory(widget.userEmail).then((historyData) {
+////        _historys = historyData;
+////        setState(() {});
+////      });
+//
+//    }
 
-    }
+//    return widget.isUserAvail
+//        ? (_historys != null)
+//            ? _historyGridView(context, _historys)
+//        : Column(
+//      children: <Widget>[
+//        SizedBox(
+//          height: 50,
+//        ),
+//        Center(
+//          child: CircularProgressIndicator(),
+//        )
+//      ],
+//              )
+//        : Center(
+//            child: Text("개인화된 기능을 사용하려면 로그인 하세요"),
+//          );
 
-    return widget.isUserAvail
-        ? (_historys != null)
-            ? _historyGridView(context, _historys)
-        : Column(
-      children: <Widget>[
-        SizedBox(
-          height: 50,
-        ),
-        Center(
-          child: CircularProgressIndicator(),
-        )
-      ],
-              )
-        : Center(
-            child: Text("개인화된 기능을 사용하려면 로그인 하세요"),
+    return FutureBuilder<SearchHistorys>(
+      future: _getUserHistory,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return (snapshot.data.historys != null) ? _historyGridView(
+              context, snapshot.data) : Column(
+            children: <Widget>[
+              SizedBox(height: 40,),
+              Text("검색하신 쓰레기가 없어요.")
+            ],
           );
+        } else {
+          return Column(
+            children: <Widget>[
+              SizedBox(height: 50,),
+              SCircularProgress()
+            ],
+          );
+        }
+      },
+    );
   }
 }
 

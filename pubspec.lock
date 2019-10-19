@@ -144,6 +144,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.1+4"
+  lamp:
+    dependency: "direct main"
+    description:
+      name: lamp
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.6"
   matcher:
     dependency: transitive
     description:
@@ -268,13 +275,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.5"
-  torch:
-    dependency: "direct main"
-    description:
-      name: torch
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1"
   typed_data:
     dependency: transitive
     description:

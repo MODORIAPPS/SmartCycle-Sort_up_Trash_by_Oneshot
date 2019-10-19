@@ -33,31 +33,16 @@ class HistoryCard extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Expanded(
-                child: Image.asset(
-                  itemImage,
-                  fit: BoxFit.cover,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20.0),
+                  child: Container(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Image.asset(itemImage),
+                    ),
+                  ),
                 ),
               ),
-
-              /*
-              *
-              * ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      alignment: Alignment(-.2, 0),
-                      image: NetworkImage(
-                          'https://media.nature.com/w800/magazine-assets/d41586-019-02584-7/d41586-019-02584-7_17110722.jpg'),
-                      fit: BoxFit.cover),
-                ),
-              )),
-              *
-              *
-              *
-              *
-              * */
-
               Text(
                 itemName,
                 style: settingBlue,

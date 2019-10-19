@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartcycle/model/SearchHistory.dart';
 
-const test_base = "http://172.17.1.172:8080/";
+const test_base = "http://192.168.15.70:8080/";
 const base = 'http://smartcycle.ljhnas.com/';
 
 class SmartCycleServer {

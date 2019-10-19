@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,34 +28,48 @@ class LoginPage extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 25, right: 25, top: 25, bottom: 20),
+          padding: EdgeInsets.only(top: 12, bottom: 15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(
-                    height: 10,
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          "SmartCycle과 함께 깨끗한 지구 만들기.",
-                          style: authBold,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25, right: 25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: Text(
+                                "SmartCycle과 함께 깨끗한 지구 만들기.",
+                                style: TextAssets.mainBoldW,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          "설치해주셔서 감사합니다.",
+                          style: authRegular,
+                        )
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    "설치해주셔서 감사합니다.",
-                    style: authRegular,
-                  )
+
                 ],
               ),
               Padding(

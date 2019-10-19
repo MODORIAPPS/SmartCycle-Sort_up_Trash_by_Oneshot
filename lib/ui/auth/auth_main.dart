@@ -4,12 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/AddDevice.dart';
+import 'package:smartcycle/SCircularProgress.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:smartcycle/SmartDialog.dart';
 import 'package:smartcycle/TutorialsPage.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/model/GoogleProfileDTO.dart';
-import 'package:smartcycle/styles/CustomStyle.dart';
+import 'package:smartcycle/assets.dart';
+import 'package:smartcycle/model/InitUserDTO.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import 'package:smartcycle/ui/auth/auth_login.dart';
 import 'package:smartcycle/ui/auth/auth_profile.dart';
@@ -38,39 +40,72 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  Future<AuthMainData> _initAccessToken;
+
+  Future<AuthMainData> initAccessToken() async {
+    String access_token = await AuthUtils().getAccessToken();
+    String user_id = await AuthUtils().getUserId();
+    if (access_token == null || access_token.isEmpty) return null;
+    return AuthMainData(access_token: access_token, user_id: user_id);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initAccessToken = initAccessToken();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (access_token == null || access_token.length <= 10) {
-      AuthUtils().getAccessToken().then((token) {
-        access_token = token;
-        if (access_token.length >= 8) {
-          isAccessTokenAvail = true;
+    return Scaffold(body: FutureBuilder<AuthMainData>(
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data == null) {
+            return LoginPage();
+          } else {
+            return AuthProfile(
+              access_token: snapshot.data.access_token,
+              user_id: snapshot.data.user_id,
+            );
+          }
         } else {
-          isAccessTokenAvail = false;
+          return SCircularProgressWithBtn();
         }
-
-        print("액세스 토큰의 유무 : " + isAccessTokenAvail.toString());
-
-        setState(() {});
-      });
-
-      AuthUtils().getUserId().then((user_id) {
-        userId = user_id;
-      });
-    } else {
-      if (isProfileAlreadyLoaded != true) {}
-    }
-
-    mContext = context;
-    return Scaffold(
-        body: !isAccessTokenAvail
-            ? LoginPage()
-            : AuthProfile(
-          user_id: userId,
-          access_token: access_token,
-        ));
-    //body: LoginPage());
-  }
+      },
+    ));
+  } //  @override
+//  Widget build(BuildContext context) {
+//    if (access_token == null || access_token.length <= 10) {
+//      AuthUtils().getAccessToken().then((token) {
+//        access_token = token;
+//        if (access_token.length >= 8) {
+//          isAccessTokenAvail = true;
+//        } else {
+//          isAccessTokenAvail = false;
+//        }
+//
+//        print("액세스 토큰의 유무 : " + isAccessTokenAvail.toString());
+//
+//        setState(() {});
+//      });
+//
+//      AuthUtils().getUserId().then((user_id) {
+//        userId = user_id;
+//      });
+//    } else {
+//      if (isProfileAlreadyLoaded != true) {}
+//    }
+//
+//    mContext = context;
+//    return Scaffold(
+//        body: !isAccessTokenAvail
+//            ? LoginPage()
+//            : AuthProfile(
+//          user_id: userId,
+//          access_token: access_token,
+//        ));
+//    //body: LoginPage());
+//  }
 
   @override
   void dispose() {
@@ -79,6 +114,13 @@ class _AuthPageState extends State<AuthPage> {
     isAccessTokenAvail = false;
     isProfileAlreadyLoaded = false;
   }
+}
+
+class AuthMainData {
+  String access_token;
+  String user_id;
+
+  AuthMainData({this.access_token, this.user_id});
 }
 
 //Future<String> _openGoogleAuth() async {

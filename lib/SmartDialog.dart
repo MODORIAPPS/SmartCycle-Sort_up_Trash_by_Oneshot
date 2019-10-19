@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -59,9 +60,9 @@ class SmartDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min, // To make the card compact
             children: <Widget>[
-              Text(title, style: mainBold),
+              Text(title, style: TextAssets.mainBold),
               SizedBox(height: 16.0),
-              Text(content, style: appBarRegular),
+              Text(content, style: TextAssets.mainRegular),
               SizedBox(height: 10.0),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -70,7 +71,7 @@ class SmartDialog extends StatelessWidget {
                   FlatButton(
                     child: Text(
                       "닫기",
-                      style: appBarRegular,
+                      style: TextAssets.mainRegular,
                     ),
                     onPressed: () {
                       Navigator.of(context).pop(); // To close the dialog

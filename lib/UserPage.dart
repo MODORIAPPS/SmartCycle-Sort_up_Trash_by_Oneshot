@@ -1,5 +1,6 @@
 import 'package:smartcycle/UserPage.dart';
 import 'package:flutter/material.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
 class UserPage extends StatelessWidget {
@@ -7,7 +8,7 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("사용자 설정", style: appBarRegular,),
+        title: Text("사용자 설정", style: TextAssets.mainRegular,),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black87),
       ),

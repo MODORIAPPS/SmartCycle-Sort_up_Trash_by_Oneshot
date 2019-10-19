@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' as prefix1;
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/DoYouKnowDetail.dart';
+import 'package:smartcycle/ScaleRoute.dart';
 import 'package:smartcycle/SmartDialog.dart';
 import 'package:smartcycle/TutorialsPage.dart';
 import 'package:smartcycle/model/GoogleProfileDTO.dart' as prefix0;
@@ -15,9 +16,9 @@ import 'package:smartcycle/ui/main/main_qr_code.dart';
 import 'package:smartcycle/ui/auth/auth_main.dart';
 import 'package:smartcycle/UserPage.dart';
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
-import 'package:smartcycle/styles/CustomStyle.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/camera/camera_start.dart';
-import 'package:smartcycle/HistoryCard.dart';
+import 'package:smartcycle/ui/main/main_history_card.dart';
 import 'package:smartcycle/RecycleDetail.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 import 'package:smartcycle/model/TrashType.dart';
@@ -26,7 +27,7 @@ import 'package:smartcycle/styles/Styles.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartcycle/ui/main/main_app_bar.dart';
-import 'package:smartcycle/ui/main/main_gridview.dart';
+import 'package:smartcycle/ui/main/main_history_gridview.dart';
 
 import 'model/GoogleProfileDTO.dart';
 import 'model/RcleDetail.dart';
@@ -59,6 +60,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
+  Future<InitUserDTO> _getinitUserData;
   InitUserDTO _initUserDTO;
   GoogleProfileDTO _googleProfileDTO;
 
@@ -75,17 +77,19 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   initState() {
-    networkCheck();
+    networkCheck(context);
+    super.initState();
 
-    AuthUtils().getInitialUserData().then((initData) {
-      _initUserDTO = initData;
-      if (_initUserDTO.user_access_token != null) {
-        isUserAvail = true;
-        AuthUtils().getUserProfileTest(_initUserDTO).then((profileData) {
-          if (profileData != null) _googleProfileDTO = profileData;
-        });
-      }
-    });
+    _getinitUserData = AuthUtils().getInitialUserData();
+//    AuthUtils().getInitialUserData().then((initData) {
+//      _initUserDTO = initData;
+//      if (_initUserDTO.user_access_token != null) {
+//        isUserAvail = true;
+//        AuthUtils().getUserProfileTest(_initUserDTO).then((profileData) {
+//          if (profileData != null) _googleProfileDTO = profileData;
+//        });
+//      }
+//    });
 
     // FabBtn Controll
     _animationController =
@@ -117,8 +121,6 @@ class _MyHomePageState extends State<MyHomePage>
         curve: _curve,
       ),
     ));
-
-    super.initState();
   }
 
   @override
@@ -138,13 +140,14 @@ class _MyHomePageState extends State<MyHomePage>
     isOpened = !isOpened;
   }
 
-  Widget image() {
+  Widget _launchCamera(BuildContext context) {
     return Container(
       child: new FloatingActionButton(
         heroTag: "imageFab",
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => CameraActvity()),
+          Navigator.push(
+            context,
+            ScaleRoute(widget: CameraActvity()),
           );
         },
         tooltip: 'camera',
@@ -153,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage>
     );
   }
 
-  Widget qrCode() {
+  Widget _launchQrCode() {
     return Container(
       child: new FloatingActionButton(
           heroTag: "qrFab",
@@ -161,16 +164,17 @@ class _MyHomePageState extends State<MyHomePage>
             AuthUtils().getUserProfileTest(_initUserDTO).then((profileData) {
               if (profileData != null) _googleProfileDTO = profileData;
             });
-//            showDialog(
-//              context: context,
-//              builder: (BuildContext context) => QrDialog(
-//                title: "QR코드",
-//                description: "이 QR코드를 기기의 카메라 앞에 대세요.",
-//                posiBtn: "알겠습니다.",
-//                // userEmail
-//                url: "DDDDDd",
-//              ),
-//            );
+            showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  QrDialog(
+                    title: "QR코드",
+                    description: "이 QR코드를 기기의 카메라 앞에 대세요.",
+                    posiBtn: "알겠습니다.",
+                    // userEmail
+                    url: "DDDDDd",
+                  ),
+            );
           },
           tooltip: 'qrCode',
           child: Image.asset(
@@ -197,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    networkCheck();
+    networkCheck(context);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
@@ -211,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage>
                   _translateButton.value * 2.0,
                   0.0,
                 ),
-                child: image(),
+                child: _launchCamera(context),
               ),
               Transform(
                 transform: Matrix4.translationValues(
@@ -219,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage>
                   _translateButton.value,
                   0.0,
                 ),
-                child: qrCode(),
+                child: _launchQrCode(),
               ),
               toggle(),
             ],
@@ -230,10 +234,26 @@ class _MyHomePageState extends State<MyHomePage>
           SizedBox(
             height: 20,
           ),
+
+//          FutureBuilder<InitUserDTO>(
+//            future: _getinitUserData,
+//            builder: (context, snapshot){
+//              if(snapshot.connectionState == ConnectionState.done){
+//                if(snapshot.data.user_access_token --)
+//              }else{
+//                SmartCycleAppBar(
+//                  isUserAvail: false,
+//                  userProfileURL: "",
+//                );
+//              }
+//            },
+//
+//          ),
           SmartCycleAppBar(
-            isUserAvail: true,
+            isUserAvail: false,
             userProfileURL: "",
           ),
+
           Padding(
             padding: EdgeInsets.only(left: 15, right: 15, top: 10),
             child: Row(
@@ -241,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage>
               children: <Widget>[
                 Text(
                   "알고계셨나요?",
-                  style: mainBold,
+                  style: TextAssets.mainBold,
                 ),
               ],
             ),
@@ -279,7 +299,7 @@ class _MyHomePageState extends State<MyHomePage>
             padding: EdgeInsets.only(left: 15),
             child: Text(
               "최근 검색한 분리수거",
-              style: mainBold,
+              style: TextAssets.mainBold,
             ),
           ),
 
@@ -410,7 +430,7 @@ Widget _page1(BuildContext context) {
                     image: DecorationImage(
                         alignment: Alignment(-.2, 0),
                         image: NetworkImage(
-                            'https://m.hardmarket.co.kr/web/product/big/201905/f51a200d5c7e3791cd3bffd76910b025.jpg'),
+                            'https://images.unsplash.com/photo-1495556650867-99590cea3657?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'),
                         fit: BoxFit.cover),
                   ),
                 )),
@@ -424,7 +444,7 @@ Widget _page1(BuildContext context) {
             Padding(
               padding: const EdgeInsets.all(15),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(),
@@ -432,14 +452,14 @@ Widget _page1(BuildContext context) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "우리가 분리수거를 해야하는 확실한 이유",
+                        "우리가 무심코 버린 쓰레기가 가는 곳",
                         style: mainRegular,
                       ),
                       SizedBox(
                         height: 5,
                       ),
                       Text(
-                        "2020년 1월 1일",
+                        "2019년 9월 12일",
                         style: mainLight,
                       )
                     ],
@@ -462,7 +482,6 @@ Widget _page1(BuildContext context) {
 //          MaterialPageRoute(builder: (context) => AuthPage()),
 //        );
 
-
 //        Navigator.of(context).push(
 //          MaterialPageRoute(builder: (context) => DoYouKnowDetail()),
 //        );
@@ -484,7 +503,7 @@ Widget _page2(BuildContext context) {
                   image: DecorationImage(
                       alignment: Alignment(-.2, 0),
                       image: NetworkImage(
-                          'https://media.nature.com/w800/magazine-assets/d41586-019-02584-7/d41586-019-02584-7_17110722.jpg'),
+                          'https://images.unsplash.com/photo-1524074500728-47a32346e245?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'),
                       fit: BoxFit.cover),
                 ),
               )),
@@ -498,7 +517,7 @@ Widget _page2(BuildContext context) {
           Padding(
             padding: const EdgeInsets.all(15),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(),
@@ -506,14 +525,14 @@ Widget _page2(BuildContext context) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "설레임은 어떻게 분리수거해야할까?",
+                      "일상속에서 흔하지만 분리수거 할줄 모르는 그것들.",
                       style: mainRegular,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      "2020년 1월 1일",
+                      "2019년 10월 12일",
                       style: mainLight,
                     )
                   ],
@@ -547,7 +566,7 @@ Widget _page3(BuildContext context) {
                   image: DecorationImage(
                       alignment: Alignment(-.2, 0),
                       image: NetworkImage(
-                          'https://media.nature.com/w800/magazine-assets/d41586-019-02638-w/d41586-019-02638-w_17141688.jpg'),
+                          'https://images.unsplash.com/photo-1526951521990-620dc14c214b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'),
                       fit: BoxFit.cover),
                 ),
               )),
@@ -561,7 +580,7 @@ Widget _page3(BuildContext context) {
           Padding(
             padding: const EdgeInsets.all(15),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(),
@@ -576,7 +595,7 @@ Widget _page3(BuildContext context) {
                       height: 5,
                     ),
                     Text(
-                      "2020년 1월 1일",
+                      "2019년 8월 15일",
                       style: mainLight,
                     )
                   ],
@@ -615,13 +634,13 @@ Future<RclDetail> getData(String itemId) async {
   //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
 }
 
-Future<Widget> networkCheck() async {
+Future<Widget> networkCheck(BuildContext context) async {
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult != ConnectivityResult.mobile &&
       connectivityResult != ConnectivityResult.wifi) {
     // noNetwork
     return showDialog(
-      context: mContext,
+      context: context,
       builder: (BuildContext context) =>
           SmartDialog(
             title: "네트워크 없음.",

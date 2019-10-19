@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smartcycle/ModifyRecog.dart';
 import 'package:smartcycle/RecycleDetail.dart';
 import 'package:smartcycle/model/TrashType.dart';
-import 'package:smartcycle/styles/CustomStyle.dart';
+import 'package:smartcycle/assets.dart';
 
 class CameraResult extends StatelessWidget {
   @override

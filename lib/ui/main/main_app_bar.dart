@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartcycle/TutorialsPage.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import '../auth/auth_main.dart';
 
@@ -30,14 +31,14 @@ class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
             child: Row(
               children: <Widget>[
                 Image.asset(
-                  "assets/images/SmartCycle_logo_skyblue.png",
+                  ImageAssets.blue_logo,
                   width: 35.0,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
                   child: Text(
                     "SmartCycle",
-                    style: appBarRegular,
+                    style: TextAssets.mainRegular,
                   ),
                 )
               ],
@@ -68,7 +69,7 @@ class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
                         fit: BoxFit.fill,
                         image: widget.isUserAvail
                             ? new NetworkImage(widget.userProfileURL != null
-                                ? widget.userProfileURL
+                            ? "https://d2ut1jne2opyld.cloudfront.net/images/community/photos/7029/7997/fcfc9e347bde68fe319fca344b1292b6_large.jpg"
                                 : "https://image.flaticon.com/icons/png/512/64/64572.png")
                             : AssetImage(
                                 "assets/images/google_user_default.png")))),

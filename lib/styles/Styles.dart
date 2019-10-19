@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:googleapis/drive/v2.dart';
 
-const TextStyle mainBold = TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold, fontFamily: "NotoCjkKR");
 const TextStyle mainRegular = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: "NotoCjkKR", height: 1.2);
 const TextStyle mainLight = TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300, fontFamily: "NotoCjkKR", );
 
@@ -15,7 +14,6 @@ const TextStyle cardLight = TextStyle(color: Colors.black87,
   fontFamily: "NotoCjkKR",);
 
 
-const TextStyle appBarRegular = TextStyle(color: Colors.black87, fontSize: 18, fontWeight: FontWeight.w700, fontFamily: "NotoCjkKR", );
 
 // StartPage()
 

@@ -1,44 +1,44 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:googleapis/compute/v1.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:image_cropper/image_cropper.dart';
+import 'package:lamp/lamp.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:smartcycle/TutorialsPage.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import 'package:smartcycle/ui/camera/CameraModify.dart';
-import 'package:torch/torch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-List<CameraDescription> cameras;
+BuildContext mContext;
 bool hasTorch = false;
-bool okay = false;
 
-cameraLaunch() async {
-  cameras = await availableCameras();
-  hasTorch = await Torch.hasTorch;
-  print(hasTorch);
-}
+class CameraActvity extends StatefulWidget {
+  final CameraDescription camera;
 
-class CameraActvity extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    cameraLaunch();
-    return Scaffold(
-      body: CameraApp(),
-      floatingActionButton: null,
-    );
-  }
-}
+  CameraActvity({Key key, @required this.camera}) : super(key: key);
 
-class CameraApp extends StatefulWidget {
   @override
   _CameraAppState createState() => _CameraAppState();
 }
 
-class _CameraAppState extends State<CameraApp> {
+class _CameraAppState extends State<CameraActvity> {
+  Future<void> _initializeControllerFuture;
+  CameraController _controller;
   File _image;
-  CameraController controller;
+
+  Future<void> makeCamera() async {
+    final cameras = await availableCameras();
+    _controller = CameraController(cameras.first, ResolutionPreset.ultraHigh);
+    _controller.initialize().whenComplete(() {
+      setState(() {});
+    });
+
+    print("동작");
+  }
 
   getImageFromAlbum(ImageSource source) async {
     var imageFile = await ImagePicker.pickImage(source: source);
@@ -58,146 +58,219 @@ class _CameraAppState extends State<CameraApp> {
     setState(() {
       _image = croppedFile;
 
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CameraModify(imageFile: _image)));
+      Route route = MaterialPageRoute(
+          builder: (context) =>
+              CameraModify(
+                imageFile: _image,
+              ));
+      Navigator.push(mContext, route);
+//      Navigator.of(mContext).push(MaterialPageRoute(
+//          builder: (context) => CameraModify(imageFile: _image))
     });
   }
 
   @override
   void initState() {
     super.initState();
-    controller = CameraController(cameras[0], ResolutionPreset.high);
-    controller.initialize().then((_) {
-      okay = true;
-      setState(() {});
+    Lamp.hasLamp.then((data) {
+      hasTorch = data;
     });
+
+    _initializeControllerFuture = makeCamera();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return okay
-        ? Stack(
-      children: <Widget>[
-        RotationTransition(
-          turns: AlwaysStoppedAnimation(1),
-          child: CameraPreview(controller),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(0),
-            child: Container(
-              color: Colors.transparent,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10, top: 3),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+    mContext = context;
+    return Scaffold(
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            print("카메라 준비 완료");
+
+            final size = MediaQuery
+                .of(context)
+                .size;
+            final deviceRatio = size.width / size.height;
+
+            return Stack(
+              children: <Widget>[
+                Transform.scale(
+                    scale: _controller.value.aspectRatio / deviceRatio,
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: CameraPreview(_controller),
+                      ),
+                    )),
+                Column(
                   children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(18),
-                      ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
                       child: IconButton(
-                        color: Colors.blueAccent,
-                        icon: Icon(Icons.photo_album,
-                            color: Colors.blueAccent),
-                        onPressed: () {
-                          getImageFromAlbum(ImageSource.gallery);
-                        },
+                        icon: Icon(Icons.arrow_back_ios),
+                        color: Colors.blue,
+                        onPressed: () => Navigator.of(context).pop(true),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.camera,
-                            color: Colors.blueAccent,
-                          )),
-                    ),
-                    Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18),
-                        ),
-                        child: InkWell(
-                          child: hasTorch
-                              ? IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.flash_off,
-                              color: Colors.blueAccent,
-                            ),
-                          )
-                              : IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.flash_on,
-                                color: Colors.blueAccent,
-                              )),
-                          onTap: () {
-                            setState(() {
-                              if (hasTorch) {
-                                hasTorch = false;
-                                Torch.turnOff();
-                              } else {
-                                hasTorch = true;
-                                Torch.turnOn();
-                              }
-                            });
-                          },
-                        )),
                   ],
                 ),
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            TutorialsPage(
-                              pageCode: 2,
-                            )),
-                  );
-                },
-                elevation: 10,
-                backgroundColor: Colors.white,
-                label: Text(
-                  "탐색할 물건 촬영",
-                  style: fabText,
-                  textAlign: TextAlign.center,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10, top: 3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: IconButton(
+                                color: Colors.blueAccent,
+                                icon: Icon(Icons.photo_album,
+                                    color: Colors.blueAccent),
+                                onPressed: () {
+                                  getImageFromAlbum(ImageSource.gallery);
+                                },
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: IconButton(
+                                  onPressed: () async {
+                                    try {
+                                      // Ensure that the camera is initialized.
+                                      await _initializeControllerFuture;
+
+                                      // Construct the path where the image should be saved using the
+                                      // pattern package.
+                                      final path = join(
+                                        // Store the picture in the temp directory.
+                                        // Find the temp directory using the `path_provider` plugin.
+                                        (await getTemporaryDirectory()).path,
+                                        '${DateTime.now()}.png',
+                                      );
+
+                                      // Attempt to take a picture and log where it's been saved.
+                                      await _controller.takePicture(path);
+
+                                      // If the picture was taken, display it on a new screen.
+//                                      Navigator.push(
+//                                        context,
+//                                        MaterialPageRoute(
+//                                          builder: (context) =>
+//                                              CameraModify(imagePath: path),
+//                                        ),
+//                                      );
+
+                                      goCrop(File(path));
+                                    } catch (e) {
+                                      // If an error occurs, log the error to the console.
+                                      print(e);
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.camera,
+                                    color: Colors.blueAccent,
+                                  )),
+                            ),
+                            Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: InkWell(
+                                  child: hasTorch
+                                      ? IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Icons.flash_off,
+                                      color: Colors.blueAccent,
+                                    ),
+                                  )
+                                      : IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.flash_on,
+                                        color: Colors.blueAccent,
+                                      )),
+                                  onTap: () {
+                                    setState(() {
+                                      if (hasTorch) {
+                                        hasTorch = false;
+                                        Lamp.turnOff();
+                                      } else {
+                                        hasTorch = true;
+                                        Lamp.turnOn();
+                                      }
+                                    });
+                                  },
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                icon: Icon(
-                  Icons.info,
-                  color: Colors.blue,
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    TutorialsPage(
+                                      pageCode: 2,
+                                    )),
+                          );
+                        },
+                        elevation: 10,
+                        backgroundColor: Colors.white,
+                        label: Text(
+                          "탐색할 물건 촬영",
+                          style: fabText,
+                          textAlign: TextAlign.center,
+                        ),
+                        icon: Icon(
+                          Icons.info,
+                          color: Colors.blue,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              )
-            ],
-          ),
-        ),
-      ],
-    )
-        : Container(
-      child: CircularProgressIndicator(),
+              ],
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }

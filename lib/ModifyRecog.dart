@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartcycle/styles/CustomStyle.dart';
+import 'package:smartcycle/assets.dart';
 
 class ModifyRecog extends StatelessWidget {
   @override
