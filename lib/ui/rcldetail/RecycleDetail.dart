@@ -6,8 +6,8 @@ import 'package:smartcycle/main.dart';
 import 'package:smartcycle/model/TrashItemDTO.dart';
 import 'package:smartcycle/model/TrashType.dart';
 import 'package:smartcycle/styles/Styles.dart';
-import 'model/RcleDetail.dart';
-import 'assets.dart';
+import '../../model/RcleDetail.dart';
+import '../../assets.dart';
 import 'package:http/http.dart' as http;
 
 // sampleData inserted.

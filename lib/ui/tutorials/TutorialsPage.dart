@@ -3,6 +3,8 @@ import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
+BuildContext mContext;
+
 class TutorialsPage extends StatelessWidget {
   int pageCode;
 
@@ -17,6 +19,7 @@ class TutorialsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    mContext = context;
     switch (pageCode) {
       case 1:
         return AppUsing(context);
@@ -66,7 +69,10 @@ Widget _cPage1(BuildContext context) {
             SizedBox(
               height: 20,
             ),
-            Text("사용자 설명서", style: TextAssets.subBold,),
+            Text(
+              "사용자 설명서",
+              style: TextAssets.subBold,
+            ),
             Icon(
               Icons.center_focus_strong,
               color: Colors.blue,
@@ -109,6 +115,19 @@ Widget _page1() {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.close),
+              color: Colors.blue,
+              onPressed: () => Navigator.of(mContext).pop(true),
+            ),
+          ],
+        ),
         Image.asset(
           "assets/images/SmartCycle_logo_white.png",
           width: 300,

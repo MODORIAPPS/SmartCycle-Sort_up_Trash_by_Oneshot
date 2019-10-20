@@ -5,17 +5,17 @@ import 'dart:io';
 
 const base = 'http://smartcycle.ljhnas.com';
 
-class CameraModify extends StatefulWidget {
+class Camerasubmit extends StatefulWidget {
   File imageFile;
   String imagePath;
 
-  CameraModify({this.imageFile, this.imagePath});
+  Camerasubmit({this.imageFile, this.imagePath});
 
   @override
-  _CameraModifyState createState() => _CameraModifyState();
+  _CamerasubmitState createState() => _CamerasubmitState();
 }
 
-class _CameraModifyState extends State<CameraModify> {
+class _CamerasubmitState extends State<Camerasubmit> {
 
   @override
   Widget build(BuildContext context) {

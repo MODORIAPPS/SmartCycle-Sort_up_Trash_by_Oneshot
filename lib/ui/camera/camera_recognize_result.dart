@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartcycle/ModifyRecog.dart';
-import 'package:smartcycle/RecycleDetail.dart';
+import 'package:smartcycle/ui/camera/camera_modify_result.dart';
+import 'package:smartcycle/ui/rcldetail/RecycleDetail.dart';
 import 'package:smartcycle/model/TrashType.dart';
 import 'package:smartcycle/assets.dart';
 

@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
-class DoYouKnowDetail extends StatelessWidget {
+class DoYouKnowMain extends StatelessWidget {
+
+  final String pageCode;
+
+  DoYouKnowMain({@required this.pageCode});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

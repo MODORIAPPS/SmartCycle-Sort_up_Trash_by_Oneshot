@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:smartcycle/assets.dart';
+import 'package:smartcycle/main.dart';
 import 'package:smartcycle/styles/Styles.dart';
+import 'package:smartcycle/ui/main/main_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatelessWidget {
@@ -127,7 +129,11 @@ class LoginPage extends StatelessWidget {
                     AuthUtils()
                         .handleSignIn()
                         .then((FirebaseUser user) => print(user))
-                        .catchError((e) => print(e));
+                        .catchError((e) => print(e)).whenComplete(() {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => MyApp()),
+                      );
+                    });
                   },
                 ),
               ),

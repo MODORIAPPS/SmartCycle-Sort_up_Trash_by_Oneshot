@@ -1,12 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/auth/auth_main.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
-import 'package:smartcycle/RegiCompleted.dart';
 import 'package:smartcycle/styles/Styles.dart';
+import 'package:smartcycle/ui/nugudevice/nugu_regi_completed.dart';
+
+TextEditingController deviceIdController = new TextEditingController();
 
 class AddDevice extends StatelessWidget {
-  TextEditingController deviceIdController = new TextEditingController();
+  final UserInfo userInfo;
+
+  AddDevice({@required this.userInfo});
+
   final snackBar = SnackBar(
     content: Text('입력 값에 문제가 있습니다.'),
     duration: const Duration(seconds: 2),
@@ -138,33 +145,51 @@ class AddDevice extends StatelessWidget {
                   onPressed: () {
                     // POST
                     String berry_id = deviceIdController.text;
-                    String user_email = "kwonkisdeok7@gmail.com";
-                    if (access_token == null ||
-                        berry_id == null ||
-                        berry_id.isEmpty) {
-                      Scaffold.of(context).showSnackBar(snackBar);
-                    } else {
-                      AuthUtils()
-                          .registerDevice(user_email, berry_id)
-                          .then((result) {
-                        print(result);
-                        if (result == '{"result":1}') {
-                          Scaffold.of(context)
-                              .showSnackBar(new SnackBar(content: Text("성공")));
+                    String user_email = userInfo.email;
 
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => RegiCompleted()),
-                          );
-                        } else if (result == '{"result":2}') {
-                          Scaffold.of(context).showSnackBar(
-                              new SnackBar(content: Text("이미 등록된 기기입니다.")));
-                        } else if (result == '{"result":false}') {
-                          Scaffold.of(context).showSnackBar(
-                              new SnackBar(content: Text("등록 중 오류가 발생했습니다.")));
-                        }
-                      });
-                    }
+//                    SmartCycleServer()
+//                        .registerDevice(user_email, berry_id)
+//                        .then((result) {
+//                      print(result);
+//                      if (result == '{"result":1}') {
+//                        Scaffold.of(context)
+//                            .showSnackBar(new SnackBar(content: Text("성공")));
+//
+//                        Navigator.of(context).push(
+//                          MaterialPageRoute(
+//                              builder: (context) => RegiCompleted()),
+//                        );
+//                      } else if (result == '{"result":2}') {
+//                        Scaffold.of(context).showSnackBar(
+//                            new SnackBar(content: Text("이미 등록된 기기입니다.")));
+//                      } else if (result == '{"result":false}') {
+//                        Scaffold.of(context).showSnackBar(
+//                            new SnackBar(content: Text("등록 중 오류가 발생했습니다.")));
+//                      }
+//                    });
+
+
+                    // %% ONLY FOR TEST %% getUserHistoryTest
+                    SmartCycleServer()
+                        .registerDeviceTest(user_email, berry_id)
+                        .then((result) {
+                      print(result);
+                      if (result == '{"result":1}') {
+                        Scaffold.of(context)
+                            .showSnackBar(new SnackBar(content: Text("성공")));
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => RegiCompleted()),
+                        );
+                      } else if (result == '{"result":2}') {
+                        Scaffold.of(context).showSnackBar(
+                            new SnackBar(content: Text("이미 등록된 기기입니다.")));
+                      } else if (result == '{"result":false}') {
+                        Scaffold.of(context).showSnackBar(
+                            new SnackBar(content: Text("등록 중 오류가 발생했습니다.")));
+                      }
+                    });
                   },
                 ),
               )

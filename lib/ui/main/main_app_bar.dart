@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartcycle/TutorialsPage.dart';
+import 'package:smartcycle/ui/tutorials/TutorialsPage.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import '../auth/auth_main.dart';

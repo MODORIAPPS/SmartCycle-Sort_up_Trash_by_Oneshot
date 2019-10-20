@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartcycle/SCircularProgress.dart';
+import 'package:smartcycle/Utils/SCircularProgress.dart';
+import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/main/main_history_card.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
@@ -26,7 +27,9 @@ class _HistoryGridViewState extends State<HistoryGridView> {
     super.initState();
 
     // %% ONLY FOR TEST %% getUserHistoryTest
-    _getUserHistory = smartCycleServer.getUserHistoryTest(widget.userEmail);
+    _getUserHistory = smartCycleServer
+        .getUserHistoryTest(widget.userEmail)
+        .timeout(const Duration(seconds: 5));
     //_getUserHistory = smartCycleServer.getUserHistory(widget.userEmail);
   }
 
@@ -37,7 +40,7 @@ class _HistoryGridViewState extends State<HistoryGridView> {
       future: _getUserHistory,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return snapshot.data != null
+          return !snapshot.hasError
               ? (snapshot.data.historys.length != 0)
               ? _historyGridView(context, snapshot.data)
               : Column(
@@ -48,7 +51,29 @@ class _HistoryGridViewState extends State<HistoryGridView> {
               Text("검색하신 쓰레기가 없어요.")
             ],
           )
-              : Text("서버에 접근할 수 없었습니다.");
+              : Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 50,
+                ),
+                Text("서버에 접근할 수 없었습니다."),
+                Text("이 문제가 계속해서 발생하면 문의해주세요."),
+                RaisedButton(
+                  child: Text("재시도"),
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    _getUserHistory = smartCycleServer
+                        .getUserHistoryTest(widget.userEmail)
+                        .timeout(const Duration(seconds: 5));
+                    setState(() {});
+                  },
+                ),
+              ],
+            ),
+          );
         } else {
           return Column(
             children: <Widget>[
@@ -61,7 +86,20 @@ class _HistoryGridViewState extends State<HistoryGridView> {
         }
       },
     )
-        : Text("기록을 사용하시려면 먼저 로그인해주세요.");
+        : Align(
+      alignment: Alignment.center,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 40,
+          ),
+          Text(
+            "기록을 사용하시려면 먼저 로그인해주세요.",
+            style: TextAssets.mainRegular,
+          )
+        ],
+      ),
+    );
   }
 }
 

@@ -1,27 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:smartcycle/AddDevice.dart';
-import 'package:smartcycle/SCircularProgress.dart';
+import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
-import 'package:smartcycle/SmartDialog.dart';
-import 'package:smartcycle/TutorialsPage.dart';
-import 'package:smartcycle/main.dart';
-import 'package:smartcycle/model/GoogleProfileDTO.dart';
-import 'package:smartcycle/assets.dart';
-import 'package:smartcycle/model/InitUserDTO.dart';
-import 'package:smartcycle/styles/Styles.dart';
 import 'package:smartcycle/ui/auth/auth_login.dart';
 import 'package:smartcycle/ui/auth/auth_profile.dart';
-import '../../model/GoogleUserDTO.dart';
-import 'package:googleapis/storage/v1.dart';
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:http/http.dart' as http;
-
-import 'package:url_launcher/url_launcher.dart';
 
 BuildContext mContext;
 

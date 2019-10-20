@@ -6,10 +6,10 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:lamp/lamp.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:smartcycle/TutorialsPage.dart';
+import 'package:smartcycle/ui/tutorials/TutorialsPage.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
-import 'package:smartcycle/ui/camera/CameraModify.dart';
+import 'package:smartcycle/ui/camera/camera_submit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -60,7 +60,7 @@ class _CameraAppState extends State<CameraActvity> {
 
       Route route = MaterialPageRoute(
           builder: (context) =>
-              CameraModify(
+              Camerasubmit(
                 imageFile: _image,
               ));
       Navigator.push(mContext, route);

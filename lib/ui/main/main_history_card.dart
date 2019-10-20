@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartcycle/RecycleDetail.dart';
+import 'package:smartcycle/ui/rcldetail/RecycleDetail.dart';
 import 'package:smartcycle/model/TrashType.dart';
 import 'package:smartcycle/styles/Styles.dart';
 

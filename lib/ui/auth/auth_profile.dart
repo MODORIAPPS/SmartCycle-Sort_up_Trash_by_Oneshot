@@ -2,13 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/driveactivity/v2.dart';
-import 'package:smartcycle/AddDevice.dart';
-import 'package:smartcycle/SCircularProgress.dart';
+import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/model/GoogleProfileDTO.dart';
 import 'package:smartcycle/styles/Styles.dart';
+import 'package:smartcycle/ui/main/main_page.dart';
+import 'package:smartcycle/ui/nugudevice/nugu_add_device.dart';
+
+UserInfo userInfo;
 
 class AuthProfile extends StatefulWidget {
   final String access_token;
@@ -37,6 +40,7 @@ class _AuthProfileState extends State<AuthProfile> {
       future: _userInfo,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          userInfo = snapshot.data;
           return UserProfile(context, snapshot.data);
         } else {
           return SCircularProgress();
@@ -289,7 +293,8 @@ Widget noDeviceAvail(BuildContext context) {
             iconSize: 40,
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => AddDevice()),
+                MaterialPageRoute(
+                    builder: (context) => AddDevice(userInfo: userInfo,)),
               );
             }),
       )
@@ -358,7 +363,9 @@ Future<bool> _asyncConfirmDialog(BuildContext mContext) async {
             child: const Text('로그아웃'),
             onPressed: () {
               AuthUtils().signOut();
-              Navigator.of(mContext).pop(true);
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => MyApp()),
+              );
             },
           )
         ],
