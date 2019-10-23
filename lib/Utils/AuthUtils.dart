@@ -3,13 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:googleapis/customsearch/v1.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'package:smartcycle/model/GoogleAccountDTO.dart';
-import 'package:smartcycle/model/GoogleProfileDTO.dart';
-import 'package:smartcycle/model/InitUserDTO.dart';
-import 'package:smartcycle/model/SearchHistory.dart';
+
 
 const email_uri = 'https://www.googleapis.com/oauth2/v3/userinfo';
 const base = 'http://smartcycle.ljhnas.com';

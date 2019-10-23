@@ -4,13 +4,14 @@ import 'dart:io';
 import 'package:googleapis/customsearch/v1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 
-const test_base = "http://172.16.3.159:8080/";
+const test_base = "http://172.17.0.65:8080/";
 const base = 'http://smartcycle.ljhnas.com/';
 
 class SmartCycleServer {
-  HttpClient client;
+  static HttpClient client;
 
   SmartCycleServer() {
     client = new HttpClient();
@@ -95,5 +96,19 @@ class SmartCycleServer {
     return result;
   }
 
+  // %% ONLY FOR TEST %% registerDevice
+  static Future<DoYouKnows> getDoYouKnowTest() async {
+    HttpClientRequest request =
+    await client.getUrl(Uri.parse("${test_base}test/getDoYouKnowInfo"));
+    request.headers.set('content-type', 'application/json');
+
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(utf8.decoder).join();
+    print(reply);
+    final jsondata = DoYouKnows.fromJson(json.decode(reply));
+    if (response.statusCode == 200) {
+      return jsondata;
+    }
+  }
 
 }

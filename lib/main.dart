@@ -4,33 +4,20 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix1;
-import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:smartcycle/ui/doyouknow/doyouknow_main.dart';
-import 'package:smartcycle/Utils/SCircularProgress.dart';
-import 'package:smartcycle/Utils/ScaleRoute.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
-import 'package:smartcycle/ui/tutorials/TutorialsPage.dart';
-import 'package:smartcycle/model/GoogleProfileDTO.dart' as prefix0;
-import 'package:smartcycle/model/InitUserDTO.dart';
+import 'package:smartcycle/ui/main/main_doyouknow.dart';
 import 'package:smartcycle/ui/main/main_qr_code.dart';
-import 'package:smartcycle/ui/auth/auth_main.dart';
-import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/camera/camera_start.dart';
-import 'package:smartcycle/ui/main/main_history_card.dart';
 import 'package:smartcycle/ui/rcldetail/RecycleDetail.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
-import 'package:smartcycle/model/TrashType.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smartcycle/styles/Styles.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartcycle/ui/main/main_app_bar.dart';
 import 'package:smartcycle/ui/main/main_history_gridview.dart';
-
-import 'model/GoogleProfileDTO.dart';
+import 'Utils/ScaleRoute.dart';
 import 'model/RcleDetail.dart';
 
 void main() => runApp(MyApp());
@@ -61,7 +48,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  Future<InitUserDTO> _getinitUserData;
   Future<bool> _isSignIn;
   Future<UserInfo> _userInfo;
 
@@ -283,32 +269,9 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
           ],
         ),
       ),
-      CarouselSlider(
-        height: 200.0,
-        enlargeCenterPage: true,
-        autoPlay: true,
-        initialPage: 0,
-        onPageChanged: (index) {
-          //setState(() {});
-        },
-        items: <Widget>[_page1(context), _page2(context), _page3(context)],
+      Expanded(
+        child: MainDoYouKnow(),
       ),
-//          doYouKnowGo
-//              ? CarouselSlider(
-//                  height: 200.0,
-//                  enlargeCenterPage: true,
-//                  autoPlay: true,
-//                  initialPage: 0,
-//                  onPageChanged: (index) {
-//                    setState(() {});
-//                  },
-//                  items: <Widget>[
-//                    _page1(context, data[0]),
-//                    _page2(context, data[1]),
-//                    _page3(context, data[2])
-//                  ],
-//                )
-//              : Container(),
       SizedBox(
         height: 14,
       ),
@@ -432,206 +395,6 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
 //        );
 //      });
 //}
-
-Widget _page1(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: InkWell(
-      child: Container(
-        child: Stack(
-          children: <Widget>[
-            ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        alignment: Alignment(-.2, 0),
-                        image: NetworkImage(
-                            'https://images.unsplash.com/photo-1495556650867-99590cea3657?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'),
-                        fit: BoxFit.cover),
-                  ),
-                )),
-            Container(
-              decoration: BoxDecoration(
-                border: new Border.all(width: 20, color: Colors.transparent),
-                color: new Color.fromRGBO(0, 0, 0, 0.5),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "우리가 무심코 버린 쓰레기가 가는 곳",
-                        style: mainRegular,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "2019년 9월 12일",
-                        style: mainLight,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black12, offset: Offset(0, 6), blurRadius: 6)
-            ]),
-      ),
-      onTap: () {
-//        Navigator.of(context).push(
-//          MaterialPageRoute(builder: (context) => AuthPage()),
-//        );
-
-//        Navigator.of(context).push(
-//          MaterialPageRoute(builder: (context) => DoYouKnowDetail()),
-//        );
-      },
-    ),
-  );
-}
-
-Widget _page2(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Container(
-      child: Stack(
-        children: <Widget>[
-          ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      alignment: Alignment(-.2, 0),
-                      image: NetworkImage(
-                          'https://images.unsplash.com/photo-1524074500728-47a32346e245?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'),
-                      fit: BoxFit.cover),
-                ),
-              )),
-          Container(
-            decoration: BoxDecoration(
-              border: new Border.all(width: 20, color: Colors.transparent),
-              color: new Color.fromRGBO(0, 0, 0, 0.5),
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "일상속에서 흔하지만 분리수거 할줄 모르는 그것들.",
-                      style: mainRegular,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "2019년 10월 12일",
-                      style: mainLight,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black12, offset: Offset(0, 6), blurRadius: 6)
-          ]),
-    ),
-  );
-}
-
-Widget _page3(BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Container(
-      child: Stack(
-        children: <Widget>[
-          ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      alignment: Alignment(-.2, 0),
-                      image: NetworkImage(
-                          'https://images.unsplash.com/photo-1526951521990-620dc14c214b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'),
-                      fit: BoxFit.cover),
-                ),
-              )),
-          Container(
-            decoration: BoxDecoration(
-              border: new Border.all(width: 20, color: Colors.transparent),
-              color: new Color.fromRGBO(0, 0, 0, 0.5),
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Container(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "쓰레기가 자연적으로 분해되는 시간",
-                      style: mainRegular,
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "2019년 8월 15일",
-                      style: mainLight,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black12, offset: Offset(0, 6), blurRadius: 6)
-          ]),
-    ),
-  );
-}
 
 Future<RclDetail> getData(String itemId) async {
   print("요청 진입 : " + itemId.toString());

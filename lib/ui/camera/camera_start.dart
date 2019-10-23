@@ -60,7 +60,7 @@ class _CameraAppState extends State<CameraActvity> {
 
       Route route = MaterialPageRoute(
           builder: (context) =>
-              Camerasubmit(
+              CameraSubmit(
                 imageFile: _image,
               ));
       Navigator.push(mContext, route);

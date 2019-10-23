@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:googleapis/drive/v2.dart';
 
-const TextStyle mainRegular = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: "NotoCjkKR", height: 1.2);
-const TextStyle mainLight = TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w300, fontFamily: "NotoCjkKR", );
 
 const TextStyle settingBlue = TextStyle(color: Colors.blue, fontSize: 17, fontWeight: FontWeight.w800, fontFamily: "NotoCjkKR", );
 
