@@ -59,8 +59,7 @@ class _CameraAppState extends State<CameraActvity> {
       _image = croppedFile;
 
       Route route = MaterialPageRoute(
-          builder: (context) =>
-              CameraSubmit(
+          builder: (context) => CameraSubmit(
                 imageFile: _image,
               ));
       Navigator.push(mContext, route);
@@ -93,88 +92,97 @@ class _CameraAppState extends State<CameraActvity> {
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            print("카메라 준비 완료");
+            if (snapshot.hasError) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 40,
+                  ),
+          Text(snapshot.error.toString())
+                ],
+              );
+            } else {
+              print("카메라 준비 완료");
 
-            final size = MediaQuery
-                .of(context)
-                .size;
-            final deviceRatio = size.width / size.height;
+              final size = MediaQuery.of(context).size;
+              final deviceRatio = size.width / size.height;
 
-            return Stack(
-              children: <Widget>[
-                Transform.scale(
-                    scale: _controller.value.aspectRatio / deviceRatio,
-                    child: Center(
-                      child: AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: CameraPreview(_controller),
+              return Stack(
+                children: <Widget>[
+                  Transform.scale(
+                      scale: _controller.value.aspectRatio / deviceRatio,
+                      child: Center(
+                        child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: CameraPreview(_controller),
+                        ),
+                      )),
+                  Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
                       ),
-                    )),
-                Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios),
-                        color: Colors.blue,
-                        onPressed: () => Navigator.of(context).pop(true),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: IconButton(
+                          icon: Icon(Icons.arrow_back_ios),
+                          color: Colors.blue,
+                          onPressed: () => Navigator.of(context).pop(true),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10, top: 3),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(18),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10, top: 3),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: IconButton(
+                                  color: Colors.blueAccent,
+                                  icon: Icon(Icons.photo_album,
+                                      color: Colors.blueAccent),
+                                  onPressed: () {
+                                    getImageFromAlbum(ImageSource.gallery);
+                                  },
+                                ),
                               ),
-                              child: IconButton(
-                                color: Colors.blueAccent,
-                                icon: Icon(Icons.photo_album,
-                                    color: Colors.blueAccent),
-                                onPressed: () {
-                                  getImageFromAlbum(ImageSource.gallery);
-                                },
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(18),
-                              ),
-                              child: IconButton(
-                                  onPressed: () async {
-                                    try {
-                                      // Ensure that the camera is initialized.
-                                      await _initializeControllerFuture;
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                                child: IconButton(
+                                    onPressed: () async {
+                                      try {
+                                        // Ensure that the camera is initialized.
+                                        await _initializeControllerFuture;
 
-                                      // Construct the path where the image should be saved using the
-                                      // pattern package.
-                                      final path = join(
-                                        // Store the picture in the temp directory.
-                                        // Find the temp directory using the `path_provider` plugin.
-                                        (await getTemporaryDirectory()).path,
-                                        '${DateTime.now()}.png',
-                                      );
+                                        // Construct the path where the image should be saved using the
+                                        // pattern package.
+                                        final path = join(
+                                          // Store the picture in the temp directory.
+                                          // Find the temp directory using the `path_provider` plugin.
+                                          (await getTemporaryDirectory()).path,
+                                          '${DateTime.now()}.png',
+                                        );
 
-                                      // Attempt to take a picture and log where it's been saved.
-                                      await _controller.takePicture(path);
+                                        // Attempt to take a picture and log where it's been saved.
+                                        await _controller.takePicture(path);
 
-                                      // If the picture was taken, display it on a new screen.
+                                        // If the picture was taken, display it on a new screen.
 //                                      Navigator.push(
 //                                        context,
 //                                        MaterialPageRoute(
@@ -183,87 +191,87 @@ class _CameraAppState extends State<CameraActvity> {
 //                                        ),
 //                                      );
 
-                                      goCrop(File(path));
-                                    } catch (e) {
-                                      // If an error occurs, log the error to the console.
-                                      print(e);
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.camera,
-                                    color: Colors.blueAccent,
-                                  )),
-                            ),
-                            Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                                child: InkWell(
-                                  child: hasTorch
-                                      ? IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Icons.flash_off,
-                                      color: Colors.blueAccent,
-                                    ),
-                                  )
-                                      : IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.flash_on,
-                                        color: Colors.blueAccent,
-                                      )),
-                                  onTap: () {
-                                    setState(() {
-                                      if (hasTorch) {
-                                        hasTorch = false;
-                                        Lamp.turnOff();
-                                      } else {
-                                        hasTorch = true;
-                                        Lamp.turnOn();
+                                        goCrop(File(path));
+                                      } catch (e) {
+                                        // If an error occurs, log the error to the console.
+                                        print(e);
                                       }
-                                    });
-                                  },
-                                )),
-                          ],
+                                    },
+                                    icon: Icon(
+                                      Icons.camera,
+                                      color: Colors.blueAccent,
+                                    )),
+                              ),
+                              Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  child: InkWell(
+                                    child: hasTorch
+                                        ? IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              Icons.flash_off,
+                                              color: Colors.blueAccent,
+                                            ),
+                                          )
+                                        : IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              Icons.flash_on,
+                                              color: Colors.blueAccent,
+                                            )),
+                                    onTap: () {
+                                      setState(() {
+                                        if (hasTorch) {
+                                          hasTorch = false;
+                                          Lamp.turnOff();
+                                        } else {
+                                          hasTorch = true;
+                                          Lamp.turnOn();
+                                        }
+                                      });
+                                    },
+                                  )),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      FloatingActionButton.extended(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    TutorialsPage(
-                                      pageCode: 2,
-                                    )),
-                          );
-                        },
-                        elevation: 10,
-                        backgroundColor: Colors.white,
-                        label: Text(
-                          "탐색할 물건 촬영",
-                          style: fabText,
-                          textAlign: TextAlign.center,
-                        ),
-                        icon: Icon(
-                          Icons.info,
-                          color: Colors.blue,
-                        ),
-                      )
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        FloatingActionButton.extended(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => TutorialsPage(
+                                        pageCode: 2,
+                                      )),
+                            );
+                          },
+                          elevation: 10,
+                          backgroundColor: Colors.white,
+                          label: Text(
+                            "탐색할 물건 촬영",
+                            style: fabText,
+                            textAlign: TextAlign.center,
+                          ),
+                          icon: Icon(
+                            Icons.info,
+                            color: Colors.blue,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            );
+                ],
+              );
+            }
           } else {
             return Center(
               child: CircularProgressIndicator(),

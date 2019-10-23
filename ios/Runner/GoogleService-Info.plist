@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>285306495565-f2gd255kgrrrc3ta2c9bgtsprrut22mp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.285306495565-f2gd255kgrrrc3ta2c9bgtsprrut22mp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>285306495565-oin3dkfdia1fkpri2qatdujisarce8bk.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCS3Vc2PsN65m_UZpyFTLVRoXDqfKsZy9Q</string>
+	<key>GCM_SENDER_ID</key>
+	<string>285306495565</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dimipo.smartcycle</string>
+	<key>PROJECT_ID</key>
+	<string>smartcycle-252908</string>
+	<key>STORAGE_BUCKET</key>
+	<string>smartcycle-252908.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:285306495565:ios:6a25ceff39ec4e96adb204</string>
+	<key>DATABASE_URL</key>
+	<string>https://smartcycle-252908.firebaseio.com</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+</dict>
+</plist>
