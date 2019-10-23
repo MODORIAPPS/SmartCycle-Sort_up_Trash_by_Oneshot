@@ -11,7 +11,7 @@ const test_base = "http://172.17.0.65:8080/";
 const base = 'http://smartcycle.ljhnas.com/';
 
 class SmartCycleServer {
-  static HttpClient client;
+  HttpClient client;
 
   SmartCycleServer() {
     client = new HttpClient();
@@ -97,7 +97,9 @@ class SmartCycleServer {
   }
 
   // %% ONLY FOR TEST %% registerDevice
-  static Future<DoYouKnows> getDoYouKnowTest() async {
+  Future<DoYouKnows> getDoYouKnowTest() async {
+    client = new HttpClient();
+
     HttpClientRequest request =
     await client.getUrl(Uri.parse("${test_base}test/getDoYouKnowInfo"));
     request.headers.set('content-type', 'application/json');

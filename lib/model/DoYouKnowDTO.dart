@@ -20,8 +20,8 @@ class DoYouKnow {
   int readTime;
   String preImage;
 
-  DoYouKnow(
-      {this.contents,
+  DoYouKnow({
+    this.contents,
       this.published_date,
       this.docNum,
       this.title,

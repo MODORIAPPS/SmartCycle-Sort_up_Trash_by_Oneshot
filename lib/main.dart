@@ -246,7 +246,7 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       SizedBox(
-        height: 20,
+        height: 30,
       ),
 //          SmartCycleAppBar(
 //            isUserAvail: snapshot.data,
@@ -269,9 +269,11 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
           ],
         ),
       ),
-      Expanded(
+      Container(
+        height: 200,
         child: MainDoYouKnow(),
       ),
+
       SizedBox(
         height: 14,
       ),

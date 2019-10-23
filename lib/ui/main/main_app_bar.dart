@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcycle/ui/tutorials/TutorialsPage.dart';
 import 'package:smartcycle/assets.dart';
@@ -16,8 +17,6 @@ class SmartCycleAppBar extends StatefulWidget {
 }
 
 class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
-
-
   @override
   Widget build(BuildContext context) {
     print(widget.isSignIn);
@@ -48,8 +47,8 @@ class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => TutorialsPage(
-                          pageCode: 1,
-                        )),
+                      pageCode: 1,
+                    )),
               );
             },
           ),
@@ -69,9 +68,9 @@ class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
                     image: new DecorationImage(
                         fit: BoxFit.fill,
                         image: widget.isSignIn
-                            ? new NetworkImage(widget.photoUrl)
+                            ? NetworkImage(widget.photoUrl)
                             : AssetImage(
-                                "assets/images/google_user_default.png")))),
+                            "assets/images/google_user_default.png")))),
             onTap: () {
               // Toast message
               Navigator.of(context).push(

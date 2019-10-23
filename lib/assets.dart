@@ -56,6 +56,26 @@ class TextAssets {
     fontWeight: FontWeight.w300,
     fontFamily: "NotoCjkKR",
   );
+
+  static const TextStyle mainLight = TextStyle(
+    color: Colors.black87,
+    fontSize: 12,
+    fontWeight: FontWeight.w300,
+    fontFamily: "NotoCjkKR",
+  );
+
+  //
+  static const TextStyle mainBlackW = TextStyle(
+      color: Colors.white,
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      fontFamily: "NotoCjkKR");
+
+  static const TextStyle mainBlack = TextStyle(
+      color: Colors.black87,
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      fontFamily: "NotoCjkKR");
 }
 
 final TextStyle header1 =

@@ -15,7 +15,7 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
 
   @override
   void initState() {
-    _getDoYouKnow = SmartCycleServer.getDoYouKnowTest()
+    _getDoYouKnow = SmartCycleServer().getDoYouKnowTest()
         .timeout(const Duration(seconds: 10));
   }
 
@@ -29,30 +29,35 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasError) {
-            return Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 50,
-                ),
-                Text("서버에 접근할 수 없었습니다."),
-                Text("이 문제가 계속해서 발생하면 문의해주세요."),
-                RaisedButton(
-                  child: Text("재시도"),
-                  color: Colors.blue,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    _getDoYouKnow = SmartCycleServer.getDoYouKnowTest()
-                        .timeout(const Duration(seconds: 10));
-                    setState(() {});
-                  },
-                ),
-              ],
+            print("DoYouKnow 에러 " + snapshot.error.toString());
+            return Align(
+              alignment: Alignment.center,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text("서버에 접근할 수 없었습니다."),
+                  Text("이 문제가 계속해서 발생하면 문의해주세요."),
+                  RaisedButton(
+                    child: Text("재시도"),
+                    color: Colors.blue,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      _getDoYouKnow = SmartCycleServer().getDoYouKnowTest()
+                          .timeout(const Duration(seconds: 10));
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
             );
           } else {
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.datas.length,
                 shrinkWrap: true,
+
                 itemBuilder: (BuildContext context, int index) {
                   return new DoYouKnowCard(
                       doYouKnow: snapshot.data.datas[index]);
