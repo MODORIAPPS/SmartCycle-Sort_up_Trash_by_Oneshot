@@ -6,6 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:lamp/lamp.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:smartcycle/ui/act/act_error_page.dart';
 import 'package:smartcycle/ui/tutorials/TutorialsPage.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -42,7 +43,9 @@ class _CameraAppState extends State<CameraActvity> {
 
   getImageFromAlbum(ImageSource source) async {
     var imageFile = await ImagePicker.pickImage(source: source);
-    goCrop(imageFile);
+    if (imageFile != null) {
+      goCrop(imageFile);
+    }
   }
 
   goCrop(File source) async {
@@ -55,17 +58,20 @@ class _CameraAppState extends State<CameraActvity> {
         maxWidth: 640,
         maxHeight: 480);
 
-    setState(() {
-      _image = croppedFile;
+    if (croppedFile != null) {
+      setState(() {
+        _image = croppedFile;
 
-      Route route = MaterialPageRoute(
-          builder: (context) => CameraSubmit(
-                imageFile: _image,
-              ));
-      Navigator.push(mContext, route);
+        Route route = MaterialPageRoute(
+            builder: (context) =>
+                CameraSubmit(
+                  imageFile: _image,
+                ));
+        Navigator.push(mContext, route);
 //      Navigator.of(mContext).push(MaterialPageRoute(
 //          builder: (context) => CameraModify(imageFile: _image))
-    });
+      });
+    }
   }
 
   @override
@@ -93,15 +99,8 @@ class _CameraAppState extends State<CameraActvity> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 40,
-                  ),
-          Text(snapshot.error.toString())
-                ],
-              );
+//              return ErrorPage(error_msg: snapshot.error.toString(),);
+              return ErrorPage(error_msg: snapshot.error.toString());
             } else {
               print("카메라 준비 완료");
 

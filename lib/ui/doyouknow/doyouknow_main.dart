@@ -34,7 +34,7 @@ class DoYouKnowMain extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   border: new Border.all(width: 20, color: Colors.transparent),
-                  color: new Color.fromRGBO(0, 0, 0, 0.5),
+                  color: new Color.fromRGBO(0, 0, 0, 0.3),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -44,16 +44,27 @@ class DoYouKnowMain extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(doYouKnow.title, style: TextAssets.mainBlackW,),
+                    Text(
+                      doYouKnow.title,
+                      style: TextAssets.mainBlackW,
+                    ),
                     Row(
                       children: <Widget>[
-                        Icon(Icons.timer, size: 28, color: Colors.white,),
-                        Text("읽는 데 ${doYouKnow.readTime}분",
-                          style: TextAssets.mainBoldW,)
+                        Icon(
+                          Icons.timer,
+                          size: 28,
+                          color: Colors.white,
+                        ),
+                        Text(
+                          "읽는 데 ${doYouKnow.readTime}분",
+                          style: TextAssets.mainBoldW,
+                        )
                       ],
                     ),
                     Text(
-                      doYouKnow.published_date, style: TextAssets.mainLightW,)
+                      doYouKnow.published_date,
+                      style: TextAssets.mainLightW,
+                    )
                   ],
                 ),
               ),
@@ -63,8 +74,10 @@ class DoYouKnowMain extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   child: IconButton(
                     icon: Icon(
-                      Icons.arrow_downward, color: Colors.white, size: 30,),
-
+                      Icons.arrow_downward,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                   ),
                 ),
               ),
@@ -73,7 +86,11 @@ class DoYouKnowMain extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: IconButton(
-                    icon: Icon(Icons.close, color: Colors.white, size: 30,),
+                    icon: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 30,
+                    ),
                     onPressed: () => Navigator.of(context).pop(true),
                   ),
                 ),
@@ -81,8 +98,8 @@ class DoYouKnowMain extends StatelessWidget {
             ],
           ),
           NestedScrollView(
-            headerSliverBuilder: (BuildContext context,
-                bool innerBoxIsScrolled) {
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
                   expandedHeight: 10.0,
@@ -90,8 +107,8 @@ class DoYouKnowMain extends StatelessWidget {
                   forceElevated: innerBoxIsScrolled,
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
-                      title: Text(
-                          doYouKnow.title, style: TextAssets.mainRegularW),
+                      title:
+                      Text(doYouKnow.title, style: TextAssets.mainRegularW),
                       background: Stack(
                         children: <Widget>[
                           CachedNetworkImage(
@@ -134,7 +151,6 @@ Widget _contents(DoYouKnow doYouKnow) {
           secTitle: _contents.secTitle,
           image: _contents.image,
           secContent: _contents.secContent);
-      print(data.secTitle.toString());
       contentWidgets.add(DoYouKnowContents(contents: data));
     }
   }
@@ -258,5 +274,3 @@ Widget _contents(DoYouKnow doYouKnow) {
 //Widget _contents(DoYouKnow doYouKnow){
 //  return Text("Dd");
 //}
-
-

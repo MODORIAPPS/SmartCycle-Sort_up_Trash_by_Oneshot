@@ -10,28 +10,48 @@ class DoYouKnowContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("카드 컨텐츠.." + contents.image.toString());
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          contents.image.isNotEmpty
-              ? CachedNetworkImage(
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: Container(
+              child: Align(
+                alignment: Alignment.center,
+                child: contents.image.isNotEmpty
+                    ? CachedNetworkImage(
                   imageUrl: contents.image,
-                  placeholder: (context, url) => CircularProgressIndicator(),
+                  placeholder: (context, url) =>
+                      CircularProgressIndicator(),
                   errorWidget: (context, url, error) => Icon(Icons.error),
 //                alignment: Alignment(-.2, 0),
                   width: double.infinity,
                   alignment: Alignment.center,
                 )
-              : Text(""),
+                    : Text(""),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             contents.secTitle,
-            style: TextAssets.mainRegular,
+            style: TextAssets.mainBold,
           ),
-          Text(contents.secContent)
+          SizedBox(
+            height: 5,
+          ),
+          Text(
+            contents.secContent,
+            style: TextAssets.insideContents,
+          ),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );

@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
+import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -10,21 +12,22 @@ import 'package:smartcycle/ui/main/main_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        ClipRRect(
-            borderRadius: BorderRadius.circular(0),
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    alignment: Alignment(-.2, 0),
-                    image: NetworkImage(
-                        'https://images.unsplash.com/photo-1569493086584-33e0b36f3145?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=701&q=80'),
-                    fit: BoxFit.cover),
-              ),
-            )),
+        CachedNetworkImage(
+          imageUrl:
+          "https://source.unsplash.com/collection/162468/1080x1920",
+          placeholder: (context, url) => SCircularProgress(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+          alignment: Alignment(-.2, 0),
+          fit: BoxFit.fill,
+          height: double.infinity,
+          width: double.infinity,
+        ),
         Container(
           decoration: BoxDecoration(
             border: new Border.all(width: 20, color: Colors.transparent),
@@ -129,7 +132,8 @@ class LoginPage extends StatelessWidget {
                     AuthUtils()
                         .handleSignIn()
                         .then((FirebaseUser user) => print(user))
-                        .catchError((e) => print(e)).whenComplete(() {
+                        .catchError((e) => print(e))
+                        .whenComplete(() {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => MyApp()),
                       );

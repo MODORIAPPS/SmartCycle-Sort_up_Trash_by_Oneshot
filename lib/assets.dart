@@ -37,13 +37,11 @@ class TextAssets {
     fontWeight: FontWeight.w700,
     fontFamily: "NotoCjkKR",
   );
-
   static const TextStyle mainBoldW = TextStyle(
       color: Colors.white,
       fontSize: 22,
       fontWeight: FontWeight.bold,
       fontFamily: "NotoCjkKR");
-
   static const TextStyle mainRegularW = TextStyle(
       color: Colors.white,
       fontSize: 16,
@@ -56,26 +54,35 @@ class TextAssets {
     fontWeight: FontWeight.w300,
     fontFamily: "NotoCjkKR",
   );
-
   static const TextStyle mainLight = TextStyle(
     color: Colors.black87,
     fontSize: 12,
     fontWeight: FontWeight.w300,
     fontFamily: "NotoCjkKR",
   );
-
-  //
   static const TextStyle mainBlackW = TextStyle(
       color: Colors.white,
       fontSize: 30,
       fontWeight: FontWeight.bold,
       fontFamily: "NotoCjkKR");
-
   static const TextStyle mainBlack = TextStyle(
       color: Colors.black87,
       fontSize: 30,
       fontWeight: FontWeight.bold,
       fontFamily: "NotoCjkKR");
+  static const TextStyle errorBold = TextStyle(
+      color: Colors.redAccent,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      fontFamily: "NotoCjkKR");
+  static const TextStyle insideContents = TextStyle(
+    color: Colors.black87,
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    fontFamily: "NotoCjkKR",
+  );
+
+
 }
 
 final TextStyle header1 =
