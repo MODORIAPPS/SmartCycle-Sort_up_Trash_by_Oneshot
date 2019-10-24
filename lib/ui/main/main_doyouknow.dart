@@ -15,7 +15,8 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
 
   @override
   void initState() {
-    _getDoYouKnow = SmartCycleServer().getDoYouKnowTest()
+    _getDoYouKnow = SmartCycleServer()
+        .getDoYouKnowTest()
         .timeout(const Duration(seconds: 10));
   }
 
@@ -44,7 +45,8 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
                     color: Colors.blue,
                     textColor: Colors.white,
                     onPressed: () {
-                      _getDoYouKnow = SmartCycleServer().getDoYouKnowTest()
+                      _getDoYouKnow = SmartCycleServer()
+                          .getDoYouKnowTest()
                           .timeout(const Duration(seconds: 10));
                       setState(() {});
                     },
@@ -53,15 +55,18 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
               ),
             );
           } else {
-            return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: snapshot.data.datas.length,
-                shrinkWrap: true,
-
-                itemBuilder: (BuildContext context, int index) {
-                  return new DoYouKnowCard(
-                      doYouKnow: snapshot.data.datas[index]);
-                });
+            return CarouselSlider(
+                height: 400.0,
+                enlargeCenterPage: true,
+                autoPlay: true,
+                initialPage: 0,
+                viewportFraction: 0.8,
+                autoPlayInterval: const Duration(seconds: 3),
+                items: snapshot.data.datas.map((i) {
+                  return DoYouKnowCard(
+                    doYouKnow: i,
+                  );
+                }).toList());
           }
         } else {
           return SCircularProgress();

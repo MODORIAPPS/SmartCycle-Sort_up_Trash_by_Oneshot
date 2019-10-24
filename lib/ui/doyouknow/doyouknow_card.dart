@@ -29,7 +29,9 @@ class DoYouKnowCard extends StatelessWidget {
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
                       alignment: Alignment(-.2, 0),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
+                      height: double.infinity,
+                      width: double.infinity,
                     ),
                   )
               ),
