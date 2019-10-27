@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -6,6 +7,7 @@ import 'package:smartcycle/styles/Styles.dart';
 BuildContext mContext;
 
 class TutorialsPage extends StatelessWidget {
+  static const platform = const MethodChannel('smartcycle.flutter.dev/widget');
   int pageCode;
 
   TutorialsPage({this.pageCode});
@@ -90,6 +92,12 @@ Widget _cPage1(BuildContext context) {
               style: rclRegular,
             ),
           ],
+        ),
+        RaisedButton(
+          child: Text("위젯 생성"),
+          onPressed: () {
+            _generateWidgetAtHome();
+          },
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -213,3 +221,13 @@ Widget _page4(BuildContext context) {
     ),
   );
 }
+
+Future<void> _generateWidgetAtHome() async {
+  try {
+    await TutorialsPage.platform.invokeMethod('generateWidget');
+  } on PlatformException catch (e) {
+    print("ERROR: '${e.message}'.");
+  }
+}
+
+

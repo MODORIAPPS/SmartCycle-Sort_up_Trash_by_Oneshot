@@ -18,24 +18,34 @@ class DoYouKnowMain extends StatelessWidget {
     return Scaffold(
       body: PageView(
         scrollDirection: Axis.vertical,
+
         children: <Widget>[
           Stack(
             children: <Widget>[
-              CachedNetworkImage(
-                imageUrl: doYouKnow.preImage,
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+              Hero(
+                tag: "${doYouKnow.docNum}TAG",
+                child: Stack(
+                  children: <Widget>[
+                    CachedNetworkImage(
+                      imageUrl: doYouKnow.preImage,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
 //                alignment: Alignment(-.2, 0),
-                fit: BoxFit.cover,
-                height: double.infinity,
-                width: double.infinity,
-                alignment: Alignment.center,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: new Border.all(width: 20, color: Colors.transparent),
-                  color: new Color.fromRGBO(0, 0, 0, 0.3),
-                  borderRadius: BorderRadius.circular(20),
+                      fit: BoxFit.cover,
+                      height: double.infinity,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: new Border.all(
+                            width: 20, color: Colors.transparent),
+                        color: new Color.fromRGBO(0, 0, 0, 0.3),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -205,72 +215,3 @@ Widget _contents(DoYouKnow doYouKnow) {
     ),
   );
 }
-
-//class DoYouKnowMain extends StatelessWidget {
-//  final DoYouKnow doYouKnow;
-//
-//  DoYouKnowMain({@required this.doYouKnow});
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Scaffold(
-//      body: PageView(
-//        scrollDirection: Axis.vertical,
-//        children: <Widget>[
-//          Stack(
-//            children: <Widget>[
-//              CachedNetworkImage(
-//                imageUrl: doYouKnow.preImage,
-//                placeholder: (context, url) => CircularProgressIndicator(),
-//                errorWidget: (context, url, error) => Icon(Icons.error),
-////                alignment: Alignment(-.2, 0),
-//                fit: BoxFit.cover,
-//                height: double.infinity,
-//                width: double.infinity,
-//                alignment: Alignment.center,
-//              ),
-//              Container(
-//                decoration: BoxDecoration(
-//                  border: new Border.all(width: 20, color: Colors.transparent),
-//                  color: new Color.fromRGBO(0, 0, 0, 0.5),
-//                  borderRadius: BorderRadius.circular(20),
-//                ),
-//              ),
-//              Padding(
-//                padding: const EdgeInsets.all(15),
-//                child: Column(
-//                  mainAxisAlignment: MainAxisAlignment.center,
-//                  crossAxisAlignment: CrossAxisAlignment.start,
-//                  children: <Widget>[
-//                    Text(doYouKnow.title, style: TextAssets.mainBlackW,),
-//                    Row(
-//                      children: <Widget>[
-//                        Icon(Icons.timer, size: 28, color: Colors.white,),
-//                        Text("읽는 데 ${doYouKnow.readTime}분", style: TextAssets.mainBoldW,)
-//                      ],
-//                    ),
-//                    Text(doYouKnow.published_date, style: TextAssets.mainLightW,)
-//                  ],
-//                ),
-//              ),
-//              Padding(
-//                padding: const EdgeInsets.all(15.0),
-//                child: Align(
-//                  alignment: Alignment.bottomCenter,
-//                  child: IconButton(
-//                    icon: Icon(Icons.arrow_downward, color: Colors.white, size: 30,),
-//                  ),
-//                ),
-//              ),
-//            ],
-//          ),
-//          _contents(doYouKnow)
-//        ],
-//      ),
-//    );
-//  }
-//}
-//
-//Widget _contents(DoYouKnow doYouKnow){
-//  return Text("Dd");
-//}

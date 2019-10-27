@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/main/main_history_card.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
-import 'package:smartcycle/model/TrashType.dart';
+import 'package:smartcycle/Utils/TrashType.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
 class HistoryGridView extends StatefulWidget {
@@ -19,6 +20,8 @@ class HistoryGridView extends StatefulWidget {
 
 class _HistoryGridViewState extends State<HistoryGridView> {
   Future<SearchHistorys> _getUserHistory;
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
   bool isDataReady = false;
   SmartCycleServer smartCycleServer = new SmartCycleServer();
 

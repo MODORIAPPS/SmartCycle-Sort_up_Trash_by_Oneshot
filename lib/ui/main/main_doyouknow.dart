@@ -61,7 +61,7 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
                 autoPlay: true,
                 initialPage: 0,
                 viewportFraction: 0.8,
-                autoPlayInterval: const Duration(seconds: 3),
+                autoPlayInterval: const Duration(seconds: 8),
                 items: snapshot.data.datas.map((i) {
                   return DoYouKnowCard(
                     doYouKnow: i,

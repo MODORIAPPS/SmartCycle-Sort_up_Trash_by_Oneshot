@@ -1,4 +1,4 @@
-# SmartCycle - 내부 서버 테스트 용
+# SmartCycle - 내부 서버 테스트 코드
 
 ## Node JS으로 작성되었습니다.
 

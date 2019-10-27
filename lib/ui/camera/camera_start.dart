@@ -6,7 +6,9 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:lamp/lamp.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/ui/act/act_error_page.dart';
+import 'package:smartcycle/ui/camera/camera_recognize_result.dart';
 import 'package:smartcycle/ui/tutorials/TutorialsPage.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -44,7 +46,18 @@ class _CameraAppState extends State<CameraActvity> {
   getImageFromAlbum(ImageSource source) async {
     var imageFile = await ImagePicker.pickImage(source: source);
     if (imageFile != null) {
-      goCrop(imageFile);
+      setState(() {
+        _image = imageFile;
+
+        Route route = MaterialPageRoute(
+            builder: (context) =>
+                CameraResult(
+                  imageFile: _image,
+                ));
+        Navigator.push(mContext, route);
+//      Navigator.of(mContext).push(MaterialPageRoute(
+//          builder: (context) => CameraModify(imageFile: _image))
+      });
     }
   }
 
@@ -64,7 +77,7 @@ class _CameraAppState extends State<CameraActvity> {
 
         Route route = MaterialPageRoute(
             builder: (context) =>
-                CameraSubmit(
+                CameraResult(
                   imageFile: _image,
                 ));
         Navigator.push(mContext, route);
@@ -109,14 +122,16 @@ class _CameraAppState extends State<CameraActvity> {
 
               return Stack(
                 children: <Widget>[
-                  Transform.scale(
+                  _controller.value.isInitialized
+                      ? Transform.scale(
                       scale: _controller.value.aspectRatio / deviceRatio,
                       child: Center(
                         child: AspectRatio(
                           aspectRatio: _controller.value.aspectRatio,
                           child: CameraPreview(_controller),
                         ),
-                      )),
+                      ))
+                      : SCircularProgress(),
                   Column(
                     children: <Widget>[
                       SizedBox(
@@ -126,7 +141,7 @@ class _CameraAppState extends State<CameraActvity> {
                         padding: const EdgeInsets.only(left: 10),
                         child: IconButton(
                           icon: Icon(Icons.arrow_back_ios),
-                          color: Colors.blue,
+                          color: Colors.white,
                           onPressed: () => Navigator.of(context).pop(true),
                         ),
                       ),
@@ -190,7 +205,14 @@ class _CameraAppState extends State<CameraActvity> {
 //                                        ),
 //                                      );
 
-                                        goCrop(File(path));
+                                        _image = File(path);
+
+                                        Route route = MaterialPageRoute(
+                                            builder: (context) =>
+                                                CameraResult(
+                                                  imageFile: _image,
+                                                ));
+                                        Navigator.push(mContext, route);
                                       } catch (e) {
                                         // If an error occurs, log the error to the console.
                                         print(e);

@@ -5,11 +5,12 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
+import 'package:smartcycle/ui/camera/camera_recognize_result.dart';
 import 'package:smartcycle/ui/main/main_doyouknow.dart';
 import 'package:smartcycle/ui/main/main_qr_code.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/camera/camera_start.dart';
-import 'package:smartcycle/ui/rcldetail/RecycleDetail.dart';
+import 'package:smartcycle/ui/rcldetail/rcldetail_main.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -127,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage>
         onPressed: () {
           Navigator.push(
             context,
+//            ScaleRoute(widget: CameraActvity()),
             ScaleRoute(widget: CameraActvity()),
           );
         },
@@ -296,126 +298,6 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
   );
 }
 
-// Widget _pageView(){
-//   return PageView(
-
-//     children: <Widget>[
-//         Container(color: Colors.blue,child: Text("Dd"),),
-//         Container(color: Colors.blue,child: Text("Dd"),),
-//         Container(color: Colors.blue,child: Text("Dd"),),
-
-//     ],
-//   );
-// }
-
-//Widget _row(BuildContext context) {
-//  return Row(
-//    children: <Widget>[
-//      Flexible(
-//        flex: 1,
-//        child: Column(
-//          children: <Widget>[
-//            SizedBox(
-//              height: 30,
-//            ),
-//            Image.asset("assets/images/icecream.png"),
-//            RaisedButton(
-//              child: Text("임시 버튼"),
-//              onPressed: () {
-//                Navigator.of(context).push(
-//                  MaterialPageRoute(
-//                      builder: (context) => RecycleDetail(
-//                        keyword: "페트병",
-//                      )),
-//                );
-//              },
-//            ),
-//            RaisedButton(
-//              child: Text("임시 버튼"),
-//              onPressed: () {
-//                // Google auth 로그인 상태 아닌 경우 로그인 창으로 이동(사실상 최초 실행시 소개 페이지와 같음)
-//                Navigator.of(context).push(
-//                  MaterialPageRoute(builder: (context) => AuthPage()),
-//                );
-//              },
-//            ),
-//          ],
-//        ),
-//      ),
-//      Flexible(
-//          flex: 1,
-//          child: Column(
-//            mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            children: <Widget>[
-//              SizedBox(
-//                height: 30,
-//              ),
-//              Text(
-//                "오늘의 분리수거\n알아보기",
-//                textAlign: TextAlign.left,
-//                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-//              ),
-//              SizedBox(
-//                height: 15,
-//              ),
-//              Text("날마다 헷갈리는 재활용품의 \n분리수거 방법을 알려드립니다."),
-//              SizedBox(
-//                height: 30,
-//              ),
-//              Text(
-//                "오늘의 분리수거",
-//                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-//              ),
-//              Text(":  '설레임'",
-//                  textAlign: TextAlign.left,
-//                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
-//            ],
-//          )),
-//    ],
-//  );
-//}
-
-//void _showSearchSheet(context) {
-//  showModalBottomSheet(
-//      context: context,
-//      builder: (BuildContext bc) {
-//        return Container(
-//          child: new Wrap(
-//            children: <Widget>[
-//              new ListTile(
-//                  leading: new Icon(Icons.music_note),
-//                  title: new Text('Music'),
-//                  onTap: () => {}),
-//              new ListTile(
-//                leading: new Icon(Icons.videocam),
-//                title: new Text('Video'),
-//                onTap: () => {},
-//              ),
-//            ],
-//          ),
-//        );
-//      });
-//}
-
-Future<RclDetail> getData(String itemId) async {
-  print("요청 진입 : " + itemId.toString());
-  http.Response response = await http.get(
-      Uri.encodeFull('http://smartcycle.ljhnas.com/api/trash/$itemId'),
-      headers: {"Accept": "application/json"});
-
-  //printch
-  // ("받은 쓰레기 이름" + TrashType().getTrashName(itemId));
-  print(response.body);
-  final jsonData = json.decode(response.body.toString());
-  RclDetails data = RclDetails.fromJson(jsonData);
-  rclData = data.rcls[0];
-  print(data.rcls[0].name.toString());
-
-  return rclData;
-  //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
-}
-
 Future<Widget> networkCheck(BuildContext context) async {
   var connectivityResult = await (Connectivity().checkConnectivity());
   if (connectivityResult != ConnectivityResult.mobile &&
@@ -432,15 +314,3 @@ Future<Widget> networkCheck(BuildContext context) async {
     );
   }
 }
-
-//Future<String> getDoYouKnow() async {
-//  String loadStr = await rootBundle.loadString('assets/data/doYouKnow.json');
-//  print(loadStr);
-//  return loadStr;
-//}
-//  Stream<List<int>> stream = new File("assets/json/doYouKnow.json").openRead();
-//  StringBuffer buffer = new StringBuffer();
-//  stream.transform(utf8.decoder).transform(LineSplitter()).listen((data) {
-//    print("ReadData : $data");
-//    buffer.write(data);
-//  }, onDone: () => print(buffer.toString()), onError: (e) => print(e));

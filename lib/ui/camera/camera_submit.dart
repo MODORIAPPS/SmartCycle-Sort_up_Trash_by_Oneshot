@@ -26,7 +26,7 @@ class _CameraSubmitState extends State<CameraSubmit> {
           RaisedButton(
             child: Text("이미지 업로드"),
             onPressed: () {
-              _uploadImage(widget.imageFile);
+              //_uploadImage(widget.imageFile);
             },
           ),
         ],
@@ -35,19 +35,3 @@ class _CameraSubmitState extends State<CameraSubmit> {
   }
 }
 
-void _uploadImage(File image) {
-  if (image == null) return;
-  String base64Image = base64Encode(image.readAsBytesSync());
-  String fileName = image.path.split("/").last;
-
-  // !! SAMPLE EMAIL USED
-
-  var jsonData = ''
-      '{ "img":$base64Image, "name": $fileName, "userEmail":"kwonkiseok7@gmail.com" }';
-
-  http.post(base + "/imageUpload", body: {"data": jsonData}).then((res) {
-    print(res.statusCode);
-  }).catchError((err) {
-    print(err);
-  });
-}

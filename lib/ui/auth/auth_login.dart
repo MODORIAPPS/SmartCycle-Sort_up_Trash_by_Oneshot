@@ -42,6 +42,9 @@ class LoginPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  SizedBox(
+                    height: 20,
+                  ),
                   IconButton(
                     icon: Icon(Icons.close),
                     color: Colors.white,

@@ -7,6 +7,7 @@
 var express = require('express'),
   http = require('http'),
   app = express(),
+  fs = require('fs')
   server = http.createServer(app);
 
 
@@ -163,7 +164,7 @@ var express = require('express'),
         ],
         "_id": "5d88e78801095013472af4d8",
         "published_date": "2019-09-23T15:40:56.523Z",
-        "docNum": "1",
+        "docNum": "2",
         "title": "이거 정말 좋은생각입니다.",
         "readTime": 4,
         "preImage": "https://cdn.clien.net/web/api/file/F01/2045212/476b3769e6e048dfbd1.JPG",
@@ -198,14 +199,14 @@ var express = require('express'),
           },
           {
             "secTitle": "共产党万岁",
-            "image": "https://www.google.com/url?sa=i&source=images&cd=&ved=2ahUKEwibx-638rDkAhWUH3AKHZkQBp8QjRx6BAgBEAQ&url=https%3A%2F%2Fdoumiangel.tistory.com%2F10&psig=AOvVaw3wrKi8f9CirXDNK4a7t06Q&ust=1567470936195220",
+            "image": "https://www.googlse.com/url?sa=i&source=images&cd=&ved=2ahUKEwibx-638rDkAhWUH3AKHZkQBp8QjRx6BAgBEAQ&url=https%3A%2F%2Fdoumiangel.tistory.com%2F10&psig=AOvVaw3wrKi8f9CirXDNK4a7t06Q&ust=1567470936195220",
             "secContent": "혹시 뚜껑도 그냥 플라스틱에 넣으면 되지 않을까?"
           }
         ],
         "_id": "5d88e78801095013472af4d8",
         "published_date": "2019-09-23T15:40:56.523Z",
-        "docNum": "1",
-        "title": "모든 것은 윤준성의 계획대로.",
+        "docNum": "3",
+        "title": "준성군이 이야기하는 대한민국의 교육산업의 미래 ",
         "readTime": 4,
         "preImage": "https://scontent-icn1-1.xx.fbcdn.net/v/t1.0-9/66413473_1013273212211161_8262834469761712128_o.jpg?_nc_cat=107&_nc_oc=AQkuS7cFQYDnymTen_Qa35dhNWXJn2k1quxjrd_0DlvsGyCu1ADxu0x_BlZJv3XmqF0&_nc_ht=scontent-icn1-1.xx&oh=1ba1dcb1c6275bfa24eae4de08e67f97&oe=5E5FE972",
         "__v": 0
@@ -213,11 +214,64 @@ var express = require('express'),
     ]
      `;
 
+    res.send(sample_response);
+  });
+
+
+  app.get('/test/getRclDetail', (req,res) => {
+  
+    var sample_response = 
+    `
+    [
+      {
+          "information": {
+              "composition": [
+                  {
+                      "part": "종이팩",
+                      "value": "종이류"
+                  }
+              ],
+              "step": [
+                  {
+                      "imageURL_step": "/1/1_1.jpg",
+                      "contents": "부피를 줄이기 위해 납작하게 구겨 주세요."
+                  },
+                  {
+                      "imageURL_step": "/1/1_0.jpg",
+                      "contents": "종이류에 분리 배출해 주세요. 만약 종이팩 수거함이 별도로 있다면 종이팩 수거함에 분리 배출해 주세요. 종이팩의 재활용률을 엄청나게 높일 수 있답니다."
+                  }
+              ],
+              "compo_number": 1,
+              "step_number": 2,
+              "time_rot": "3개월"
+          },
+          "_id": "5d8b6e2579ff2107e3f95757",
+          "published_date": "2019-09-25T13:39:49.822Z",
+          "id": "1",
+          "name": "종이팩",
+          "imageURL": "/1/1_0.jpg",
+          "nugu_script": "종이팩은 부피를 줄이기 위해 납작하게 구겨 주신 후 종이류에 분리 배출 해 주세요. 종이팩 수거함이 별도로 있다면 종이팩 수거함에 분리 배출해 주세요.",
+          "__v": 0
+      }
+  ]
+     `;
+
 
     res.send(sample_response);
   });
 
 
+  app.get('/test/imageTest', (req,res) => {
+
+    res.end('https://5.imimg.com/data5/ET/FM/MY-11874215/1-litre-pet-bottle-500x500.jpg');
+
+
+  });
+
+
+
+
+  
 
 
 
@@ -228,3 +282,4 @@ var express = require('express'),
   server.listen(8080, function () {
     console.log('Express server listening on port ' + server.address().port);
   });
+

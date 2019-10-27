@@ -19,27 +19,36 @@ class DoYouKnowCard extends StatelessWidget {
           height: 50,
           child: Stack(
             children: <Widget>[
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: CachedNetworkImage(
-                      imageUrl: doYouKnow.preImage,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      alignment: Alignment(-.2, 0),
-                      fit: BoxFit.fill,
-                      height: double.infinity,
-                      width: double.infinity,
+              Hero(
+                tag: "${doYouKnow.docNum}TAG",
+                child: Stack(
+                  children: <Widget>[
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: CachedNetworkImage(
+                            imageUrl: doYouKnow.preImage,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            alignment: Alignment(-.2, 0),
+                            fit: BoxFit.fill,
+                            height: double.infinity,
+                            width: double.infinity,
+                          ),
+                        )
                     ),
-                  )
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: new Border.all(width: 20, color: Colors.transparent),
-                  color: new Color.fromRGBO(0, 0, 0, 0.5),
-                  borderRadius: BorderRadius.circular(20),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: new Border.all(
+                            width: 20, color: Colors.transparent),
+                        color: new Color.fromRGBO(0, 0, 0, 0.5),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(

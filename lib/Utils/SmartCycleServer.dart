@@ -5,12 +5,14 @@ import 'package:googleapis/customsearch/v1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
+import 'package:smartcycle/model/RcleDetail.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 
-const test_base = "http://172.17.0.65:8080/";
-const base = 'http://smartcycle.ljhnas.com/';
-
 class SmartCycleServer {
+  static var test_base = "http://172.18.0.82:8080";
+  static var test_client_base = "$test_base/";
+  static var base = 'http://smartcycle.ljhnas.com/';
+  static var base_n = 'http://smartcycle.ljhnas.com';
   HttpClient client;
 
   SmartCycleServer() {
@@ -22,20 +24,14 @@ class SmartCycleServer {
   AuthUtils() {
     // for https certificate
     client.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
+    ((X509Certificate cert, String host, int port) => true);
   }
-
-  // 서버가 살아있는지 테스트
-  Future<bool> isServerAlive() {
-
-  }
-
 
   // %%%% 최근 검색한 분리수거 %%%%
   Future<SearchHistorys> getUserHistory(String userEmail) async {
     print(userEmail);
     HttpClientRequest request =
-        await client.getUrl(Uri.parse("{$base}trash/lately/$userEmail"));
+    await client.getUrl(Uri.parse("{$base}trash/lately/$userEmail"));
     request.headers.set('content-type', 'application/json');
 
     HttpClientResponse response = await request.close();
@@ -53,7 +49,7 @@ class SmartCycleServer {
     // 이 함수에서는 실질적으로 userEmail 의 의미가 없습니다.
 
     HttpClientRequest request =
-        await client.getUrl(Uri.parse("${test_base}test/trash/lately"));
+    await client.getUrl(Uri.parse("${test_client_base}test/trash/lately"));
     request.headers.set('content-type', 'application/json');
 
     HttpClientResponse response = await request.close();
@@ -65,7 +61,6 @@ class SmartCycleServer {
     }
     print("사용자 기록 : " + jsondata.toString());
   }
-
 
   Future<String> registerDevice(String user_email, String berry_id) async {
     // POST /socket/
@@ -98,10 +93,8 @@ class SmartCycleServer {
 
   // %% ONLY FOR TEST %% registerDevice
   Future<DoYouKnows> getDoYouKnowTest() async {
-    client = new HttpClient();
-
-    HttpClientRequest request =
-    await client.getUrl(Uri.parse("${test_base}test/getDoYouKnowInfo"));
+    HttpClientRequest request = await client
+        .getUrl(Uri.parse("${test_client_base}test/getDoYouKnowInfo"));
     request.headers.set('content-type', 'application/json');
 
     HttpClientResponse response = await request.close();
@@ -113,4 +106,78 @@ class SmartCycleServer {
     }
   }
 
+  Future<RclDetail> getRclDetail(int itemId) async {
+    //print("요청 진입 : " + itemId.toString());
+    http.Response response = await http.get(
+        Uri.encodeFull('http://smartcycle.ljhnas.com/api/trash/$itemId'),
+        headers: {"Accept": "application/json"});
+
+    //printch
+    // ("받은 쓰레기 이름" + TrashType().getTrashName(itemId));
+    //print(response.body);
+    final jsonData = json.decode(response.body.toString());
+    RclDetails data = RclDetails.fromJson(jsonData);
+    //rclData = data.rcls[0];
+    //print(data.rcls[0].name.toString());
+
+    return data.rcls[0];
+    //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
+  }
+
+  // %% ONLY FOR TEST %% rclDetail
+  Future<RclDetail> getRclDetailTest(int itemId) async {
+    print("요청 진입 : " + itemId.toString());
+    http.Response response = await http.get(
+        Uri.encodeFull('${test_client_base}test/getRclDetail'),
+        headers: {"Accept": "application/json"});
+
+    //printch
+    // ("받은 쓰레기 이름" + TrashType().getTrashName(itemId));
+    //print(response.body);
+    final jsonData = json.decode(response.body.toString());
+    RclDetails data = RclDetails.fromJson(jsonData);
+    //rclData = data.rcls[0];
+    //print(data.rcls[0].name.toString());
+
+    return data.rcls[0];
+    //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
+  }
+
+  // %% ONLY FOR TEST %% rclDetail
+  Future<String> getCameraResultTest() {
+    return new Future.delayed(new Duration(seconds: 50), () {
+      return '0';
+    });
+  }
+
+  Future<String> getCameraResult(File image) async {
+    print("서버 요청 시작");
+
+    String base64Image = base64Encode(image.readAsBytesSync());
+    String fileName = image.path
+        .split("/")
+        .last;
+    Map<String, dynamic> map;
+
+    // !! SAMPLE EMAIL USED
+    Map jsondata = {
+      'img': '$base64Image',
+      'name': '$fileName',
+      'userEmail': 'kwonkiseok7@gmail.com'
+    };
+    //var jsonData = '{ "img": "$base64Image", "name": "$fileName", "userEmail":"kwonkiseok7@gmail.com" }';
+    //var gay = json.encode(jsonData);
+    //print(jsonData);
+    await http.post(base_n + "/api/phone/trash", body: jsondata).then((res) {
+      print(res.statusCode);
+      print("상욱쨩이 나에게 보낸 이미지에 대한 답장이당 <3 ${res.body.toString()}");
+      map = jsonDecode(res.body);
+      //return map['trashId'];
+    }).catchError((err) {
+      print(err);
+      return err;
+    });
+
+    return map['trashId'];
+  }
 }

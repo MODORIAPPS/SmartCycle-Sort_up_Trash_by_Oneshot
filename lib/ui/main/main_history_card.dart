@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smartcycle/ui/rcldetail/RecycleDetail.dart';
-import 'package:smartcycle/model/TrashType.dart';
+import 'package:smartcycle/ui/rcldetail/rcldetail_main.dart';
+import 'package:smartcycle/Utils/TrashType.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
 class HistoryCard extends StatelessWidget {
