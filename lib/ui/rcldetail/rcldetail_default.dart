@@ -108,7 +108,6 @@ Widget CompositionWidget(String part, String value) {
 }
 
 Widget StepWidget(String image, String step, int i) {
-  var base = 'http://smartcycle.ljhnas.com/pictures/';
   var test_base = SmartCycleServer.test_base;
 
   return Padding(
@@ -128,7 +127,7 @@ Widget StepWidget(String image, String step, int i) {
             child: CachedNetworkImage(
 //              imageUrl: base + image,
               // %% ONLY FOR TEST %% getImage
-              imageUrl: base + image,
+              imageUrl: SmartCycleServer.getServerImage(image),
               placeholder: (context, url) => CircularProgressIndicator(),
               errorWidget: (context, url, error) => Icon(
                 Icons.error,
@@ -155,6 +154,7 @@ Widget StepWidget(String image, String step, int i) {
 Widget _doYouKnow(RclDetail rclDetail) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       Text(
         "알고계셨나요?",
@@ -183,7 +183,7 @@ Widget _doYouKnow(RclDetail rclDetail) {
           ),
           Text(
             rclDetail.information.time_rot,
-            style: TextAssets.subBold,
+            style: TextAssets.mainRegular,
           ),
           SizedBox(
             height: 15,
@@ -202,7 +202,7 @@ Widget _title(RclDetail rclDetail) {
       Text(
         rclDetail.name + " 을(를) 분리수거 하는 방법",
         style: TextAssets.mainBold,
-      ),
+      )
     ],
   );
 }

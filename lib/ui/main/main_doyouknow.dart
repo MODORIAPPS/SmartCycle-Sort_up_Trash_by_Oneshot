@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
+import 'package:smartcycle/Utils/TabletDetector.dart';
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/ui/doyouknow/doyouknow_card.dart';
 
@@ -25,6 +26,9 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+
     return FutureBuilder<DoYouKnows>(
       future: _getDoYouKnow,
       builder: (context, snapshot) {
@@ -55,7 +59,23 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
               ),
             );
           } else {
-            return CarouselSlider(
+            var doYouKnow = new List<Widget>();
+
+            for (var doyouknow in snapshot.data.datas) {
+              doYouKnow.add(DoYouKnowCard(
+                doYouKnow: doyouknow,
+              ));
+            }
+            return TabletDetector.isTablet(queryData)
+                ? ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: snapshot.data.datas.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return new DoYouKnowCard(
+                    doYouKnow: snapshot.data.datas[index],
+                  );
+                })
+                : CarouselSlider(
                 height: 400.0,
                 enlargeCenterPage: true,
                 autoPlay: true,
@@ -74,4 +94,8 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
       },
     );
   }
+
+//  List<Widget> _doYouKnowCard(DoYouKnows doYouKnows) {
+//    return doYouKnow;
+//  }
 }

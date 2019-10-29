@@ -29,6 +29,9 @@ class _RecycleDetailState extends State<RecycleDetail> {
   void initState() {
     // %% ONLY FOR TEST %% getRclData
     super.initState();
+//    _getRclDetailData = SmartCycleServer().getRclDetailTest(2);
+
+
     _getRclDetailData = SmartCycleServer()
         .getRclDetail(itemId)
         .timeout(const Duration(seconds: 5));
@@ -69,7 +72,7 @@ class _RecycleDetailState extends State<RecycleDetail> {
                       textColor: Colors.white,
                       onPressed: () {
                         _getRclDetailData = SmartCycleServer()
-                            .getRclDetailTest(2)
+                            .getRclDetail(2)
                             .timeout(const Duration(seconds: 5));
                         setState(() {});
                       },
@@ -80,24 +83,17 @@ class _RecycleDetailState extends State<RecycleDetail> {
             } else {
               pages.add(RclDetailDefault(rclDetail: snapshot.data));
               pages.add(RclDetailPageView(rclDetail: snapshot.data));
-//              return PageView.builder(
-//                controller: controller,
-//                scrollDirection: Axis.vertical,
-//                physics: BouncingScrollPhysics(),
-//                itemBuilder: (context, position){
-//                  return pages[position];
-//                }
-//              );
               return PageView(
                 controller: controller,
                 scrollDirection: Axis.vertical,
+                pageSnapping: false,
                 children: <Widget>[
                   RclDetailDefault(
                     rclDetail: snapshot.data,
                   ),
-                  RclDetailPageView(
-                    rclDetail: snapshot.data,
-                  )
+//                  RclDetailPageView(
+//                    rclDetail: snapshot.data,
+//                  )
                 ],
               );
             }
@@ -106,6 +102,7 @@ class _RecycleDetailState extends State<RecycleDetail> {
           }
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(
           Icons.refresh,

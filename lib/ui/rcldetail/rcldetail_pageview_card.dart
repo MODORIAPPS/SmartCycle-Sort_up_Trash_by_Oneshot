@@ -1,8 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/assets.dart';
+import 'package:smartcycle/model/RcleDetail.dart' as rclDTO;
 
 class RclDetailPageViewCard extends StatelessWidget {
+  final int count;
+  final rclDTO.Step step;
+
+  RclDetailPageViewCard({@required this.step, @required this.count});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -12,7 +19,7 @@ class RclDetailPageViewCard extends StatelessWidget {
           Align(
             alignment: Alignment.topLeft,
             child: Text(
-              "1 단계",
+              "$count 단계",
               style: TextAssets.mainBlack,
             ),
           ),
@@ -23,8 +30,7 @@ class RclDetailPageViewCard extends StatelessWidget {
                 child: CachedNetworkImage(
 //              imageUrl: base + image,
                   // %% ONLY FOR TEST %% getImage
-                  imageUrl:
-                      "https://5.imimg.com/data5/ET/FM/MY-11874215/1-litre-pet-bottle-500x500.jpg",
+                  imageUrl: SmartCycleServer.getServerImage(step.imageURL_step),
                   placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => Icon(
                     Icons.error,
@@ -54,7 +60,7 @@ class RclDetailPageViewCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
-                    "부피를 줄이기 위해 납작하게 구겨 주세요.",
+                    step.contents,
                     style: TextAssets.mainRegular,
                   ),
                 ),

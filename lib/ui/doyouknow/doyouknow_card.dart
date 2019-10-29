@@ -16,7 +16,7 @@ class DoYouKnowCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         child: Container(
-          height: 50,
+          height: 60,
           child: Stack(
             children: <Widget>[
               Hero(
@@ -35,11 +35,10 @@ class DoYouKnowCard extends StatelessWidget {
                                 Icon(Icons.error),
                             alignment: Alignment(-.2, 0),
                             fit: BoxFit.fill,
-                            height: double.infinity,
                             width: double.infinity,
+                            height: double.infinity,
                           ),
-                        )
-                    ),
+                        )),
                     Container(
                       decoration: BoxDecoration(
                         border: new Border.all(

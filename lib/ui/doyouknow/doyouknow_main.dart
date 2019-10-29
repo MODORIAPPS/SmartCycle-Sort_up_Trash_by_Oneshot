@@ -42,7 +42,6 @@ class DoYouKnowMain extends StatelessWidget {
                         border: new Border.all(
                             width: 20, color: Colors.transparent),
                         color: new Color.fromRGBO(0, 0, 0, 0.3),
-                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                   ],

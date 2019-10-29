@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
 import 'package:smartcycle/ui/camera/camera_recognize_result.dart';
 import 'package:smartcycle/ui/main/main_doyouknow.dart';
@@ -21,7 +22,12 @@ import 'package:smartcycle/ui/main/main_history_gridview.dart';
 import 'Utils/ScaleRoute.dart';
 import 'model/RcleDetail.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp());
+  });
+}
 
 //bool doYouKnowGo = false;
 //bool isUserAvail = false;

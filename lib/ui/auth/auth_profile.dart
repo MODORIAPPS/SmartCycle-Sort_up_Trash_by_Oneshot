@@ -229,6 +229,27 @@ Widget UserProfile(BuildContext context, UserInfo userinfo) {
               ),
             ),
           ),
+//          Padding(
+//            padding: const EdgeInsets.all(15.0),
+//            child: ButtonTheme(
+//              minWidth: double.infinity,
+//              child: RaisedButton(
+//                child: Text(
+//                  "개발자 설정",
+//                  style: TextStyle(color: Colors.orange),
+//                ),
+//                shape: RoundedRectangleBorder(
+//                    borderRadius: new BorderRadius.circular(30.0),
+//                    side: BorderSide(color: Colors.blue, width: 1)),
+//                color: Colors.white,
+//                //splashColor: Colors.yellow,
+//                onPressed: () {
+//                  // Logout
+//                  //_asyncConfirmDialog(context);
+//                },
+//              ),
+//            ),
+//          ),
 
 //          Padding(
 //            padding: const EdgeInsets.all(15.0),

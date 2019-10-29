@@ -8,8 +8,13 @@ import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/model/RcleDetail.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 
+
+/// SmartCycle 의 서버와 연결해주는 역할을 합니다.
+/// test_base는 테스트 코드를 위한 로컬 서버를 가르킵니다.
+/// 메소드명 뒤에 Test가 붙은 것들은 로컬 서버를 향하는 테스트 코드입니다.
+/// ex) getUserHistoryTest
 class SmartCycleServer {
-  static var test_base = "http://172.18.0.82:8080";
+  static var test_base = "http://172.16.0.157:8080";
   static var test_client_base = "$test_base/";
   static var base = 'http://smartcycle.ljhnas.com/';
   static var base_n = 'http://smartcycle.ljhnas.com';
@@ -27,11 +32,15 @@ class SmartCycleServer {
     ((X509Certificate cert, String host, int port) => true);
   }
 
+  static String getServerImage(String image) {
+    return base_n + "/pictures" + image;
+  }
+
   // %%%% 최근 검색한 분리수거 %%%%
   Future<SearchHistorys> getUserHistory(String userEmail) async {
     print(userEmail);
     HttpClientRequest request =
-    await client.getUrl(Uri.parse("{$base}trash/lately/$userEmail"));
+    await client.getUrl(Uri.parse(base + "trash/info/$userEmail"));
     request.headers.set('content-type', 'application/json');
 
     HttpClientResponse response = await request.close();
@@ -39,6 +48,7 @@ class SmartCycleServer {
 
     String reply = await response.transform(utf8.decoder).join();
     print(reply);
+    print(response.statusCode.toString());
     final jsondata = SearchHistorys.fromJson(json.decode(reply));
     print("사용자 기록 : " + jsondata.toString());
     return jsondata;
@@ -49,7 +59,7 @@ class SmartCycleServer {
     // 이 함수에서는 실질적으로 userEmail 의 의미가 없습니다.
 
     HttpClientRequest request =
-    await client.getUrl(Uri.parse("${test_client_base}test/trash/lately"));
+    await client.getUrl(Uri.parse(test_client_base + "test/trash/lately"));
     request.headers.set('content-type', 'application/json');
 
     HttpClientResponse response = await request.close();
@@ -109,7 +119,7 @@ class SmartCycleServer {
   Future<RclDetail> getRclDetail(int itemId) async {
     //print("요청 진입 : " + itemId.toString());
     http.Response response = await http.get(
-        Uri.encodeFull('http://smartcycle.ljhnas.com/api/trash/$itemId'),
+        Uri.encodeFull('http://smartcycle.ljhnas.com/trash/info/$itemId'),
         headers: {"Accept": "application/json"});
 
     //printch
