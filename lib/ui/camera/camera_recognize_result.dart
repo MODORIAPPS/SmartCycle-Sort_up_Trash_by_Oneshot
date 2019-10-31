@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/ui/act/act_error_page.dart';
@@ -11,8 +12,9 @@ import 'package:smartcycle/assets.dart';
 
 class CameraResult extends StatefulWidget {
   final File imageFile;
+  final String userEmail;
 
-  CameraResult({this.imageFile});
+  CameraResult({@required this.imageFile, @required this.userEmail});
 
   @override
   _CameraResultState createState() => _CameraResultState();
@@ -28,7 +30,8 @@ class _CameraResultState extends State<CameraResult> {
 //    _cameraResult = SmartCycleServer().getCameraResult()
 //        .timeout(const Duration(seconds: 10));
 //
-    _cameraResult = SmartCycleServer().getCameraResult(widget.imageFile);
+    _cameraResult =
+        SmartCycleServer().getCameraResult(widget.imageFile, widget.userEmail);
   }
 
   @override
@@ -67,66 +70,115 @@ class _CameraResultState extends State<CameraResult> {
                 okay = true;
                 final int trashNumber = int.parse(snapshot.data);
                 return Container(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15, top: 10, right: 15, bottom: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "들고 계신 쓰레기는",
-                              style: header1,
-                            ),
-                            Text(
-                              "${TrashType().getTrashName(trashNumber)} 같아요",
-                              style: header1,
-                            ),
-                          ],
-                        ),
-                        AspectRatio(
-                          aspectRatio: 1 / 1.2,
-                          child: Image.file(
-                            widget.imageFile,
+                  child: Stack(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "들고 계신 쓰레기는",
+                                style: TextAssets.mainBlack,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Text(
+                                    "${TrashType().getTrashName(
+                                        trashNumber)} 같아요!",
+                                    style: TextAssets.mainBlack,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                      Align(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Container(
+                            child: AspectRatio(
+                                aspectRatio: 1 / 1.2,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(25),
+                                  child: Image.file(
+                                    widget.imageFile,
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
+                                )),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(25),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black12,
+                                      offset: Offset(0, 15),
+                                      blurRadius: 15)
+                                ]),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
                           children: <Widget>[
-                            RaisedButton(
-                              child: Text("아니에요"),
-                              onPressed: () {
-                                // 스피너 탭으로 이동
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => ModifyPage()),
-                                );
-                              },
-                              color: Colors.blue,
-                              elevation: 5,
+                            Flexible(
+                              child: ButtonTheme(
+                                minWidth: double.infinity,
+                                height: 70,
+                                child: RaisedButton(
+                                  child: Text(
+                                    "아니에요",
+                                    style: TextAssets.mainRegularW,
+                                  ),
+                                  onPressed: () {
+                                    // 스피너 탭으로 이동
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ModifyPage(
+                                                initImage: widget.imageFile,)),
+                                    );
+                                  },
+                                  color: Colors.redAccent,
+                                  elevation: 5,
+                                ),
+                              ),
                             ),
-                            RaisedButton(
-                              child: Text("맞아요"),
-                              onPressed: () {
-                                // 서버가 개발되지 않았으므로 임시 코드
-                                //var number = TrashType().getTrashNumber("부탄가스");
-                                //print(number);
+                            Flexible(
+                              child: ButtonTheme(
+                                  minWidth: double.infinity,
+                                  height: 70,
+                                  child: RaisedButton(
+                                    child: Text(
+                                      "맞아요",
+                                      style: TextAssets.mainRegularW,
+                                    ),
+                                    onPressed: () {
+                                      // 서버가 개발되지 않았으므로 임시 코드
+                                      //var number = TrashType().getTrashNumber("부탄가스");
+                                      //print(number);
 
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          RecycleDetail(itemID: trashNumber)),
-                                );
-                              },
-                              color: Colors.green,
-                              elevation: 5,
-                            )
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                RecycleDetail(
+                                                    itemID: trashNumber)),
+                                      );
+                                    },
+                                    color: Colors.blue,
+                                    elevation: 5,
+                                  )),
+                            ),
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }

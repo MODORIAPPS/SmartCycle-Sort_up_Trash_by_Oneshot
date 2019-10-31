@@ -17,7 +17,7 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
   @override
   void initState() {
     _getDoYouKnow = SmartCycleServer()
-        .getDoYouKnowTest()
+        .getDoYouKnow()
         .timeout(const Duration(seconds: 10));
   }
 
@@ -50,7 +50,7 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
                     textColor: Colors.white,
                     onPressed: () {
                       _getDoYouKnow = SmartCycleServer()
-                          .getDoYouKnowTest()
+                          .getDoYouKnow()
                           .timeout(const Duration(seconds: 10));
                       setState(() {});
                     },

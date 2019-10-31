@@ -147,28 +147,6 @@ class AddDevice extends StatelessWidget {
                     String berry_id = deviceIdController.text;
                     String user_email = userInfo.email;
 
-//                    SmartCycleServer()
-//                        .registerDevice(user_email, berry_id)
-//                        .then((result) {
-//                      print(result);
-//                      if (result == '{"result":1}') {
-//                        Scaffold.of(context)
-//                            .showSnackBar(new SnackBar(content: Text("성공")));
-//
-//                        Navigator.of(context).push(
-//                          MaterialPageRoute(
-//                              builder: (context) => RegiCompleted()),
-//                        );
-//                      } else if (result == '{"result":2}') {
-//                        Scaffold.of(context).showSnackBar(
-//                            new SnackBar(content: Text("이미 등록된 기기입니다.")));
-//                      } else if (result == '{"result":false}') {
-//                        Scaffold.of(context).showSnackBar(
-//                            new SnackBar(content: Text("등록 중 오류가 발생했습니다.")));
-//                      }
-//                    });
-
-
                     // %% ONLY FOR TEST %% getUserHistoryTest
                     SmartCycleServer()
                         .registerDeviceTest(user_email, berry_id)

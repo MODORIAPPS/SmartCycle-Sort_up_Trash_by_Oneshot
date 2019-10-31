@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
 import 'package:smartcycle/ui/camera/camera_recognize_result.dart';
+import 'package:smartcycle/ui/main/main_bottom_bar.dart';
 import 'package:smartcycle/ui/main/main_doyouknow.dart';
 import 'package:smartcycle/ui/main/main_qr_code.dart';
 import 'package:smartcycle/assets.dart';
@@ -29,14 +30,6 @@ void main() {
   });
 }
 
-//bool doYouKnowGo = false;
-//bool isUserAvail = false;
-//bool isHistoryReady = false;
-//
-//SearchHistorys historys;
-//var userProfileURL;
-//var user_email;
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -57,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   Future<bool> _isSignIn;
   Future<UserInfo> _userInfo;
+  String user_email = "";
 
   var history = new List<SearchHistory>();
 
@@ -112,11 +106,12 @@ class _MyHomePageState extends State<MyHomePage>
     ));
   }
 
-  @override
-  dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
+//
+//  @override
+//  dispose() {
+//    _animationController.dispose();
+//    super.dispose();
+//  }
 
   animate() {
     if (!isOpened) {
@@ -127,16 +122,20 @@ class _MyHomePageState extends State<MyHomePage>
     isOpened = !isOpened;
   }
 
-  Widget _launchCamera(BuildContext context) {
+  Widget _launchCamera(BuildContext context, String userEmail) {
     return Container(
       child: new FloatingActionButton(
         heroTag: "imageFab",
         onPressed: () {
-          Navigator.push(
-            context,
-//            ScaleRoute(widget: CameraActvity()),
-            ScaleRoute(widget: CameraActvity()),
-          );
+          if (user_email.isNotEmpty) {
+            Navigator.push(
+              context,
+              ScaleRoute(
+                  widget: CameraActvity(
+                    userEmail: userEmail,
+                  )),
+            );
+          }
         },
         tooltip: 'camera',
         child: Icon(Icons.camera_alt),
@@ -188,31 +187,134 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     networkCheck(context);
 
+    if (user_email == null) {
+      _isSignIn = AuthUtils().isSignIn();
+    }
+
+
     return Scaffold(
+//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+//      floatingActionButton: Padding(
+//          padding: const EdgeInsets.all(14.0),
+//          child: new Column(
+//            mainAxisAlignment: MainAxisAlignment.end,
+//            children: <Widget>[
+//              Transform(
+//                transform: Matrix4.translationValues(
+//                  0.0,
+//                  _translateButton.value * 2.0,
+//                  0.0,
+//                ),
+//                child: _launchCamera(context, user_email),
+//              ),
+//              Transform(
+//                transform: Matrix4.translationValues(
+//                  0.0,
+//                  _translateButton.value,
+//                  0.0,
+//                ),
+//                child: _launchQrCode("Dd"),
+//              ),
+//              toggle(),
+//            ],
+//          )),
+      floatingActionButton: Container(
+        height: 65.0,
+        width: 65.0,
+        child: FittedBox(
+          child: FloatingActionButton(
+            onPressed: () {
+              if (user_email != null) {
+                Navigator.push(
+                  context,
+                  ScaleRoute(
+                      widget: CameraActvity(
+                        userEmail: user_email,
+                      )),
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      SmartDialog(
+                        title: "로그인 필요",
+                        content: "로그인이 필요한 서비스입니다.",
+                        colors: Colors.orange,
+                      ),
+                );
+              }
+            },
+            child: Icon(
+              Icons.camera_alt,
+              color: Colors.white,
+            ),
+            // elevation: 5.0,
+          ),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: new Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Transform(
-                transform: Matrix4.translationValues(
-                  0.0,
-                  _translateButton.value * 2.0,
-                  0.0,
+      bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(),
+          child: Container(
+            height: 60,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(
+                  iconSize: 30.0,
+                  padding: EdgeInsets.only(left: 28.0),
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+//                    setState(() {
+//                      if (user_email.isNotEmpty) {
+//                        Navigator.push(
+//                          context,
+//                          ScaleRoute(
+//                              widget: CameraActvity(
+//                                userEmail: user_email,
+//                              )),
+//                        );
+//                      }
+//                    });
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          SmartDialog(
+                            title: "준비중",
+                            content: "죄송합니다. 아직 준비중입니다.",
+                            colors: Colors.orange,
+                          ),
+                    );
+                  },
                 ),
-                child: _launchCamera(context),
-              ),
-              Transform(
-                transform: Matrix4.translationValues(
-                  0.0,
-                  _translateButton.value,
-                  0.0,
-                ),
-                child: _launchQrCode("Dd"),
-              ),
-              toggle(),
-            ],
+
+                IconButton(
+                  iconSize: 30.0,
+                  padding: EdgeInsets.only(right: 28.0),
+                  icon: Image.asset(
+                    "assets/images/qrCode.png",
+                    color: Colors.black87,
+                    width: 30,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            QrDialog(
+                              title: "QR코드",
+                              description: "이 QR코드를 기기의 카메라 앞에 대세요.",
+                              posiBtn: "알겠습니다.",
+                              // userEmail
+                              url: user_email,
+                            ),
+                      );
+                    });
+                  },
+                )
+              ],
+            ),
           )),
       body: FutureBuilder<bool>(
         future: _isSignIn,
@@ -221,16 +323,19 @@ class _MyHomePageState extends State<MyHomePage>
             if (snapshot.data) {
               // already signed
 
+              print("유저 로그인 되어있음");
+
               // Call currentUser
               _userInfo = AuthUtils().currentUser();
               return FutureBuilder<UserInfo>(
                 future: _userInfo,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
+                    user_email = snapshot.data.email;
                     return mainColumn(context, snapshot.data.photoUrl, true,
                         true, snapshot.data.email);
                   } else {
-                    return mainColumn(context, "NO", false, true, "NO");
+                    return mainColumn(context, "NO", false, false, "NO");
                   }
                 },
               );

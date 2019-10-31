@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:convert' as prefix0;
 import 'dart:io';
 
 import 'package:googleapis/customsearch/v1.dart';
@@ -7,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/model/RcleDetail.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
-
 
 /// SmartCycle 의 서버와 연결해주는 역할을 합니다.
 /// test_base는 테스트 코드를 위한 로컬 서버를 가르킵니다.
@@ -40,7 +40,7 @@ class SmartCycleServer {
   Future<SearchHistorys> getUserHistory(String userEmail) async {
     print(userEmail);
     HttpClientRequest request =
-    await client.getUrl(Uri.parse(base + "trash/info/$userEmail"));
+    await client.getUrl(Uri.parse(base + "trash/lately/$userEmail"));
     request.headers.set('content-type', 'application/json');
 
     HttpClientResponse response = await request.close();
@@ -116,6 +116,20 @@ class SmartCycleServer {
     }
   }
 
+  Future<DoYouKnows> getDoYouKnow() async {
+    HttpClientRequest request =
+    await client.getUrl(Uri.parse(base_n + "/trash/know"));
+    request.headers.set('content-type', 'application/json');
+
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(utf8.decoder).join();
+    print(reply);
+    final jsondata = DoYouKnows.fromJson(json.decode(reply));
+    if (response.statusCode == 200) {
+      return jsondata;
+    }
+  }
+
   Future<RclDetail> getRclDetail(int itemId) async {
     //print("요청 진입 : " + itemId.toString());
     http.Response response = await http.get(
@@ -160,7 +174,7 @@ class SmartCycleServer {
     });
   }
 
-  Future<String> getCameraResult(File image) async {
+  Future<String> getCameraResult(File image, String userEmail) async {
     print("서버 요청 시작");
 
     String base64Image = base64Encode(image.readAsBytesSync());
@@ -170,15 +184,16 @@ class SmartCycleServer {
     Map<String, dynamic> map;
 
     // !! SAMPLE EMAIL USED
-    Map jsondata = {
+    Map jsonData = {
       'img': '$base64Image',
       'name': '$fileName',
-      'userEmail': 'kwonkiseok7@gmail.com'
+      'userEmail': '$userEmail'
     };
-    //var jsonData = '{ "img": "$base64Image", "name": "$fileName", "userEmail":"kwonkiseok7@gmail.com" }';
-    //var gay = json.encode(jsonData);
-    //print(jsonData);
-    await http.post(base_n + "/api/phone/trash", body: jsondata).then((res) {
+//    var json = prefix0.json.encode(jsonData);
+//
+//    // 'http://smartcycle.ljhnas.com';
+//    print(jsonData);
+    await http.post(base_n + "/trash/phone/what", body: jsonData).then((res) {
       print(res.statusCode);
       print("상욱쨩이 나에게 보낸 이미지에 대한 답장이당 <3 ${res.body.toString()}");
       map = jsonDecode(res.body);

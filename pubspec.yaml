@@ -43,7 +43,9 @@ dependencies:
   flutter_image_compress: ^0.6.0
   shared_preferences: any
   connectivity: ^0.4.4
+  image: ^2.1.6
   cached_network_image: ^1.1.2+1
+
 
 
 

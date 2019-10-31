@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart' as prefix0;
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image/image.dart' as prefix1;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lamp/lamp.dart';
 import 'package:path/path.dart';
@@ -20,9 +22,11 @@ BuildContext mContext;
 bool hasTorch = false;
 
 class CameraActvity extends StatefulWidget {
+  final String userEmail;
   final CameraDescription camera;
 
-  CameraActvity({Key key, @required this.camera}) : super(key: key);
+  CameraActvity({Key key, @required this.camera, @required this.userEmail})
+      : super(key: key);
 
   @override
   _CameraAppState createState() => _CameraAppState();
@@ -44,20 +48,27 @@ class _CameraAppState extends State<CameraActvity> {
   }
 
   getImageFromAlbum(ImageSource source) async {
-    var imageFile = await ImagePicker.pickImage(source: source);
-    if (imageFile != null) {
-      setState(() {
-        _image = imageFile;
+    var imageFile =
+    await ImagePicker.pickImage(source: source, imageQuality: 50);
 
-        Route route = MaterialPageRoute(
-            builder: (context) =>
-                CameraResult(
-                  imageFile: _image,
-                ));
-        Navigator.push(mContext, route);
-//      Navigator.of(mContext).push(MaterialPageRoute(
-//          builder: (context) => CameraModify(imageFile: _image))
-      });
+    if (imageFile != null) {
+//      setState(() {
+//        _image = imageFile;
+//
+//        Route route = MaterialPageRoute(
+//            builder: (context) =>
+//                CameraResult(
+//                  imageFile: _image,
+//                  userEmail: widget.userEmail,
+//                ));
+//        Navigator.push(mContext, route);
+////      Navigator.of(mContext).push(MaterialPageRoute(
+////          builder: (context) => CameraModify(imageFile: _image))
+//      }
+//
+//      );
+
+      goCrop(imageFile);
     }
   }
 
@@ -65,7 +76,7 @@ class _CameraAppState extends State<CameraActvity> {
     File croppedFile = await ImageCropper.cropImage(
         sourcePath: source.path,
         ratioX: 3,
-        ratioY: 2,
+        ratioY: 3,
         toolbarTitle: "사진 편집하기",
         toolbarColor: Colors.black54,
         maxWidth: 640,
@@ -79,6 +90,7 @@ class _CameraAppState extends State<CameraActvity> {
             builder: (context) =>
                 CameraResult(
                   imageFile: _image,
+                  userEmail: widget.userEmail,
                 ));
         Navigator.push(mContext, route);
 //      Navigator.of(mContext).push(MaterialPageRoute(
@@ -206,13 +218,14 @@ class _CameraAppState extends State<CameraActvity> {
 //                                      );
 
                                         _image = File(path);
+                                        goCrop(_image);
 
-                                        Route route = MaterialPageRoute(
-                                            builder: (context) =>
-                                                CameraResult(
-                                                  imageFile: _image,
-                                                ));
-                                        Navigator.push(mContext, route);
+//                                        Route route = MaterialPageRoute(
+//                                            builder: (context) =>
+//                                                CameraResult(
+//                                                  imageFile: _image
+//                                                ));
+//                                        Navigator.push(mContext, route);
                                       } catch (e) {
                                         // If an error occurs, log the error to the console.
                                         print(e);
@@ -304,6 +317,19 @@ class _CameraAppState extends State<CameraActvity> {
   }
 }
 
+Future<File> compressAndGetFile(File file) async {
+  var result = await FlutterImageCompress.compressAndGetFile(
+    file.absolute.path,
+    file.absolute.path,
+    quality: 88,
+    rotate: 180,
+  );
+
+  print(file.lengthSync());
+  print(result.lengthSync());
+
+  return result;
+}
 // void _showDialog(BuildContext context) {
 //   showDialog(
 //       context: context,

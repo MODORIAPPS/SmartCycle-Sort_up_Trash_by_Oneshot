@@ -98,9 +98,11 @@ Widget CompositionWidget(String part, String value) {
         SizedBox(
           width: 20,
         ),
-        Text(
-          value,
-          style: TextAssets.mainBold,
+        Expanded(
+          child: Text(
+            value,
+            style: TextAssets.mainBold,
+          ),
         )
       ],
     ),

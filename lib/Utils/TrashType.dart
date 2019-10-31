@@ -11,7 +11,8 @@ class TrashType {
     "휴지",
     "부탄가스 통",
     "유리병",
-    "약통"
+    "약통",
+    "기타"
   ];
   var trashImages = ["assets/images/"];
 

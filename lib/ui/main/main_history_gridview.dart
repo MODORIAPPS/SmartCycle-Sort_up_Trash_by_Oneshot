@@ -24,6 +24,7 @@ class _HistoryGridViewState extends State<HistoryGridView> {
   RefreshController(initialRefresh: false);
   bool isDataReady = false;
   SmartCycleServer smartCycleServer = new SmartCycleServer();
+  RefreshController controller = new RefreshController();
 
   @override
   void initState() {
@@ -31,18 +32,22 @@ class _HistoryGridViewState extends State<HistoryGridView> {
 
     // %% ONLY FOR TEST %% getUserHistoryTest
     _getUserHistory = smartCycleServer
-        .getUserHistoryTest(widget.userEmail)
+        .getUserHistory(widget.userEmail)
         .timeout(const Duration(seconds: 5));
     //_getUserHistory = smartCycleServer.getUserHistory(widget.userEmail);
   }
 
   @override
   Widget build(BuildContext context) {
+    print("사용자 사용 기록 이메일 상태" + widget.userEmail.toString());
     return widget.isSignIn
         ? FutureBuilder<SearchHistorys>(
       future: _getUserHistory,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasError) {
+            print("사용자 사용 기록 오류" + snapshot.error.toString());
+          }
           return !snapshot.hasError
               ? (snapshot.data.historys.length != 0)
               ? _historyGridView(context, snapshot.data)
@@ -69,7 +74,7 @@ class _HistoryGridViewState extends State<HistoryGridView> {
                   textColor: Colors.white,
                   onPressed: () {
                     _getUserHistory = smartCycleServer
-                        .getUserHistoryTest(widget.userEmail)
+                        .getUserHistory(widget.userEmail)
                         .timeout(const Duration(seconds: 5));
                     setState(() {});
                   },
@@ -104,46 +109,56 @@ class _HistoryGridViewState extends State<HistoryGridView> {
       ),
     );
   }
-}
 
-Widget _historyGridView(BuildContext context, SearchHistorys historys) {
-  return (historys.historys.length == 0)
-      ? Center(
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 50,
-              ),
-              Icon(Icons.info_outline),
-              SizedBox(
-                height: 8,
-              ),
-              Text(
-                "검색한 정보가 없어요.",
-                style: cardRegular,
-              ),
-            ],
+  Widget _historyGridView(BuildContext context, SearchHistorys historys) {
+    return (historys.historys.length == 0)
+        ? Center(
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 50,
           ),
-        )
-      : Expanded(
-          child: MediaQuery.removePadding(
+          Icon(Icons.info_outline),
+          SizedBox(
+            height: 8,
+          ),
+          Text(
+            "검색한 정보가 없어요.",
+            style: cardRegular,
+          ),
+        ],
+      ),
+    )
+        : Expanded(
+        child: MediaQuery.removePadding(
           context: context,
           removeTop: true,
-          child: GridView.count(
-            crossAxisCount: 2,
-            children: List.generate(historys.historys.length, (index) {
-              var history = historys.historys[index];
-              return Center(
-                child: HistoryCard(
-                    id: int.parse(history.trash_id),
-                    itemName:
-                        TrashType().getTrashName(int.parse(history.trash_id)),
-                    itemImage:
-                        TrashType().getTrashImage(int.parse(history.trash_id)),
-                    date: history.date,
-                    itemIndex: index),
-              );
-            }),
+          child: SmartRefresher(
+            enablePullDown: true,
+            onRefresh: () {
+              _getUserHistory = smartCycleServer
+                  .getUserHistory(widget.userEmail)
+                  .timeout(const Duration(seconds: 5));
+              setState(() {});
+            },
+            child: new GridView.count(
+              crossAxisCount: 2,
+              children: List.generate(historys.historys.length, (index) {
+                var history = historys.historys[index];
+                return Center(
+                  child: HistoryCard(
+                      id: int.parse(history.trash_id),
+                      itemName: TrashType()
+                          .getTrashName(int.parse(history.trash_id)),
+                      itemImage: TrashType()
+                          .getTrashImage(int.parse(history.trash_id)),
+                      date: history.date,
+                      itemIndex: index),
+                );
+              }),
+            ),
+            controller: _refreshController,
           ),
         ));
+  }
 }
