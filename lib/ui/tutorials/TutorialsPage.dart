@@ -124,14 +124,14 @@ Widget _page1() {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         SizedBox(
-          height: 10,
+          height: 15,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             IconButton(
               icon: Icon(Icons.close),
-              color: Colors.blue,
+              color: Colors.black87,
               onPressed: () => Navigator.of(mContext).pop(true),
             ),
           ],
@@ -141,8 +141,8 @@ Widget _page1() {
           width: 300,
         ),
         Text(
-          "SmartCycle 시작하기",
-          style: TextAssets.mainBold,
+          "Smartcycle 시작하기",
+          style: TextAssets.mainBlack,
         ),
         SizedBox(
           height: 20,

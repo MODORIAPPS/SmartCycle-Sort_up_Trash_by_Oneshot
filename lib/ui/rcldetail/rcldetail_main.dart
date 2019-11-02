@@ -31,7 +31,6 @@ class _RecycleDetailState extends State<RecycleDetail> {
     super.initState();
 //    _getRclDetailData = SmartCycleServer().getRclDetailTest(2);
 
-
     _getRclDetailData = SmartCycleServer()
         .getRclDetail(itemId)
         .timeout(const Duration(seconds: 5));
@@ -81,7 +80,10 @@ class _RecycleDetailState extends State<RecycleDetail> {
                 ),
               );
             } else {
-              pages.add(RclDetailDefault(rclDetail: snapshot.data));
+              pages.add(RclDetailDefault(
+                rclDetail: snapshot.data,
+                trashNumber: widget.itemID,
+              ));
               pages.add(RclDetailPageView(rclDetail: snapshot.data));
               return PageView(
                 controller: controller,
@@ -90,6 +92,7 @@ class _RecycleDetailState extends State<RecycleDetail> {
                 children: <Widget>[
                   RclDetailDefault(
                     rclDetail: snapshot.data,
+                    trashNumber: widget.itemID,
                   ),
 //                  RclDetailPageView(
 //                    rclDetail: snapshot.data,
@@ -102,24 +105,24 @@ class _RecycleDetailState extends State<RecycleDetail> {
           }
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.refresh,
-          color: Colors.black87,
-        ),
-        backgroundColor: Colors.white,
-        onPressed: () {
-          print(controller.page.toString());
-          if (controller.page == 0.0) {
-            controller.jumpToPage(2);
-          } else {
-            controller.jumpToPage(0);
-          }
-//          controller.jumpTo(2.0);
-//          controller.jumpToPage(2);
-        },
-      ),
+//      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+//      floatingActionButton: FloatingActionButton(
+//        child: Icon(
+//          Icons.refresh,
+//          color: Colors.black87,
+//        ),
+//        backgroundColor: Colors.white,
+//        onPressed: () {
+//          print(controller.page.toString());
+//          if (controller.page == 0.0) {
+//            controller.jumpToPage(2);
+//          } else {
+//            controller.jumpToPage(0);
+//          }
+////          controller.jumpTo(2.0);
+////          controller.jumpToPage(2);
+//        },
+//      ),
     );
   }
 }

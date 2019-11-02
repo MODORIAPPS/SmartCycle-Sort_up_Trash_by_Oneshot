@@ -1,32 +1,25 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
-import 'package:smartcycle/ui/camera/camera_recognize_result.dart';
-import 'package:smartcycle/ui/main/main_bottom_bar.dart';
 import 'package:smartcycle/ui/main/main_doyouknow.dart';
 import 'package:smartcycle/ui/main/main_qr_code.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/camera/camera_start.dart';
-import 'package:smartcycle/ui/rcldetail/rcldetail_main.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:smartcycle/styles/Styles.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
-import 'package:http/http.dart' as http;
 import 'package:smartcycle/ui/main/main_app_bar.dart';
 import 'package:smartcycle/ui/main/main_history_gridview.dart';
 import 'Utils/ScaleRoute.dart';
-import 'model/RcleDetail.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(MyApp());
+    runApp(
+        MyApp());
   });
 }
 
@@ -35,7 +28,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MyHomePage(),
+//        '/cameraStart' : (context) => CameraActvity(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
@@ -219,8 +216,8 @@ class _MyHomePageState extends State<MyHomePage>
 //            ],
 //          )),
       floatingActionButton: Container(
-        height: 65.0,
-        width: 65.0,
+        height: 70.0,
+        width: 70.0,
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () {
@@ -298,19 +295,17 @@ class _MyHomePageState extends State<MyHomePage>
                     width: 30,
                   ),
                   onPressed: () {
-                    setState(() {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            QrDialog(
-                              title: "QR코드",
-                              description: "이 QR코드를 기기의 카메라 앞에 대세요.",
-                              posiBtn: "알겠습니다.",
-                              // userEmail
-                              url: user_email,
-                            ),
-                      );
-                    });
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          QrDialog(
+                            title: "QR코드",
+                            description: "이 QR코드를 기기의 카메라 앞에 대세요.",
+                            posiBtn: "알겠습니다.",
+                            // userEmail
+                            url: user_email,
+                          ),
+                    );
                   },
                 )
               ],

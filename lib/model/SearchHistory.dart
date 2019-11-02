@@ -26,14 +26,17 @@ class SearchHistory {
   String user_email;
   String trash_id;
   String date;
+  String imageURL;
 
-  SearchHistory({this.id, this.user_email, this.trash_id, this.date});
+  SearchHistory(
+      {this.id, this.user_email, this.trash_id, this.date, this.imageURL});
 
   factory SearchHistory.fromJson(Map<dynamic, dynamic> parsedJson) {
     return SearchHistory(
         id: parsedJson['_id'],
         user_email: parsedJson['user_email'],
-        date: parsedJson['published_date'],
+        date: parsedJson['date'],
+        imageURL: parsedJson['imageURL'],
         trash_id: parsedJson['trash_id']);
   }
 }

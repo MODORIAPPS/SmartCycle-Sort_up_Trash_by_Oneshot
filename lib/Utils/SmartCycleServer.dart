@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:convert' as prefix0;
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:googleapis/customsearch/v1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ import 'package:smartcycle/model/SearchHistory.dart';
 /// 메소드명 뒤에 Test가 붙은 것들은 로컬 서버를 향하는 테스트 코드입니다.
 /// ex) getUserHistoryTest
 class SmartCycleServer {
-  static var test_base = "http://172.16.0.157:8080";
+  static var test_base = "http://192.168.0.3:8080";
   static var test_client_base = "$test_base/";
   static var base = 'http://smartcycle.ljhnas.com/';
   static var base_n = 'http://smartcycle.ljhnas.com';
@@ -34,6 +35,12 @@ class SmartCycleServer {
 
   static String getServerImage(String image) {
     return base_n + "/pictures" + image;
+  }
+
+  static String getPresentImage(String image) {
+    String img = base_n + "/latelyPictures/" + image;
+    print(img);
+    return img;
   }
 
   // %%%% 최근 검색한 분리수거 %%%%
@@ -143,6 +150,7 @@ class SmartCycleServer {
     RclDetails data = RclDetails.fromJson(jsonData);
     //rclData = data.rcls[0];
     //print(data.rcls[0].name.toString());
+    print(data.rcls[0].information.step[0].imageURL_step.toString());
 
     return data.rcls[0];
     //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
@@ -161,7 +169,6 @@ class SmartCycleServer {
     final jsonData = json.decode(response.body.toString());
     RclDetails data = RclDetails.fromJson(jsonData);
     //rclData = data.rcls[0];
-    //print(data.rcls[0].name.toString());
 
     return data.rcls[0];
     //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
@@ -204,5 +211,35 @@ class SmartCycleServer {
     });
 
     return map['trashId'];
+  }
+
+  Future<http.Response> saveHistory(File imageFile, String userEmail,
+      bool isSuccess, String trash, bool isNormal) async {
+    String base64Image = base64Encode(imageFile.readAsBytesSync());
+    String fileName = imageFile.path
+        .split("/")
+        .last;
+
+    http.Response response;
+    Map jsonData = {
+      'img': '$base64Image',
+      'name': '$fileName',
+      'user_email': '$userEmail',
+      'success': '$isSuccess',
+      'trash': '$trash',
+    };
+
+    print("클라이언트가 전송한 쓰레기 타입 : " + jsonData['trash']);
+    String ker = isNormal ? "success" : "wrong";
+    await http.post(base_n + "/trash/$ker", body: jsonData).then((res) {
+      print(res.statusCode);
+      response = res;
+      print("사용기록 저장 ${res.body.toString()}");
+    }).catchError((err) {
+      print(err);
+      return err;
+    });
+
+    return response;
   }
 }

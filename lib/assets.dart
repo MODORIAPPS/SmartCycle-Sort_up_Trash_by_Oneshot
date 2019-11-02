@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/Utils/HexColor.dart';
 
 class ImageAssets {
   static const String sample_cameraImg =
@@ -33,7 +34,7 @@ class TextAssets {
   );
   static const TextStyle subBold = TextStyle(
     color: Colors.black87,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: FontWeight.w700,
     fontFamily: "NotoCjkKR",
   );
@@ -82,7 +83,50 @@ class TextAssets {
     fontFamily: "NotoCjkKR",
   );
 
+  static const TextStyle infoBold = TextStyle(
+      color: Colors.black87,
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      fontFamily: "NotoCjkKR");
+}
 
+class BlogTextStyles {
+  static const TextStyle title = TextStyle(
+      color: Colors.black87,
+      fontSize: 25,
+      fontWeight: FontWeight.bold,
+      fontFamily: "NotoCjkKR");
+
+  static const TextStyle stepTitle = TextStyle(
+      color: Colors.black87,
+      fontSize: 25,
+      backgroundColor: Colors.amberAccent,
+      fontWeight: FontWeight.bold,
+      fontFamily: "NotoCjkKR");
+
+  static const TextStyle stepContent = TextStyle(
+      color: Colors.black87,
+      fontSize: 17,
+      fontWeight: FontWeight.w500,
+      fontFamily: "NotoCjkKR");
+
+  static const TextStyle stepContentW = TextStyle(
+      color: Colors.white,
+      fontSize: 17,
+      fontWeight: FontWeight.w500,
+      fontFamily: "NotoCjkKR");
+
+  static const TextStyle compositionTitle = TextStyle(
+      color: Colors.white,
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+      fontFamily: "NotoCjkKR");
+
+  static const TextStyle compositionContent = TextStyle(
+      color: Colors.white,
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      fontFamily: "NotoCjkKR");
 }
 
 final TextStyle header1 =

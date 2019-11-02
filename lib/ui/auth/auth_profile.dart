@@ -162,65 +162,65 @@ Widget UserProfile(BuildContext context, UserInfo userinfo) {
             ),
           ),
 
-          Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "기기 연결",
-                    style: TextAssets.mainBold,
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.info_outline,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {},
-                  )
-                ],
-              )),
-          Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Container(
-              width: double.infinity,
-              child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 15,
-                    top: 7,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      noDeviceAvail(context),
-                      //myDeviceInfo()
-                    ],
-                  )),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(0, 6),
-                        blurRadius: 6)
-                  ]),
-            ),
-          ),
+//          Padding(
+//              padding: const EdgeInsets.only(left: 20),
+//              child: Row(
+//                crossAxisAlignment: CrossAxisAlignment.center,
+//                children: <Widget>[
+//                  Text(
+//                    "기기 연결",
+//                    style: TextAssets.mainBold,
+//                  ),
+//                  IconButton(
+//                    icon: Icon(
+//                      Icons.info_outline,
+//                      color: Colors.black,
+//                    ),
+//                    onPressed: () {},
+//                  )
+//                ],
+//              )),
+//          Padding(
+//            padding: const EdgeInsets.only(left: 15, right: 15),
+//            child: Container(
+//              width: double.infinity,
+//              child: Padding(
+//                  padding: const EdgeInsets.only(
+//                    left: 15,
+//                    top: 7,
+//                  ),
+//                  child: Column(
+//                    crossAxisAlignment: CrossAxisAlignment.start,
+//                    children: <Widget>[
+//                      noDeviceAvail(context),
+//                      //myDeviceInfo()
+//                    ],
+//                  )),
+//              decoration: BoxDecoration(
+//                  color: Colors.white,
+//                  borderRadius: BorderRadius.circular(20),
+//                  boxShadow: [
+//                    BoxShadow(
+//                        color: Colors.black12,
+//                        offset: Offset(0, 6),
+//                        blurRadius: 6)
+//                  ]),
+//            ),
+//          ),
 
           Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: const EdgeInsets.only(left: 15, right: 15),
             child: ButtonTheme(
               minWidth: double.infinity,
               child: RaisedButton(
                 child: Text(
                   "로그아웃",
-                  style: TextStyle(color: Colors.orange),
+                  style: TextAssets.mainRegularW,
                 ),
                 shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(30.0),
-                    side: BorderSide(color: Colors.orange, width: 1)),
-                color: Colors.white,
+                  borderRadius: new BorderRadius.circular(34.0),
+                ),
+                color: Colors.orangeAccent,
                 //splashColor: Colors.yellow,
                 onPressed: () {
                   // Logout
@@ -315,7 +315,10 @@ Widget noDeviceAvail(BuildContext context) {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => AddDevice(userInfo: userInfo,)),
+                    builder: (context) =>
+                        AddDevice(
+                          userInfo: userInfo,
+                        )),
               );
             }),
       )

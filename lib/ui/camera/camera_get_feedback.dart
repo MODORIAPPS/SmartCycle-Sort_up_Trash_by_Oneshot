@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
@@ -6,9 +9,15 @@ import 'package:smartcycle/main.dart';
 TextEditingController controller = new TextEditingController();
 
 class CameraFeedBack extends StatelessWidget {
+  final File imageFile;
+  final String user_email;
+
+  CameraFeedBack({@required this.user_email, @required this.imageFile});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black87),
@@ -23,32 +32,41 @@ class CameraFeedBack extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  "'기타'를 선택하셨습니다.🔊",
-                  style: TextAssets.mainBlack,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "'기타'를 선택하셨습니다.🔊",
+                      style: TextAssets.mainBlack,
+                    ),
+                    Text(
+                      "서비스 개선을 위해 도와주세요.",
+                      style: TextAssets.mainBold,
+                    )
+                  ],
                 ),
-                Text(
-                  "서비스 개선을 위해 도와주세요.",
-                  style: TextAssets.mainBold,
-                )
               ],
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "✨촬영하신 쓰레기가 어떤 쓰레기인지 직접 알려주세요.",
-                style: TextAssets.subBold,
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Text(
+                  "✨촬영하신 쓰레기가 어떤 쓰레기인지 직접 알려주세요.",
+                  style: TextAssets.subBold,
+                ),
               ),
               SizedBox(
                 height: 15,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
                 child: TextFormField(
                   controller: controller,
                   decoration: InputDecoration(
@@ -72,7 +90,7 @@ class CameraFeedBack extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       "저희 서비스는 완성되지 않았습니다. \n소중한 피드백으로 더욱 발전된 서비스를 제공하겠습니다.",
-                      style: TextAssets.subBold,
+                      style: TextAssets.infoBold,
                     ),
                   ),
                   ButtonTheme(
@@ -85,6 +103,21 @@ class CameraFeedBack extends StatelessWidget {
                         ),
                         onPressed: () {
                           if (controller.text.isNotEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  SmartDialog(
+                                    title: "피드백",
+                                    content: "대단히 감사합니다. 빠른 시일 내에 추가하겠습니다.",
+                                    colors: Colors.green,
+                                  ),
+                            );
+                            SmartCycleServer().saveHistory(
+                                imageFile,
+                                user_email,
+                                false,
+                                controller.text.toString(),
+                                false);
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (context) => MyApp()),
                             );

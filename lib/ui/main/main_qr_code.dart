@@ -3,13 +3,6 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
 
-class Consts {
-  Consts._();
-
-  static const double padding = 18.0;
-  static const double avatarRadius = 66.0;
-}
-
 class QrDialog extends StatelessWidget {
   final String title, description, negaBtn, posiBtn, url;
   final Image image;
@@ -27,7 +20,7 @@ class QrDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Consts.padding),
+        borderRadius: BorderRadius.circular(20),
       ),
       elevation: 0.0,
       backgroundColor: Colors.transparent,
@@ -39,17 +32,12 @@ class QrDialog extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(
-            top: Consts.padding,
-            bottom: Consts.padding,
-            left: Consts.padding,
-            right: Consts.padding,
-          ),
-          margin: EdgeInsets.only(top: Consts.avatarRadius),
+          padding: EdgeInsets.all(20),
+          margin: EdgeInsets.only(top: 20),
           decoration: new BoxDecoration(
             shape: BoxShape.rectangle,
             color: Colors.white,
-            borderRadius: BorderRadius.circular(Consts.padding),
+            borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
                 color: Colors.black26,
@@ -59,16 +47,19 @@ class QrDialog extends StatelessWidget {
             ],
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // To make the card compact
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              // Text(
-              //   title,
-              //   style: TextStyle(
-              //     fontSize: 24.0,
-              //     fontWeight: FontWeight.w700,
-              //   ),
-              // ),
-              //SizedBox(height: 15.0),
+              IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.black87,
+                  size: 28,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(); // To close the dialog
+                },
+              ),
               QrImage(
                 data: url,
                 size: 0.5 * MediaQuery
@@ -80,37 +71,9 @@ class QrDialog extends StatelessWidget {
                         .viewInsets
                         .bottom,
               ),
-              Text("더 상세한 정보를 얻고 싶다면 카메라에 QR코드를 보여주세요.",
-                  textAlign: TextAlign.center, style: TextAssets.mainBold),
-              SizedBox(height: 10.0),
-              SizedBox(
-                width: double.infinity,
-                child: RaisedButton(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Text(
-                        "닫기",
-                        style: diaBold,
-                      ),
-                    ),
-                    color: Colors.red,
-                    onPressed: () {
-                      Navigator.of(context).pop(); // To close the dialog
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0))),
-              ),
             ],
           ),
         ),
-        // Positioned(
-        //   left: Consts.padding,
-        //   right: Consts.padding,
-        //   child: CircleAvatar(
-        //     backgroundColor: Colors.blueAccent,
-        //     radius: Consts.avatarRadius,
-        //   ),
-        // ),
       ],
     );
   }

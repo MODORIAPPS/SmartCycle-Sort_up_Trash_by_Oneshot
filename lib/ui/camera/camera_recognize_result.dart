@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
+import 'package:smartcycle/Utils/SmartDialog.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/ui/act/act_error_page.dart';
 import 'package:smartcycle/ui/camera/camera_modify_result.dart';
@@ -30,8 +32,9 @@ class _CameraResultState extends State<CameraResult> {
 //    _cameraResult = SmartCycleServer().getCameraResult()
 //        .timeout(const Duration(seconds: 10));
 //
-    _cameraResult =
-        SmartCycleServer().getCameraResult(widget.imageFile, widget.userEmail);
+    _cameraResult = SmartCycleServer()
+        .getCameraResult(widget.imageFile, widget.userEmail)
+        .timeout(const Duration(seconds: 20));
   }
 
   @override
@@ -44,7 +47,13 @@ class _CameraResultState extends State<CameraResult> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("인식결과"),
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black87),
+          title: Text(
+            "인식결과",
+            style: TextAssets.mainRegular,
+          ),
+          elevation: 1,
           leading: new IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
@@ -62,9 +71,17 @@ class _CameraResultState extends State<CameraResult> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
-                return ErrorPage(
-                  error_msg: snapshot.error.toString(),
-                );
+                if (snapshot.error == TimeoutException) {
+                  return SmartDialog(
+                    title: "대기 시간 초과",
+                    content: "인식이 힘든 사물인 것 같습니다. 다른 각도에서 다시 찍어주세요.",
+                    colors: Colors.red,
+                  );
+                } else {
+                  return ErrorPage(
+                    error_msg: snapshot.error.toString(),
+                  );
+                }
               } else {
                 print(snapshot.data.toString());
                 okay = true;
@@ -72,10 +89,9 @@ class _CameraResultState extends State<CameraResult> {
                 return Container(
                   child: Stack(
                     children: <Widget>[
-                      Align(
-                        alignment: Alignment.topCenter,
+                      SingleChildScrollView(
                         child: Padding(
-                          padding: const EdgeInsets.all(20.0),
+                          padding: const EdgeInsets.all(15.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
@@ -92,34 +108,39 @@ class _CameraResultState extends State<CameraResult> {
                                   ),
                                 ],
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Container(
+                                  child: AspectRatio(
+                                      aspectRatio: 1 / 1,
+                                      child: Hero(
+                                        tag: "camera_hero",
+                                        child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(30),
+                                          child: Image.file(
+                                            widget.imageFile,
+                                            fit: BoxFit.fill,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        ),
+                                      )),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black12,
+                                            offset: Offset(0, 15),
+                                            blurRadius: 15)
+                                      ]),
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
-                      ),
-                      Align(
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Container(
-                            child: AspectRatio(
-                                aspectRatio: 1 / 1.2,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(25),
-                                  child: Image.file(
-                                    widget.imageFile,
-                                    fit: BoxFit.fill,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                  ),
-                                )),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(25),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black12,
-                                      offset: Offset(0, 15),
-                                      blurRadius: 15)
-                                ]),
                           ),
                         ),
                       ),
@@ -130,7 +151,7 @@ class _CameraResultState extends State<CameraResult> {
                             Flexible(
                               child: ButtonTheme(
                                 minWidth: double.infinity,
-                                height: 70,
+                                height: 65,
                                 child: RaisedButton(
                                   child: Text(
                                     "아니에요",
@@ -142,7 +163,11 @@ class _CameraResultState extends State<CameraResult> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               ModifyPage(
-                                                initImage: widget.imageFile,)),
+                                                user_email: widget.userEmail,
+                                                initImage: widget.imageFile,
+                                                oldTrashType: TrashType()
+                                                    .getTrashName(trashNumber),
+                                              )),
                                     );
                                   },
                                   color: Colors.redAccent,
@@ -153,7 +178,7 @@ class _CameraResultState extends State<CameraResult> {
                             Flexible(
                               child: ButtonTheme(
                                   minWidth: double.infinity,
-                                  height: 70,
+                                  height: 65,
                                   child: RaisedButton(
                                     child: Text(
                                       "맞아요",
@@ -163,8 +188,13 @@ class _CameraResultState extends State<CameraResult> {
                                       // 서버가 개발되지 않았으므로 임시 코드
                                       //var number = TrashType().getTrashNumber("부탄가스");
                                       //print(number);
-
-                                      Navigator.of(context).push(
+                                      SmartCycleServer().saveHistory(
+                                          widget.imageFile,
+                                          widget.userEmail,
+                                          true,
+                                          trashNumber.toString(),
+                                          true);
+                                      Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 RecycleDetail(
@@ -203,13 +233,6 @@ Widget _waiting() {
             CircularProgressIndicator(),
             SizedBox(
               height: 20,
-            ),
-            Icon(
-              Icons.phonelink_ring,
-              size: 30,
-            ),
-            SizedBox(
-              height: 30,
             ),
             Text(
               "서버로부터 결과를 \n받아오고 있습니다.",

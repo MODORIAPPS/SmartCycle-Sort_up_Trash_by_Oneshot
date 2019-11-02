@@ -12,15 +12,12 @@ import 'package:smartcycle/ui/main/main_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
         CachedNetworkImage(
-          imageUrl:
-          "https://source.unsplash.com/collection/162468/1080x1920",
+          imageUrl: "https://source.unsplash.com/lpjb_UMOyx8/1080x1920",
           placeholder: (context, url) => SCircularProgress(),
           errorWidget: (context, url, error) => Icon(Icons.error),
           alignment: Alignment(-.2, 0),
@@ -63,17 +60,17 @@ class LoginPage extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 "SmartCycle과 함께 깨끗한 지구 만들기.",
-                                style: TextAssets.mainBoldW,
+                                style: TextAssets.mainBlackW,
                               ),
                             ),
                           ],
                         ),
                         SizedBox(
-                          height: 15,
+                          height: 3,
                         ),
                         Text(
                           "설치해주셔서 감사합니다.",
-                          style: authRegular,
+                          style: TextAssets.mainBoldW,
                         )
                       ],
                     ),
@@ -112,7 +109,7 @@ class LoginPage extends StatelessWidget {
                             child: Text(
                               "구글 계정으로 로그인",
                               textAlign: TextAlign.center,
-                              style: authBtn,
+                              style: TextAssets.mainRegular,
                             ),
                           ),
                           SizedBox()
@@ -137,9 +134,8 @@ class LoginPage extends StatelessWidget {
                         .then((FirebaseUser user) => print(user))
                         .catchError((e) => print(e))
                         .whenComplete(() {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                      );
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/', (Route<dynamic> route) => false);
                     });
                   },
                 ),
@@ -156,7 +152,7 @@ class LoginPage extends StatelessWidget {
                     },
                   ),
                   Text(
-                    "Photo by 'Christopher Rusev' on Unsplash",
+                    "Photo by 'Daniel Roe' on Unsplash",
                     style: startLight,
                   ),
                 ],

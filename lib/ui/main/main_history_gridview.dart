@@ -51,13 +51,24 @@ class _HistoryGridViewState extends State<HistoryGridView> {
           return !snapshot.hasError
               ? (snapshot.data.historys.length != 0)
               ? _historyGridView(context, snapshot.data)
-              : Column(
-            children: <Widget>[
-              SizedBox(
-                height: 40,
-              ),
-              Text("검색하신 쓰레기가 없어요.")
-            ],
+              : Align(
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 50,
+                ),
+                Icon(Icons.info_outline),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "검색한 정보가 없어요.\n새로 검색을 시작해볼까요?",
+                  style: TextAssets.subBold,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
           )
               : Align(
             alignment: Alignment.center,
@@ -111,54 +122,34 @@ class _HistoryGridViewState extends State<HistoryGridView> {
   }
 
   Widget _historyGridView(BuildContext context, SearchHistorys historys) {
-    return (historys.historys.length == 0)
-        ? Center(
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 50,
-          ),
-          Icon(Icons.info_outline),
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            "검색한 정보가 없어요.",
-            style: cardRegular,
-          ),
-        ],
-      ),
-    )
-        : Expanded(
+    return Expanded(
         child: MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: SmartRefresher(
-            enablePullDown: true,
-            onRefresh: () {
-              _getUserHistory = smartCycleServer
-                  .getUserHistory(widget.userEmail)
-                  .timeout(const Duration(seconds: 5));
-              setState(() {});
-            },
-            child: new GridView.count(
-              crossAxisCount: 2,
-              children: List.generate(historys.historys.length, (index) {
-                var history = historys.historys[index];
-                return Center(
-                  child: HistoryCard(
-                      id: int.parse(history.trash_id),
-                      itemName: TrashType()
-                          .getTrashName(int.parse(history.trash_id)),
-                      itemImage: TrashType()
-                          .getTrashImage(int.parse(history.trash_id)),
-                      date: history.date,
-                      itemIndex: index),
-                );
-              }),
-            ),
-            controller: _refreshController,
-          ),
-        ));
+            context: context,
+            removeTop: true,
+            child: SmartRefresher(
+              controller: _refreshController,
+              enablePullDown: true,
+              onRefresh: () {
+                _getUserHistory = smartCycleServer
+                    .getUserHistory(widget.userEmail)
+                    .timeout(const Duration(seconds: 5));
+                setState(() {});
+              },
+              child: new GridView.count(
+                crossAxisCount: 2,
+                children: List.generate(historys.historys.length, (index) {
+                  var history = historys.historys[index];
+                  return Center(
+                    child: HistoryCard(
+                        id: int.parse(history.trash_id),
+                        itemName: TrashType()
+                            .getTrashName(int.parse(history.trash_id)),
+                        itemImage: history.imageURL,
+                        date: history.date,
+                        itemIndex: index),
+                  );
+                }),
+              ),
+            )));
   }
 }

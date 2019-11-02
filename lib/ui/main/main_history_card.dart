@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/ui/rcldetail/rcldetail_main.dart';
 import 'package:smartcycle/Utils/TrashType.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -10,8 +12,7 @@ class HistoryCard extends StatelessWidget {
   final String itemImage;
   final int itemIndex;
 
-  HistoryCard(
-      {this.id, this.itemImage, this.date, this.itemName, this.itemIndex});
+  HistoryCard({this.id, this.itemImage, this.date, this.itemName, this.itemIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +26,10 @@ class HistoryCard extends StatelessWidget {
           padding: EdgeInsets.all(5),
           decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black12, offset: Offset(0, 6), blurRadius: 6)
+                    color: Colors.black12, offset: Offset(0, 7), blurRadius: 7)
               ]),
           child: Column(
             children: <Widget>[
@@ -38,7 +39,16 @@ class HistoryCard extends StatelessWidget {
                   child: Container(
                     child: Align(
                       alignment: Alignment.center,
-                      child: Image.asset(itemImage),
+                      child: CachedNetworkImage(
+                        imageUrl: SmartCycleServer.getPresentImage(itemImage),
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        alignment: Alignment(-.2, 0),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 200,
+                      ),
                     ),
                   ),
                 ),

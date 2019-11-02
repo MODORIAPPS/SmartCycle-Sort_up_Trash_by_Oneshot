@@ -62,9 +62,8 @@ class ErrorPage extends StatelessWidget {
                 color: Colors.blue,
                 textColor: Colors.white,
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                  );
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/', (Route<dynamic> route) => false);
                 },
               ),
             ],
