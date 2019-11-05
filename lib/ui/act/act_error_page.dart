@@ -51,7 +51,7 @@ class ErrorPage extends StatelessWidget {
                 height: 8,
               ),
               Text(
-                "이 메시지를 스크린 샷하여 아래 이메일로\n보내주시면 도와드리겠습니다.",
+                "다시 한번 시도해보시고 계속해서 발생하면\n이 메시지를 스크린 샷하여 아래 이메일로\n보내주시면 도와드리겠습니다.",
                 textAlign: TextAlign.center,
               ),
               SizedBox(

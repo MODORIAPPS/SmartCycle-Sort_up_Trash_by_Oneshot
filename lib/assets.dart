@@ -18,6 +18,8 @@ class ImageAssets {
 
   static const String white_logo = "assets/images/SmartCycle_logo_white.png";
   static const String blue_logo = "assets/images/SmartCycle_logo_skyblue.png";
+
+  static const String sirenImage = "assets/images/siren.png";
 }
 
 class TextAssets {
@@ -38,6 +40,14 @@ class TextAssets {
     fontWeight: FontWeight.w700,
     fontFamily: "NotoCjkKR",
   );
+
+  static const TextStyle dialogText = TextStyle(
+    color: Colors.blue,
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    fontFamily: "NotoCjkKR",
+  );
+
   static const TextStyle mainBoldW = TextStyle(
       color: Colors.white,
       fontSize: 22,
@@ -47,6 +57,13 @@ class TextAssets {
       color: Colors.white,
       fontSize: 16,
       fontWeight: FontWeight.w500,
+      fontFamily: "NotoCjkKR",
+      height: 1.2);
+
+  static const TextStyle mainRegularR = TextStyle(
+      color: Colors.redAccent,
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
       fontFamily: "NotoCjkKR",
       height: 1.2);
   static const TextStyle mainLightW = TextStyle(
@@ -68,8 +85,8 @@ class TextAssets {
       fontFamily: "NotoCjkKR");
   static const TextStyle mainBlack = TextStyle(
       color: Colors.black87,
-      fontSize: 30,
-      fontWeight: FontWeight.bold,
+      fontSize: 33,
+      fontWeight: FontWeight.w700,
       fontFamily: "NotoCjkKR");
   static const TextStyle errorBold = TextStyle(
       color: Colors.redAccent,

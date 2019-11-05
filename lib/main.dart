@@ -18,8 +18,7 @@ void main() {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(
-        MyApp());
+    runApp(MyApp());
   });
 }
 
@@ -43,22 +42,12 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> {
   Future<bool> _isSignIn;
   Future<UserInfo> _userInfo;
   String user_email = "";
 
   var history = new List<SearchHistory>();
-
-  // FabBtn Controll
-  bool isOpened = false;
-  AnimationController _animationController;
-  Animation<Color> _buttonColor;
-  Animation<double> _animateIcon;
-  Animation<double> _translateButton;
-  Curve _curve = Curves.easeOut;
-  double _fabHeight = 56.0;
 
   @override
   initState() {
@@ -66,118 +55,11 @@ class _MyHomePageState extends State<MyHomePage>
     super.initState();
 
     _isSignIn = AuthUtils().isSignIn();
-
-    //_userInfo = AuthUtils().currentUser();
-    //_isSignIn = AuthUtils().isSignIn();
-    //_getinitUserData = AuthUtils().getInitialUserData();
-
-    // FabBtn Controll
-    _animationController =
-    AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-      ..addListener(() {
-        setState(() {});
-      });
-    _animateIcon =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _buttonColor = ColorTween(
-      begin: Colors.blue,
-      end: Colors.red,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.00,
-        1.00,
-        curve: Curves.linear,
-      ),
-    ));
-    _translateButton = Tween<double>(
-      begin: _fabHeight,
-      end: -14.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Interval(
-        0.0,
-        0.75,
-        curve: _curve,
-      ),
-    ));
   }
 
-//
-//  @override
-//  dispose() {
-//    _animationController.dispose();
-//    super.dispose();
-//  }
-
-  animate() {
-    if (!isOpened) {
-      _animationController.forward();
-    } else {
-      _animationController.reverse();
-    }
-    isOpened = !isOpened;
-  }
-
-  Widget _launchCamera(BuildContext context, String userEmail) {
-    return Container(
-      child: new FloatingActionButton(
-        heroTag: "imageFab",
-        onPressed: () {
-          if (user_email.isNotEmpty) {
-            Navigator.push(
-              context,
-              ScaleRoute(
-                  widget: CameraActvity(
-                    userEmail: userEmail,
-                  )),
-            );
-          }
-        },
-        tooltip: 'camera',
-        child: Icon(Icons.camera_alt),
-      ),
-    );
-  }
-
-  Widget _launchQrCode(String email) {
-    return Container(
-      child: new FloatingActionButton(
-          heroTag: "qrFab",
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) =>
-                  QrDialog(
-                    title: "QR코드",
-                    description: "이 QR코드를 기기의 카메라 앞에 대세요.",
-                    posiBtn: "알겠습니다.",
-                    // userEmail
-                    url: email,
-                  ),
-            );
-          },
-          tooltip: 'qrCode',
-          child: Image.asset(
-            "assets/images/qrCode.png",
-            color: Colors.white,
-            width: 30,
-          )),
-    );
-  }
-
-  Widget toggle() {
-    return Container(
-      child: FloatingActionButton(
-        backgroundColor: _buttonColor.value,
-        onPressed: animate,
-        tooltip: 'open menu',
-        child: AnimatedIcon(
-          icon: AnimatedIcons.menu_close,
-          progress: _animateIcon,
-        ),
-      ),
-    );
+  @override
+  dispose() {
+    super.dispose();
   }
 
   @override
@@ -188,128 +70,86 @@ class _MyHomePageState extends State<MyHomePage>
       _isSignIn = AuthUtils().isSignIn();
     }
 
-
     return Scaffold(
-//      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-//      floatingActionButton: Padding(
-//          padding: const EdgeInsets.all(14.0),
-//          child: new Column(
-//            mainAxisAlignment: MainAxisAlignment.end,
-//            children: <Widget>[
-//              Transform(
-//                transform: Matrix4.translationValues(
-//                  0.0,
-//                  _translateButton.value * 2.0,
-//                  0.0,
-//                ),
-//                child: _launchCamera(context, user_email),
-//              ),
-//              Transform(
-//                transform: Matrix4.translationValues(
-//                  0.0,
-//                  _translateButton.value,
-//                  0.0,
-//                ),
-//                child: _launchQrCode("Dd"),
-//              ),
-//              toggle(),
-//            ],
-//          )),
       floatingActionButton: Container(
         height: 70.0,
         width: 70.0,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () {
-              if (user_email != null) {
-                Navigator.push(
-                  context,
-                  ScaleRoute(
-                      widget: CameraActvity(
-                        userEmail: user_email,
-                      )),
-                );
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) =>
-                      SmartDialog(
-                        title: "로그인 필요",
-                        content: "로그인이 필요한 서비스입니다.",
-                        colors: Colors.orange,
-                      ),
-                );
-              }
-            },
-            child: Icon(
-              Icons.camera_alt,
-              color: Colors.white,
-            ),
-            // elevation: 5.0,
+        child: FloatingActionButton(
+          onPressed: () {
+            if (user_email != null) {
+              Navigator.push(
+                context,
+                ScaleRoute(
+                    widget: CameraActvity(
+                      userEmail: user_email,
+                    )),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    SmartDialog(
+                      title: "로그인 필요",
+                      content: "로그인이 필요한 서비스입니다.",
+                      colors: Colors.orange,
+                    ),
+              );
+            }
+          },
+          child: Icon(
+            Icons.camera_alt,
+            color: Colors.white,
           ),
+          // elevation: 5.0,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
+          notchMargin: 5,
           shape: CircularNotchedRectangle(),
-          child: Container(
-            height: 60,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  iconSize: 30.0,
-                  padding: EdgeInsets.only(left: 28.0),
-                  icon: Icon(Icons.settings),
-                  onPressed: () {
-//                    setState(() {
-//                      if (user_email.isNotEmpty) {
-//                        Navigator.push(
-//                          context,
-//                          ScaleRoute(
-//                              widget: CameraActvity(
-//                                userEmail: user_email,
-//                              )),
-//                        );
-//                      }
-//                    });
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          SmartDialog(
-                            title: "준비중",
-                            content: "죄송합니다. 아직 준비중입니다.",
-                            colors: Colors.orange,
-                          ),
-                    );
-                  },
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                iconSize: 30.0,
+                padding: EdgeInsets.only(left: 28.0),
+                icon: Icon(Icons.settings),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        SmartDialog(
+                          title: "준비중",
+                          content: "죄송합니다. 아직 준비중입니다.",
+                          colors: Colors.orange,
+                        ),
+                  );
+                },
+              ),
+              IconButton(
+                iconSize: 30.0,
+                padding: EdgeInsets.only(right: 28.0),
+                icon: Image.asset(
+                  "assets/images/qrCode.png",
+                  color: Colors.black87,
+                  width: 30,
                 ),
-
-                IconButton(
-                  iconSize: 30.0,
-                  padding: EdgeInsets.only(right: 28.0),
-                  icon: Image.asset(
-                    "assets/images/qrCode.png",
-                    color: Colors.black87,
-                    width: 30,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          QrDialog(
-                            title: "QR코드",
-                            description: "이 QR코드를 기기의 카메라 앞에 대세요.",
-                            posiBtn: "알겠습니다.",
-                            // userEmail
-                            url: user_email,
-                          ),
-                    );
-                  },
-                )
-              ],
-            ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        QrDialog(
+                          title: "QR코드",
+                          description: "이 QR코드를 기기의 카메라 앞에 대세요.",
+                          posiBtn: "알겠습니다.",
+                          // userEmail
+                          url: user_email,
+                        ),
+                  );
+                },
+              )
+            ],
           )),
       body: FutureBuilder<bool>(
         future: _isSignIn,

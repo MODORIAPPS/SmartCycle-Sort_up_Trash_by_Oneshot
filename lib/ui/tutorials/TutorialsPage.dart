@@ -176,6 +176,10 @@ Widget _page2() {
     ),
   );
 }
+//
+//Widget _generalNotify(){
+//  return
+//}
 
 Widget _page3() {
   return Padding(

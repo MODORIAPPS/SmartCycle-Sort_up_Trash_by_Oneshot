@@ -387,9 +387,8 @@ Future<bool> _asyncConfirmDialog(BuildContext mContext) async {
             child: const Text('로그아웃'),
             onPressed: () {
               AuthUtils().signOut();
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => MyApp()),
-              );
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/', (Route<dynamic> route) => false);
             },
           )
         ],

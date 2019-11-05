@@ -7,10 +7,10 @@ import 'package:smartcycle/ui/rcldetail/rcldetail_pageview.dart';
 import '../../model/RcleDetail.dart';
 
 class RecycleDetail extends StatefulWidget {
-  final String keyword;
   final int itemID;
+  final bool mode;
 
-  RecycleDetail({this.keyword, this.itemID});
+  RecycleDetail({@required this.itemID, @required this.mode});
 
   @override
   _RecycleDetailState createState() => _RecycleDetailState(itemId: itemID);
@@ -83,6 +83,7 @@ class _RecycleDetailState extends State<RecycleDetail> {
               pages.add(RclDetailDefault(
                 rclDetail: snapshot.data,
                 trashNumber: widget.itemID,
+                mode: widget.mode,
               ));
               pages.add(RclDetailPageView(rclDetail: snapshot.data));
               return PageView(
@@ -93,6 +94,7 @@ class _RecycleDetailState extends State<RecycleDetail> {
                   RclDetailDefault(
                     rclDetail: snapshot.data,
                     trashNumber: widget.itemID,
+                    mode: widget.mode,
                   ),
 //                  RclDetailPageView(
 //                    rclDetail: snapshot.data,

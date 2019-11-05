@@ -110,11 +110,14 @@ class DoYouKnowMain extends StatelessWidget {
                 SliverAppBar(
                   expandedHeight: 10.0,
                   floating: true,
+                  elevation: 2,
+                  backgroundColor: Colors.white,
+                  iconTheme: IconThemeData(color: Colors.black87),
                   forceElevated: innerBoxIsScrolled,
                   pinned: true,
                   flexibleSpace: FlexibleSpaceBar(
                       title:
-                      Text(doYouKnow.title, style: TextAssets.mainRegularW),
+                      Text(doYouKnow.title, style: TextAssets.mainRegular),
                       background: Stack(
                         children: <Widget>[
                           CachedNetworkImage(

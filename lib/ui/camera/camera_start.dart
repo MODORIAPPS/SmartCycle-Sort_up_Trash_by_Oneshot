@@ -78,9 +78,9 @@ class _CameraAppState extends State<CameraActvity> {
         ratioX: 3,
         ratioY: 3,
         toolbarTitle: "사진 편집하기",
-        toolbarColor: Colors.black54,
+        toolbarColor: Colors.white,
         maxWidth: 640,
-        maxHeight: 480);
+        maxHeight: 640);
 
     if (croppedFile != null) {
       setState(() {
@@ -112,6 +112,7 @@ class _CameraAppState extends State<CameraActvity> {
   @override
   void dispose() {
     _controller.dispose();
+
     super.dispose();
   }
 

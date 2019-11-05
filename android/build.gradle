@@ -1,4 +1,4 @@
-    buildscript {
+buildscript {
     repositories {
         google()
         jcenter()
@@ -16,6 +16,7 @@ allprojects {
         jcenter()
     }
 }
+
 
 rootProject.buildDir = '../build'
 subprojects {

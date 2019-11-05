@@ -65,12 +65,12 @@ class HistoryCard extends StatelessWidget {
           ),
         ),
         onTap: () {
-          /// todo
           var number = TrashType().getTrashNumber(itemName);
 
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => RecycleDetail(itemID: number)),
+                builder: (context) =>
+                    RecycleDetail(itemID: number, mode: false,)),
           );
         },
       ),

@@ -8,6 +8,7 @@ import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/model/RcleDetail.dart';
 import 'package:smartcycle/ui/act/act_prepare_page.dart';
 import 'package:smartcycle/ui/camera/camera_get_feedback.dart';
+import 'package:smartcycle/ui/policy/policy_main.dart';
 import 'package:smartcycle/ui/rcldetail/rcldetail_main.dart';
 
 class ModifyPage extends StatefulWidget {
@@ -132,7 +133,6 @@ class _ModifyPageState extends State<ModifyPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-
                         Text(
                           "제출",
                           style: TextAssets.mainRegularW,
@@ -140,8 +140,11 @@ class _ModifyPageState extends State<ModifyPage> {
                         SizedBox(
                           width: 10,
                         ),
-                        Icon(Icons.send, color: Colors.white, size: 18,),
-
+                        Icon(
+                          Icons.send,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ],
                     ),
                     onPressed: () {
@@ -166,30 +169,13 @@ class _ModifyPageState extends State<ModifyPage> {
                                 ),
                           );
                         } else {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                SmartDialog(
-                                  title: "피드백 접수됨",
-                                  content:
-                                  "도와주셔서 감사합니다. 더 나은 서비스를 만드는데 큰 도움이 될 것입니다.",
-                                  colors: Colors.green,
-                                ),
-                          );
+                          _showSubmitDialog(context, _value);
                           SmartCycleServer().saveHistory(
                               widget.initImage,
                               widget.user_email,
                               true,
                               TrashType().getTrashNumber(_value).toString(),
                               false);
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  RecycleDetail(
-                                    itemID: TrashType().getTrashNumber(_value),
-                                  ),
-                            ),
-                          );
                         }
                       } else {
                         showDialog(
@@ -197,8 +183,7 @@ class _ModifyPageState extends State<ModifyPage> {
                           builder: (BuildContext context) =>
                               SmartDialog(
                                 title: "공란 감지",
-                                content:
-                                "피드백 란은 공란일 수 없습니다. 하나를 선택해주세요.",
+                                content: "피드백 란은 공란일 수 없습니다. 하나를 선택해주세요.",
                                 colors: Colors.red,
                               ),
                         );
@@ -219,4 +204,80 @@ class _ModifyPageState extends State<ModifyPage> {
       ),
     );
   }
+}
+
+_showSubmitDialog(BuildContext mContext, String _value) {
+  showDialog(
+      context: mContext,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: <Widget>[
+              Text(
+                "인공지능 개선",
+                style: TextAssets.mainBold,
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.info_outline,
+                  color: Colors.black87,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PolicyMain(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          content: Text(
+            "더 나은 서비스 제공을 위해 이미지를 학습용으로 보내주시겠어요?",
+            style: TextAssets.mainRegular,
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          RecycleDetail(
+                            itemID: TrashType().getTrashNumber(_value),
+                            mode: true,
+                          ),
+                    ),
+                  );
+                },
+                child: Text(
+                  "아니오",
+                  style: TextAssets.dialogText,
+                )),
+            FlatButton(
+              onPressed: () {
+//                SmartDialog(
+//                  title: "피드백 접수됨",
+//                  content: "도와주셔서 감사합니다. 더 나은 서비스를 만드는데 큰 도움이 될 것입니다.",
+//                  colors: Colors.green,
+//                );
+                final snackBar = SnackBar(content: Text('도와주셔서 감사합니다!'));
+                Scaffold.of(mContext).showSnackBar(snackBar);
+                Navigator.of(mContext).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        RecycleDetail(
+                          itemID: TrashType().getTrashNumber(_value),
+                          mode: true,
+                        ),
+                  ),
+                );
+              },
+              child: Text(
+                "네",
+                style: TextAssets.dialogText,
+              ),
+            )
+          ],
+        );
+      });
 }

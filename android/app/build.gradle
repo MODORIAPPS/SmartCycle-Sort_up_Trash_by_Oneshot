@@ -36,6 +36,8 @@ android {
 
     lintOptions {
         disable 'InvalidPackage'
+        checkReleaseBuilds false
+
     }
 
     defaultConfig {
@@ -43,6 +45,8 @@ android {
         applicationId "com.dimipo.smartcycle"
         minSdkVersion 21
         targetSdkVersion 29
+        versionCode 3
+        versionName "1.1.2"
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

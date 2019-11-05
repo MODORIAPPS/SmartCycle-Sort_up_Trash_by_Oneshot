@@ -32,9 +32,8 @@ class _CameraResultState extends State<CameraResult> {
 //    _cameraResult = SmartCycleServer().getCameraResult()
 //        .timeout(const Duration(seconds: 10));
 //
-    _cameraResult = SmartCycleServer()
-        .getCameraResult(widget.imageFile, widget.userEmail)
-        .timeout(const Duration(seconds: 20));
+    _cameraResult =
+        SmartCycleServer().getCameraResult(widget.imageFile, widget.userEmail);
   }
 
   @override
@@ -99,11 +98,43 @@ class _CameraResultState extends State<CameraResult> {
                                 "들고 계신 쓰레기는",
                                 style: TextAssets.mainBlack,
                               ),
+                              SizedBox(
+                                height: 2,
+                              ),
                               Row(
                                 children: <Widget>[
+                                  Stack(
+                                    children: <Widget>[
+//                                      Container(
+//                                        child: Align(
+//                                          alignment: Alignment.bottomCenter,
+//                                          child: Container(
+//                                            decoration: BoxDecoration(
+//                                              border: new Border.all(
+//                                                  width: 5, color: Colors.transparent),
+//                                              color: Colors.blue,
+//                                            ),
+//                                          ),
+//                                        ),
+//                                      ),
+                                      Align(
+                                        child: Text(
+                                          "${TrashType().getTrashName(
+                                              trashNumber)}",
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'NotoCjkKR',
+                                              backgroundColor:
+                                              Colors.amberAccent),
+                                        ),
+                                        alignment: Alignment.bottomCenter,
+                                      ),
+                                    ],
+                                  ),
                                   Text(
-                                    "${TrashType().getTrashName(
-                                        trashNumber)} 같아요!",
+                                    " 같아요!",
                                     style: TextAssets.mainBlack,
                                   ),
                                 ],
@@ -112,7 +143,8 @@ class _CameraResultState extends State<CameraResult> {
                                 height: 10,
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(15.0),
+                                padding: const EdgeInsets.only(
+                                    left: 5, top: 5, right: 5, bottom: 20),
                                 child: Container(
                                   child: AspectRatio(
                                       aspectRatio: 1 / 1,
@@ -120,7 +152,7 @@ class _CameraResultState extends State<CameraResult> {
                                         tag: "camera_hero",
                                         child: ClipRRect(
                                           borderRadius:
-                                          BorderRadius.circular(30),
+                                          BorderRadius.circular(34),
                                           child: Image.file(
                                             widget.imageFile,
                                             fit: BoxFit.fill,
@@ -131,7 +163,7 @@ class _CameraResultState extends State<CameraResult> {
                                       )),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(30),
+                                      borderRadius: BorderRadius.circular(34),
                                       boxShadow: [
                                         BoxShadow(
                                             color: Colors.black12,
@@ -194,11 +226,12 @@ class _CameraResultState extends State<CameraResult> {
                                           true,
                                           trashNumber.toString(),
                                           true);
-                                      Navigator.of(context).pushReplacement(
+                                      Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 RecycleDetail(
-                                                    itemID: trashNumber)),
+                                                    itemID: trashNumber,
+                                                    mode: true)),
                                       );
                                     },
                                     color: Colors.blue,

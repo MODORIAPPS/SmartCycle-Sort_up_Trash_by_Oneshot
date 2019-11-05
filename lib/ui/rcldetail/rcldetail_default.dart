@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/blogger/v3.dart';
 import 'package:smartcycle/Utils/HexColor.dart';
+import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/Utils/TrashType.dart';
 import 'package:smartcycle/assets.dart';
@@ -12,8 +13,11 @@ import 'package:smartcycle/ui/camera/camera_start.dart';
 class RclDetailDefault extends StatelessWidget {
   final RclDetail rclDetail;
   final int trashNumber;
+  final bool mode;
 
-  RclDetailDefault({@required this.rclDetail, @required this.trashNumber});
+  RclDetailDefault({@required this.rclDetail,
+    @required this.trashNumber,
+    @required this.mode});
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +42,25 @@ class RclDetailDefault extends StatelessWidget {
               SliverAppBar(
                 leading: IconButton(
                   icon: Icon(
-                    Icons.arrow_back,
+                    Icons.home,
                     color: Colors.black87,
                   ),
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                         '/', (Route<dynamic> route) => false);
                   },
+                  tooltip: "Go home",
                 ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () {
+                      //Navigator.of(context).pop(true);
+                      _showMaterialDialog(context, mode);
+                    },
+                    tooltip: "Go back",
+                  ),
+                ],
                 expandedHeight: 10.0,
                 floating: true,
                 forceElevated: innerBoxIsScrolled,
@@ -145,32 +160,30 @@ Widget StepWidget(String image, String step, int i) {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding:
+        const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
         child: Container(
           child: AspectRatio(
-            aspectRatio: 1 / 1,
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: CachedNetworkImage(
+              aspectRatio: 1 / 1,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(34),
+                child: CachedNetworkImage(
 //              imageUrl: base + image,
-                    // %% ONLY FOR TEST %% getImage
-                    imageUrl: SmartCycleServer.getServerImage(image),
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        Icon(
-                          Icons.error,
-                          color: Colors.redAccent,
-                        ),
+                  // %% ONLY FOR TEST %% getImage
+                  imageUrl: SmartCycleServer.getServerImage(image),
+                  placeholder: (context, url) => SCircularProgress(),
+                  errorWidget: (context, url, error) =>
+                      Icon(
+                        Icons.error,
+                        color: Colors.redAccent,
+                      ),
 //                alignment: Alignment(-.2, 0),
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                  ),
-                )),
-          ),
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                ),
+              )),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
@@ -271,7 +284,7 @@ Widget _title(RclDetail rclDetail, int trashNumber) {
         children: <Widget>[
           CachedNetworkImage(
             imageUrl: TrashType.trashTitleImages[trashNumber],
-            placeholder: (context, url) => CircularProgressIndicator(),
+            placeholder: (context, url) => SCircularProgress(),
             errorWidget: (context, url, error) => Icon(Icons.error),
             alignment: Alignment(-.2, 0),
             fit: BoxFit.cover,
@@ -321,4 +334,43 @@ Widget _element(RclDetail rclDetail) {
       ),
     ],
   );
+}
+
+void _showMaterialDialog(BuildContext context, bool mode) {
+  if (mode) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "뒤로 되돌아가기",
+              style: TextAssets.mainBold,
+            ),
+            content: Text(
+              "선택을 잘못하셨나요?\n돌아가서 다시 선택할 수 있어요.",
+              style: TextAssets.mainRegular,
+            ),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {},
+                  child: Text(
+                    "아니오",
+                    style: TextAssets.dialogText,
+                  )),
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(
+                  "네",
+                  style: TextAssets.dialogText,
+                ),
+              )
+            ],
+          );
+        });
+  } else {
+    Navigator.of(context).pop(true);
+  }
 }

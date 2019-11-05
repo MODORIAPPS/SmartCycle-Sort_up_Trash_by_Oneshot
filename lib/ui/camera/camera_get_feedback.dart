@@ -5,6 +5,7 @@ import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
+import 'package:smartcycle/ui/policy/policy_main.dart';
 
 TextEditingController controller = new TextEditingController();
 
@@ -35,20 +36,22 @@ class CameraFeedBack extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "'기타'를 선택하셨습니다.🔊",
-                      style: TextAssets.mainBlack,
-                    ),
-                    Text(
-                      "서비스 개선을 위해 도와주세요.",
-                      style: TextAssets.mainBold,
-                    )
-                  ],
-                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "'기타'를 선택하셨습니다.🔊",
+                        style: TextAssets.mainBlack,
+                      ),
+                      Text(
+                        "서비스 개선을 위해 도와주세요.",
+                        style: TextAssets.mainBold,
+                      )
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -103,32 +106,18 @@ class CameraFeedBack extends StatelessWidget {
                         ),
                         onPressed: () {
                           if (controller.text.isNotEmpty) {
+                            _showSubmitDialog(
+                                context, controller.text, imageFile,
+                                user_email);
+                          } else {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) =>
                                   SmartDialog(
-                                    title: "피드백",
-                                    content: "대단히 감사합니다. 빠른 시일 내에 추가하겠습니다.",
-                                    colors: Colors.green,
+                                    title: "공백감지",
+                                    content: "이 입력은 공란일 수 없습니다.",
+                                    colors: Colors.red,
                                   ),
-                            );
-                            SmartCycleServer().saveHistory(
-                                imageFile,
-                                user_email,
-                                false,
-                                controller.text.toString(),
-                                false);
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) => MyApp()),
-                            );
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => SmartDialog(
-                                title: "공백감지",
-                                content: "이 입력은 공란일 수 없습니다.",
-                                colors: Colors.red,
-                              ),
                             );
                           }
                         },
@@ -142,3 +131,83 @@ class CameraFeedBack extends StatelessWidget {
     );
   }
 }
+
+_showSubmitDialog(BuildContext mContext, String _value, File imageFile,
+    String user_email) {
+  showDialog(
+      context: mContext,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: <Widget>[
+              Text(
+                "인공지능 개선",
+                style: TextAssets.mainBold,
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.info_outline,
+                  color: Colors.black87,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => PolicyMain(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+          content: Text(
+            "더 나은 서비스 제공을 위해 이미지를 학습용으로 보내주시겠어요?",
+            style: TextAssets.mainRegular,
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  SmartCycleServer().saveHistory(
+                      imageFile,
+                      user_email,
+                      false,
+                      controller.text.toString(),
+                      false);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                  );
+                },
+                child: Text(
+                  "아니오",
+                  style: TextAssets.dialogText,
+                )),
+            FlatButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      SmartDialog(
+                        title: "피드백",
+                        content: "대단히 감사합니다. 빠른 시일 내에 추가하겠습니다.",
+                        colors: Colors.green,
+                      ),
+                );
+                SmartCycleServer().saveHistory(
+                    imageFile,
+                    user_email,
+                    false,
+                    controller.text.toString(),
+                    false);
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                );
+              },
+              child: Text(
+                "네",
+                style: TextAssets.dialogText,
+              ),
+            )
+          ],
+        );
+      });
+}
+
