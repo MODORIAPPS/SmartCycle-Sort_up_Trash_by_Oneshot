@@ -72,8 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       floatingActionButton: Container(
-        height: 70.0,
-        width: 70.0,
+        height: 75.0,
+        width: 75.0,
         child: FloatingActionButton(
           onPressed: () {
             if (user_email != null) {
@@ -128,12 +128,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               IconButton(
-                iconSize: 30.0,
+                iconSize: 35.0,
                 padding: EdgeInsets.only(right: 28.0),
                 icon: Image.asset(
                   "assets/images/qrCode.png",
                   color: Colors.black87,
-                  width: 30,
+                  width: 35,
                 ),
                 onPressed: () {
                   showDialog(
