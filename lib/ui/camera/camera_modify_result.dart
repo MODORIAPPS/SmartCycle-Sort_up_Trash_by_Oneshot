@@ -255,13 +255,11 @@ _showSubmitDialog(BuildContext mContext, String _value) {
                 )),
             FlatButton(
               onPressed: () {
-//                SmartDialog(
-//                  title: "피드백 접수됨",
-//                  content: "도와주셔서 감사합니다. 더 나은 서비스를 만드는데 큰 도움이 될 것입니다.",
-//                  colors: Colors.green,
-//                );
-                final snackBar = SnackBar(content: Text('도와주셔서 감사합니다!'));
-                Scaffold.of(mContext).showSnackBar(snackBar);
+                SmartDialog(
+                  title: "피드백 접수됨",
+                  content: "도와주셔서 감사합니다. 더 나은 서비스를 만드는데 큰 도움이 될 것입니다.",
+                  colors: Colors.green,
+                );
                 Navigator.of(mContext).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) =>
