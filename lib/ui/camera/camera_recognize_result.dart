@@ -70,17 +70,9 @@ class _CameraResultState extends State<CameraResult> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
-                if (snapshot.error == TimeoutException) {
-                  return SmartDialog(
-                    title: "대기 시간 초과",
-                    content: "인식이 힘든 사물인 것 같습니다. 다른 각도에서 다시 찍어주세요.",
-                    colors: Colors.red,
-                  );
-                } else {
-                  return ErrorPage(
-                    error_msg: snapshot.error.toString(),
-                  );
-                }
+                return ErrorPage(
+                  error_msg: snapshot.error.toString(),
+                );
               } else {
                 print(snapshot.data.toString());
                 okay = true;
@@ -125,7 +117,6 @@ class _CameraResultState extends State<CameraResult> {
                                               color: Colors.black87,
                                               fontSize: 30,
                                               fontWeight: FontWeight.bold,
-                                              fontFamily: 'NotoCjkKR',
                                               backgroundColor:
                                               Colors.amberAccent),
                                         ),

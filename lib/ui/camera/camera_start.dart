@@ -75,12 +75,12 @@ class _CameraAppState extends State<CameraActvity> {
   goCrop(File source) async {
     File croppedFile = await ImageCropper.cropImage(
         sourcePath: source.path,
-        ratioX: 3,
-        ratioY: 3,
+        ratioX: 1,
+        ratioY: 1,
         toolbarTitle: "사진 편집하기",
         toolbarColor: Colors.white,
-        maxWidth: 640,
-        maxHeight: 640);
+        maxWidth: 400,
+        maxHeight: 400);
 
     if (croppedFile != null) {
       setState(() {

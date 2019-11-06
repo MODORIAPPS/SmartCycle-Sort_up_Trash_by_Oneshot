@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/blogger/v3.dart';
 import 'package:smartcycle/Utils/HexColor.dart';
@@ -154,9 +155,16 @@ Widget StepWidget(String image, String step, int i) {
     children: <Widget>[
       Padding(
         padding: const EdgeInsets.only(left: 15, bottom: 10),
-        child: Text(
-          "${i.toString()} 단계",
-          style: BlogTextStyles.stepTitle,
+        child: Container(
+          color: Colors.amberAccent,
+          child: Text(
+            "${i.toString()} 단계",
+            style: TextStyle(
+              color: Colors.black87,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
       Padding(
@@ -236,6 +244,7 @@ Widget _doYouKnow(RclDetail rclDetail) {
             padding:
             const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   rclDetail.name + "이(가) 자연에서 완전히 분해되기까지 걸리는 시간",
