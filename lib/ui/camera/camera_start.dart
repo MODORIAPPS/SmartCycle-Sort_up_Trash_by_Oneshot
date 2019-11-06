@@ -39,7 +39,7 @@ class _CameraAppState extends State<CameraActvity> {
 
   Future<void> makeCamera() async {
     final cameras = await availableCameras();
-    _controller = CameraController(cameras.first, ResolutionPreset.ultraHigh);
+    _controller = CameraController(cameras.first, ResolutionPreset.max);
     _controller.initialize().whenComplete(() {
       setState(() {});
     });
@@ -129,21 +129,43 @@ class _CameraAppState extends State<CameraActvity> {
               return ErrorPage(error_msg: snapshot.error.toString());
             } else {
               print("카메라 준비 완료");
-
               final size = MediaQuery.of(context).size;
               final deviceRatio = size.width / size.height;
-
+//_controller.value.aspectRatio,
               return Stack(
                 children: <Widget>[
                   _controller.value.isInitialized
-                      ? Transform.scale(
-                      scale: _controller.value.aspectRatio / deviceRatio,
-                      child: Center(
-                        child: AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: CameraPreview(_controller),
-                        ),
-                      ))
+                      ?
+//                  Transform.scale(
+//                      scale: _controller.value.aspectRatio / deviceRatio,
+//                      child: Center(
+//                        child: AspectRatio(
+//                          aspectRatio: _controller.value.aspectRatio,
+//                          child: CameraPreview(_controller),
+//                        ),
+//                      ))
+                  ClipRect(
+                      child: new OverflowBox(
+                          maxWidth: double.infinity,
+                          maxHeight: double.infinity,
+                          alignment: Alignment.center,
+                          child: new FittedBox(
+                              fit: BoxFit.cover,
+                              alignment: Alignment.center,
+                              child: new Container(
+                                  width: size.width,
+                                  height: size.height,
+                                  child: CameraPreview(_controller)
+                              )
+                          )
+                      )
+                  )
+//                      Center(
+//                          child: AspectRatio(
+//                            aspectRatio: _controller.value.aspectRatio,
+//                            child: CameraPreview(_controller),
+//                          ),
+//                        )
                       : SCircularProgress(),
                   Column(
                     children: <Widget>[

@@ -16,9 +16,8 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
 
   @override
   void initState() {
-    _getDoYouKnow = SmartCycleServer()
-        .getDoYouKnow()
-        .timeout(const Duration(seconds: 10));
+    _getDoYouKnow =
+        SmartCycleServer().getDoYouKnow().timeout(const Duration(seconds: 10));
   }
 
   @override
@@ -26,9 +25,6 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData queryData;
-    queryData = MediaQuery.of(context);
-
     return FutureBuilder<DoYouKnows>(
       future: _getDoYouKnow,
       builder: (context, snapshot) {
@@ -66,7 +62,7 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
                 doYouKnow: doyouknow,
               ));
             }
-            return TabletDetector.isTablet(queryData)
+            return TabletDetector.isTablet(context)
                 ? ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.datas.length,

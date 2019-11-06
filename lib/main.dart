@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
+import 'package:smartcycle/Utils/TabletDetector.dart';
 import 'package:smartcycle/ui/main/main_doyouknow.dart';
 import 'package:smartcycle/ui/main/main_qr_code.dart';
 import 'package:smartcycle/assets.dart';
@@ -190,6 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
     bool done, String email) {
+  double height = TabletDetector.isTablet(context) ? 400 : 200;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[

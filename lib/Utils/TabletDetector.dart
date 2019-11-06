@@ -50,8 +50,11 @@ class TabletDetector {
   //    |_ size: 1366.0x1024.0, pixelRatio: 2.0, pixels: 2732.0x2048.0
   //       |_ diagonal: 1707.2000468603555
 
-  static bool isTablet(MediaQueryData query) {
-    var size = query.size;
+  static bool isTablet(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+
+    var size = queryData.size;
     var diagonal =
         sqrt((size.width * size.width) + (size.height * size.height));
 
