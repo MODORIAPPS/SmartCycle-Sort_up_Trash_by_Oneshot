@@ -52,22 +52,6 @@ class _CameraAppState extends State<CameraActvity> {
     await ImagePicker.pickImage(source: source, imageQuality: 50);
 
     if (imageFile != null) {
-//      setState(() {
-//        _image = imageFile;
-//
-//        Route route = MaterialPageRoute(
-//            builder: (context) =>
-//                CameraResult(
-//                  imageFile: _image,
-//                  userEmail: widget.userEmail,
-//                ));
-//        Navigator.push(mContext, route);
-////      Navigator.of(mContext).push(MaterialPageRoute(
-////          builder: (context) => CameraModify(imageFile: _image))
-//      }
-//
-//      );
-
       goCrop(imageFile);
     }
   }
@@ -155,11 +139,7 @@ class _CameraAppState extends State<CameraActvity> {
                               child: new Container(
                                   width: size.width,
                                   height: size.height,
-                                  child: CameraPreview(_controller)
-                              )
-                          )
-                      )
-                  )
+                                  child: CameraPreview(_controller)))))
 //                      Center(
 //                          child: AspectRatio(
 //                            aspectRatio: _controller.value.aspectRatio,
@@ -185,34 +165,34 @@ class _CameraAppState extends State<CameraActvity> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: Container(
-                        color: Colors.transparent,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10, top: 3),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                                child: IconButton(
-                                  color: Colors.blueAccent,
-                                  icon: Icon(Icons.photo_album,
-                                      color: Colors.blueAccent),
-                                  onPressed: () {
-                                    getImageFromAlbum(ImageSource.gallery);
-                                  },
-                                ),
+                      padding: const EdgeInsets.all(10),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10, top: 3),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
+                              child: IconButton(
+                                color: Colors.blueAccent,
+                                icon: Icon(Icons.photo_album,
+                                    color: Colors.blueAccent),
+                                onPressed: () {
+                                  getImageFromAlbum(ImageSource.gallery);
+                                },
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
                                 child: IconButton(
                                     onPressed: () async {
                                       try {
@@ -259,40 +239,43 @@ class _CameraAppState extends State<CameraActvity> {
                                       color: Colors.blueAccent,
                                     )),
                               ),
-                              Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(18),
-                                  ),
-                                  child: InkWell(
-                                    child: hasTorch
-                                        ? IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(
-                                              Icons.flash_off,
-                                              color: Colors.blueAccent,
-                                            ),
-                                          )
-                                        : IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(
-                                              Icons.flash_on,
-                                              color: Colors.blueAccent,
-                                            )),
-                                    onTap: () {
-                                      setState(() {
-                                        if (hasTorch) {
-                                          hasTorch = false;
-                                          Lamp.turnOff();
-                                        } else {
-                                          hasTorch = true;
-                                          Lamp.turnOn();
-                                        }
-                                      });
-                                    },
-                                  )),
-                            ],
-                          ),
+                            ),
+                            Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: InkWell(
+                                  child: hasTorch
+                                      ? IconButton(
+                                      onPressed: () {
+                                        _recognizeNotifyDialog(context);
+                                      },
+                                      icon: Icon(
+                                        Icons.warning,
+                                        color: Colors.amber,
+                                      ))
+                                      : IconButton(
+                                      onPressed: () {
+                                        _recognizeNotifyDialog(context);
+                                      },
+                                      icon: Icon(
+                                        Icons.warning,
+                                        color: Colors.amber,
+                                      )),
+                                  onTap: () {
+                                    setState(() {
+                                      if (hasTorch) {
+                                        hasTorch = false;
+                                        Lamp.turnOff();
+                                      } else {
+                                        hasTorch = true;
+                                        Lamp.turnOn();
+                                      }
+                                    });
+                                  },
+                                )),
+                          ],
                         ),
                       ),
                     ),
@@ -353,22 +336,47 @@ Future<File> compressAndGetFile(File file) async {
 
   return result;
 }
-// void _showDialog(BuildContext context) {
-//   showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: new Text("권한필요"),
-//           content: new Text("이 앱을 정상적으로 실행하기 위해 권한이 필요합니다."),
-//           actions: <Widget>[
-//             // usually buttons at the bottom of the dialog
-//             new FlatButton(
-//               child: new Text("닫기"),
-//               onPressed: () {
-//                 Navigator.of(context).pop();
-//               },
-//             ),
-//           ],
-//         );
-//       });
-// }
+
+Future<bool> _recognizeNotifyDialog(BuildContext mContext) async {
+  return showDialog<bool>(
+    context: mContext,
+    barrierDismissible: false, // user must tap button for close dialog!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          '인식가능한 품목',
+          style: TextAssets.mainBold,
+        ),
+        content: const Text(
+          '저희 서비스는 베타 서비스입니다. 그렇기 때문에 인식가능한 품목이 제한되어있습니다. 확인하기 를 눌러 자세한 정보를 확인하세요.',
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: const Text(
+              '닫기',
+              style: TextAssets.dialogText,
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+          FlatButton(
+            child: const Text(
+              '확인하기',
+              style: TextAssets.dialogText,
+            ),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (context) =>
+                        TutorialsPage(
+                          pageCode: 2,
+                        )),
+              );
+            },
+          )
+        ],
+      );
+    },
+  );
+}

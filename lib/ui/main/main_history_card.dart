@@ -12,7 +12,8 @@ class HistoryCard extends StatelessWidget {
   final String itemImage;
   final int itemIndex;
 
-  HistoryCard({this.id, this.itemImage, this.date, this.itemName, this.itemIndex});
+  HistoryCard(
+      {this.id, this.itemImage, this.date, this.itemName, this.itemIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +71,13 @@ class HistoryCard extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) =>
-                    RecycleDetail(itemID: number, mode: false,)),
+                    RecycleDetail(
+                      itemID: number,
+                      mode: false,
+                    )),
           );
         },
+        onLongPress: () {},
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:smartcycle/Utils/TrashType.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -81,23 +82,34 @@ Widget _cPage1(BuildContext context) {
               size: 50,
             ),
             Text(
-              "카메라로 직접 검색하기",
+              "카메라로 직접 분리수거 검색하기",
               style: tutoBold,
             ),
             SizedBox(
-              height: 8,
+              height: 20,
             ),
             Text(
               "갤러리에서도, 카메라로 직접 찍으셔도 좋아요. 불편하게 직접 입력하지 않아도 되죠.",
-              style: rclRegular,
+              style: TextAssets.subBold,
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: Text(
+                "현재 인식가능한 품목 목록",
+                style: TextAssets.mainBold,
+              ),
+            ),
+            Text(
+              "저희 서비스는 아직 베타서비스입니다. 아래의 목록의 물건만"
+                  " 인식할 수 있으며, 그외의 물건은 아래의 목록으로 오인할 수 있습니다. ",
+              style: TextAssets.subBold,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(TrashType().trashes.toString())
+
           ],
-        ),
-        RaisedButton(
-          child: Text("위젯 생성"),
-          onPressed: () {
-            _generateWidgetAtHome();
-          },
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -233,5 +245,3 @@ Future<void> _generateWidgetAtHome() async {
     print("ERROR: '${e.message}'.");
   }
 }
-
-

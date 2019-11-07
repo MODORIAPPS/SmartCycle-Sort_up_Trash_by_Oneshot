@@ -220,7 +220,7 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
         ),
       ),
       Container(
-        height: 200,
+        height: height,
         child: MainDoYouKnow(),
       ),
 
@@ -262,3 +262,5 @@ Future<Widget> networkCheck(BuildContext context) async {
     );
   }
 }
+
+

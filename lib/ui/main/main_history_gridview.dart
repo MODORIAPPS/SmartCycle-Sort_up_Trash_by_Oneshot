@@ -7,6 +7,7 @@ import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 import 'package:smartcycle/Utils/TrashType.dart';
 import 'package:smartcycle/styles/Styles.dart';
+import 'package:smartcycle/ui/main/main_history_card_v2.dart';
 
 class HistoryGridView extends StatefulWidget {
   final bool isSignIn;
@@ -140,7 +141,15 @@ class _HistoryGridViewState extends State<HistoryGridView> {
                 children: List.generate(historys.historys.length, (index) {
                   var history = historys.historys[index];
                   return Center(
-                    child: HistoryCard(
+                    child:
+//                    HistoryCard(
+//                        id: int.parse(history.trash_id),
+//                        itemName: TrashType()
+//                            .getTrashName(int.parse(history.trash_id)),
+//                        itemImage: history.imageURL,
+//                        date: history.date,
+//                        itemIndex: index),
+                    NewHistoryCard(
                         id: int.parse(history.trash_id),
                         itemName: TrashType()
                             .getTrashName(int.parse(history.trash_id)),

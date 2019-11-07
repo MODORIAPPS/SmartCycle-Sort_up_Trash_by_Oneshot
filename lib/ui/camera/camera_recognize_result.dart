@@ -110,15 +110,18 @@ class _CameraResultState extends State<CameraResult> {
 //                                        ),
 //                                      ),
                                       Align(
-                                        child: Text(
-                                          "${TrashType().getTrashName(
-                                              trashNumber)}",
-                                          style: TextStyle(
+                                        child: Container(
+                                          color: Colors.amberAccent,
+                                          child: Text(
+                                            "${TrashType().getTrashName(
+                                                trashNumber)}",
+                                            style: TextStyle(
                                               color: Colors.black87,
-                                              fontSize: 30,
+                                              fontSize: 32,
                                               fontWeight: FontWeight.bold,
-                                              backgroundColor:
-                                              Colors.amberAccent),
+                                            ),
+                                          ),
+
                                         ),
                                         alignment: Alignment.bottomCenter,
                                       ),

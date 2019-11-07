@@ -5,6 +5,7 @@ import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/Utils/TabletDetector.dart';
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/ui/doyouknow/doyouknow_card.dart';
+import 'package:smartcycle/ui/doyouknow/doyouknow_card_for_tablet.dart';
 
 class MainDoYouKnow extends StatefulWidget {
   @override
@@ -67,7 +68,7 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
                 scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.datas.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return new DoYouKnowCard(
+                  return DoYouKnowCardForTablet(
                     doYouKnow: snapshot.data.datas[index],
                   );
                 })

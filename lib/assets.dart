@@ -82,6 +82,12 @@ class TextAssets {
     fontSize: 14,
     fontWeight: FontWeight.w500,
   );
+
+  static const TextStyle cardBlue = TextStyle(
+    color: Colors.blueAccent,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
 }
 
 class BlogTextStyles {
