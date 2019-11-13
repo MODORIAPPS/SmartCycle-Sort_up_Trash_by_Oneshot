@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/app_localizations.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 
@@ -21,7 +22,8 @@ class ErrorPage extends StatelessWidget {
                 height: 40,
               ),
               Text(
-                "😥죄송합니다.",
+                AppLocalizations.of(context)
+                    .translate('act_error_title'),
                 style: TextAssets.mainBlack,
                 textAlign: TextAlign.center,
               ),
@@ -29,7 +31,8 @@ class ErrorPage extends StatelessWidget {
                 height: 15,
               ),
               Text(
-                "문제가 발생했습니다.",
+                AppLocalizations.of(context)
+                    .translate('act_error_content'),
                 style: TextAssets.mainBold,
                 textAlign: TextAlign.center,
               ),
@@ -37,7 +40,8 @@ class ErrorPage extends StatelessWidget {
                 height: 3,
               ),
               Text(
-                "오류 원인은 아래와 같습니다.",
+                AppLocalizations.of(context)
+                    .translate('act_error_content2'),
                 style: TextAssets.mainRegular,
               ),
               SizedBox(
@@ -51,14 +55,15 @@ class ErrorPage extends StatelessWidget {
                 height: 8,
               ),
               Text(
-                "다시 한번 시도해보시고 계속해서 발생하면\n이 메시지를 스크린 샷하여 아래 이메일로\n보내주시면 도와드리겠습니다.",
+                AppLocalizations.of(context)
+                    .translate('act_error_content3'),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
                 height: 10,
               ),
               RaisedButton(
-                child: Text("확인"),
+                child: Text("dialog_positive_default"),
                 color: Colors.blue,
                 textColor: Colors.white,
                 onPressed: () {

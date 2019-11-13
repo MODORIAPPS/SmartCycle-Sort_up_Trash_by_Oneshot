@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/assets.dart';
-import 'package:smartcycle/ui/main/main_history_card.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/model/SearchHistory.dart';
 import 'package:smartcycle/Utils/TrashType.dart';

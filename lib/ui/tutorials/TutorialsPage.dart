@@ -107,7 +107,7 @@ Widget _cPage1(BuildContext context) {
             SizedBox(
               height: 10,
             ),
-            Text(TrashType().trashes.toString())
+            Text(TrashType.trashes.toString())
 
           ],
         ),

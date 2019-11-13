@@ -14,7 +14,6 @@ import 'package:smartcycle/ui/camera/camera_recognize_result.dart';
 import 'package:smartcycle/ui/tutorials/TutorialsPage.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
-import 'package:smartcycle/ui/camera/camera_submit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 

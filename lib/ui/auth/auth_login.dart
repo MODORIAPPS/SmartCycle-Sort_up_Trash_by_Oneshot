@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:smartcycle/Utils/SCircularProgress.dart';
+import 'package:smartcycle/app_localizations.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -59,7 +60,8 @@ class LoginPage extends StatelessWidget {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                "SmartCycle과 함께 깨끗한 지구 만들기.",
+                                AppLocalizations.of(context).translate(
+                                    'auth_login_1'),
                                 style: TextAssets.mainBlackW,
                               ),
                             ),
@@ -69,7 +71,8 @@ class LoginPage extends StatelessWidget {
                           height: 3,
                         ),
                         Text(
-                          "설치해주셔서 감사합니다.",
+                          AppLocalizations.of(context).translate(
+                              'auth_login_2'),
                           style: TextAssets.mainBoldW,
                         )
                       ],
@@ -107,7 +110,8 @@ class LoginPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(right: 20),
                             child: Text(
-                              "구글 계정으로 로그인",
+                              AppLocalizations.of(context).translate(
+                                  'auth_login_google_btn'),
                               textAlign: TextAlign.center,
                               style: TextAssets.mainRegular,
                             ),
@@ -144,7 +148,8 @@ class LoginPage extends StatelessWidget {
                 children: <Widget>[
                   InkWell(
                     child: Text(
-                      "이용약관",
+                      AppLocalizations.of(context).translate(
+                          'auth_login_policy_btn'),
                       style: startLight,
                     ),
                     onTap: () {

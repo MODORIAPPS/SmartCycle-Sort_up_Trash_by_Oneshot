@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:smartcycle/app_localizations.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -62,7 +63,10 @@ class DoYouKnowMain extends StatelessWidget {
                           color: Colors.white,
                         ),
                         Text(
-                          "읽는 데 ${doYouKnow.readTime}분",
+                          "${AppLocalizations.of(context).translate(
+                              'doyouknow_read_time_start')} ${doYouKnow
+                              .readTime}${AppLocalizations.of(context)
+                              .translate('doyouknow_read_time_end')}",
                           style: TextAssets.mainBoldW,
                         )
                       ],
@@ -111,6 +115,7 @@ class DoYouKnowMain extends StatelessWidget {
                   expandedHeight: 10.0,
                   floating: true,
                   elevation: 2,
+                  centerTitle: true,
                   backgroundColor: Colors.white,
                   iconTheme: IconThemeData(color: Colors.black87),
                   forceElevated: innerBoxIsScrolled,
@@ -144,7 +149,7 @@ class DoYouKnowMain extends StatelessWidget {
                 ),
               ];
             },
-            body: _contents(doYouKnow),
+            body: _contents(doYouKnow, context),
           ),
         ],
       ),
@@ -152,7 +157,7 @@ class DoYouKnowMain extends StatelessWidget {
   }
 }
 
-Widget _contents(DoYouKnow doYouKnow) {
+Widget _contents(DoYouKnow doYouKnow, BuildContext context) {
   contentWidgets = new List();
   if (contentWidgets.length == 0) {
     for (var _contents in doYouKnow.contents) {
@@ -190,7 +195,10 @@ Widget _contents(DoYouKnow doYouKnow) {
                     color: Colors.black87,
                   ),
                   Text(
-                    "읽는 데 ${doYouKnow.readTime}분",
+                    "${AppLocalizations.of(context).translate(
+                        'doyouknow_read_time_start')} ${doYouKnow
+                        .readTime}${AppLocalizations.of(context).translate(
+                        'doyouknow_read_time_end')}",
                     style: TextAssets.mainBold,
                   )
                 ],

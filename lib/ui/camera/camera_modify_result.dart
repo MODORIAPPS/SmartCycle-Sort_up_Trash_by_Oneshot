@@ -44,6 +44,7 @@ class _ModifyPageState extends State<ModifyPage> {
         ),
         iconTheme: IconThemeData(color: Colors.black87),
         elevation: 1,
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -102,7 +103,7 @@ class _ModifyPageState extends State<ModifyPage> {
                     padding: const EdgeInsets.only(top: 15, bottom: 15),
                     child: DropdownButton<String>(
                       value: _value,
-                      items: TrashType().trashes.map((String value) {
+                      items: TrashType.trashes.map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),

@@ -48,6 +48,7 @@ class _CameraResultState extends State<CameraResult> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black87),
+          centerTitle: true,
           title: Text(
             "인식결과",
             style: TextAssets.mainRegular,
@@ -271,7 +272,7 @@ Widget _waiting() {
       ),
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(34),
           boxShadow: [
             BoxShadow(
                 color: Colors.black12, offset: Offset(0, 6), blurRadius: 6)
@@ -286,17 +287,17 @@ Future<bool> _asyncConfirmDialog(BuildContext mContext) async {
     barrierDismissible: false, // user must tap button for close dialog!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('작업 취소'),
-        content: const Text('현재 진행중인 작업을 취소하시겠어요?'),
+        title: Text('작업 취소', style: TextAssets.mainRegular,),
+        content: const Text('현재 진행중인 작업을 취소하시겠어요?', style: TextAssets.subBold,),
         actions: <Widget>[
           FlatButton(
-            child: const Text('아니오'),
+            child: const Text('아니오', style: TextAssets.dialogText,),
             onPressed: () {
               Navigator.of(context).pop(false);
             },
           ),
           FlatButton(
-            child: const Text('확인'),
+            child: const Text('확인', style: TextAssets.dialogText,),
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => MyApp()),

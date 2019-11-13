@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:googleapis/driveactivity/v2.dart';
 import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
+import 'package:smartcycle/app_localizations.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/model/GoogleProfileDTO.dart';
@@ -14,19 +15,12 @@ import 'package:smartcycle/ui/nugudevice/nugu_add_device.dart';
 UserInfo userInfo;
 
 class AuthProfile extends StatefulWidget {
-  final String access_token;
-  final String user_id;
-
-  AuthProfile({Key key, @required this.access_token, @required this.user_id})
-      : super(key: key);
-
   @override
   _AuthProfileState createState() => _AuthProfileState();
 }
 
 class _AuthProfileState extends State<AuthProfile> {
   Future<UserInfo> _userInfo;
-  String access_token_new = "";
 
   @override
   void initState() {
@@ -58,8 +52,9 @@ class _AuthProfileState extends State<AuthProfile> {
 Widget UserProfile(BuildContext context, UserInfo userinfo) {
   return Scaffold(
     appBar: AppBar(
+      centerTitle: true,
       title: Text(
-        "사용자 계정정보",
+        AppLocalizations.of(context).translate('auth_profile_appbar'),
         style: TextAssets.mainRegular,
       ),
       backgroundColor: Colors.white,
@@ -214,7 +209,8 @@ Widget UserProfile(BuildContext context, UserInfo userinfo) {
               minWidth: double.infinity,
               child: RaisedButton(
                 child: Text(
-                  "로그아웃",
+                  AppLocalizations.of(context)
+                      .translate('auth_profile_logout_btn'),
                   style: TextAssets.mainRegularW,
                 ),
                 shape: RoundedRectangleBorder(
@@ -374,17 +370,20 @@ Future<bool> _asyncConfirmDialog(BuildContext mContext) async {
     barrierDismissible: false, // user must tap button for close dialog!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('로그아웃'),
-        content: const Text('예기치 못한 문제가 발생하거나 다른 계정이 있는 경우 도움이 될 수 있습니다.'),
+        title: Text(
+            AppLocalizations.of(context).translate('auth_profile_logout_btn')),
+        content: const Text(''),
         actions: <Widget>[
           FlatButton(
-            child: const Text('취소'),
+            child: Text(AppLocalizations.of(context)
+                .translate('camera_feed_back_submit_error_content')),
             onPressed: () {
               Navigator.of(context).pop(false);
             },
           ),
           FlatButton(
-            child: const Text('로그아웃'),
+            child: Text(AppLocalizations.of(context)
+                .translate('auth_profile_logout_btn')),
             onPressed: () {
               AuthUtils().signOut();
               Navigator.of(context).pushNamedAndRemoveUntil(

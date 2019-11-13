@@ -69,9 +69,8 @@ class RclDetailDefault extends StatelessWidget {
                 elevation: 10,
                 iconTheme: IconThemeData(color: Colors.black87),
                 pinned: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text("분리수거 하기", style: TextAssets.mainRegular),
-                ),
+                title: Text("분리수거 하기", style: TextAssets.mainRegular),
+                centerTitle: true,
               ),
             ];
           },
@@ -194,12 +193,12 @@ Widget StepWidget(String image, String step, int i) {
               )),
           decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(34),
               boxShadow: [
                 BoxShadow(
                     color: Colors.black12,
-                    offset: Offset(0, 20),
-                    blurRadius: 20)
+                    offset: Offset(0, 5),
+                    blurRadius: 5)
               ]),
         ),
       ),

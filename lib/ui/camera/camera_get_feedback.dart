@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
+import 'package:smartcycle/app_localizations.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/ui/policy/policy_main.dart';
@@ -23,8 +24,9 @@ class CameraFeedBack extends StatelessWidget {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black87),
         elevation: 1,
+        centerTitle: true,
         title: Text(
-          "사용자 피드백",
+          AppLocalizations.of(context).translate('camera_feed_back'),
           style: TextAssets.mainRegular,
         ),
       ),
@@ -42,11 +44,13 @@ class CameraFeedBack extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "'기타'를 선택하셨습니다.🔊",
+                        AppLocalizations.of(context)
+                            .translate('camera_feed_back_text1'),
                         style: TextAssets.mainBlack,
                       ),
                       Text(
-                        "서비스 개선을 위해 도와주세요.",
+                        AppLocalizations.of(context)
+                            .translate('camera_feed_back_text2'),
                         style: TextAssets.mainBold,
                       )
                     ],
@@ -61,7 +65,8 @@ class CameraFeedBack extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Text(
-                  "✨촬영하신 쓰레기가 어떤 쓰레기인지 직접 알려주세요.",
+                  AppLocalizations.of(context)
+                      .translate('camera_feed_back_text3'),
                   style: TextAssets.subBold,
                 ),
               ),
@@ -73,7 +78,8 @@ class CameraFeedBack extends StatelessWidget {
                 child: TextFormField(
                   controller: controller,
                   decoration: InputDecoration(
-                      labelText: "쓰레기 정보 직접 입력",
+                      labelText: AppLocalizations.of(context)
+                          .translate('camera_feed_back_input'),
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -92,7 +98,8 @@ class CameraFeedBack extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "저희 서비스는 완성되지 않았습니다. \n소중한 피드백으로 더욱 발전된 서비스를 제공하겠습니다.",
+                      AppLocalizations.of(context)
+                          .translate('camera_feed_back_text4'),
                       style: TextAssets.infoBold,
                     ),
                   ),
@@ -101,21 +108,25 @@ class CameraFeedBack extends StatelessWidget {
                       height: 60,
                       child: RaisedButton(
                         child: Text(
-                          "제출 및 메인화면으로",
+                          AppLocalizations.of(context)
+                              .translate('camera_feed_back_submit_btn'),
                           style: TextAssets.mainRegularW,
                         ),
                         onPressed: () {
                           if (controller.text.isNotEmpty) {
-                            _showSubmitDialog(
-                                context, controller.text, imageFile,
-                                user_email);
+                            _showSubmitDialog(context, controller.text,
+                                imageFile, user_email);
                           } else {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) =>
                                   SmartDialog(
-                                    title: "공백감지",
-                                    content: "이 입력은 공란일 수 없습니다.",
+                                    title: AppLocalizations.of(context)
+                                        .translate(
+                                        'camera_feed_back_submit_error_title'),
+                                    content: AppLocalizations.of(context)
+                                        .translate(
+                                        'camera_feed_back_submit_error_content'),
                                     colors: Colors.red,
                                   ),
                             );
@@ -141,7 +152,8 @@ _showSubmitDialog(BuildContext mContext, String _value, File imageFile,
           title: Row(
             children: <Widget>[
               Text(
-                "인공지능 개선",
+                AppLocalizations.of(context)
+                    .translate('dialog_feedback_need_title'),
                 style: TextAssets.mainBold,
               ),
               IconButton(
@@ -160,24 +172,22 @@ _showSubmitDialog(BuildContext mContext, String _value, File imageFile,
             ],
           ),
           content: Text(
-            "더 나은 서비스 제공을 위해 이미지를 학습용으로 보내주시겠어요?",
+            AppLocalizations.of(context)
+                .translate('dialog_feedback_need_content'),
             style: TextAssets.mainRegular,
           ),
           actions: <Widget>[
             FlatButton(
                 onPressed: () {
-                  SmartCycleServer().saveHistory(
-                      imageFile,
-                      user_email,
-                      false,
-                      controller.text.toString(),
-                      false);
+                  SmartCycleServer().saveHistory(imageFile, user_email, false,
+                      controller.text.toString(), false);
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => MyApp()),
                   );
                 },
                 child: Text(
-                  "아니오",
+                  AppLocalizations.of(context)
+                      .translate('dialog_negative_default'),
                   style: TextAssets.dialogText,
                 )),
             FlatButton(
@@ -186,23 +196,22 @@ _showSubmitDialog(BuildContext mContext, String _value, File imageFile,
                   context: context,
                   builder: (BuildContext context) =>
                       SmartDialog(
-                        title: "피드백",
-                        content: "대단히 감사합니다. 빠른 시일 내에 추가하겠습니다.",
+                        title: AppLocalizations.of(context)
+                            .translate('dialog_feedback_title'),
+                        content: AppLocalizations.of(context)
+                            .translate('dialog_feedback_content'),
                         colors: Colors.green,
                       ),
                 );
-                SmartCycleServer().saveHistory(
-                    imageFile,
-                    user_email,
-                    false,
-                    controller.text.toString(),
-                    false);
+                SmartCycleServer().saveHistory(imageFile, user_email, false,
+                    controller.text.toString(), false);
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => MyApp()),
                 );
               },
               child: Text(
-                "네",
+                AppLocalizations.of(context)
+                    .translate('dialog_positive_default'),
                 style: TextAssets.dialogText,
               ),
             )
@@ -210,4 +219,3 @@ _showSubmitDialog(BuildContext mContext, String _value, File imageFile,
         );
       });
 }
-

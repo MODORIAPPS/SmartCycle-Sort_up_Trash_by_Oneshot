@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/model/TrashDTO.dart';
 
 class TrashType {
-  var trashes = [
+  static var trashes = [
     "페트병",
     "종이팩",
     "내열유리",
@@ -26,6 +27,44 @@ class TrashType {
     "https://source.unsplash.com/RuudPEDUM3w/1000x400",
     "https://source.unsplash.com/nss2eRzQwgw/1000x500",
   ];
+
+  static var trashItems = [
+    TrashDTO(
+        trashName: "페트병",
+        trashTitleImages: trashTitleImages[0],
+        trashNumber: 0),
+    TrashDTO(
+        trashName: "종이팩",
+        trashTitleImages: trashTitleImages[1],
+        trashNumber: 1),
+    TrashDTO(
+        trashName: "내열유리",
+        trashTitleImages: trashTitleImages[2],
+        trashNumber: 2),
+    TrashDTO(
+        trashName: "우산", trashTitleImages: trashTitleImages[3], trashNumber: 3),
+    TrashDTO(
+        trashName: "건전지",
+        trashTitleImages: trashTitleImages[4],
+        trashNumber: 4),
+    TrashDTO(
+        trashName: "스티로폼",
+        trashTitleImages: trashTitleImages[5],
+        trashNumber: 5),
+    TrashDTO(
+        trashName: "휴지", trashTitleImages: trashTitleImages[6], trashNumber: 6),
+    TrashDTO(
+        trashName: "부탄가스 통",
+        trashTitleImages: trashTitleImages[7],
+        trashNumber: 7),
+    TrashDTO(
+        trashName: "유리병",
+        trashTitleImages: trashTitleImages[8],
+        trashNumber: 8),
+    TrashDTO(
+        trashName: "약통", trashTitleImages: trashTitleImages[9], trashNumber: 9),
+  ];
+
   var trashImages = ["assets/images/"];
 
   getTrashNumber(String trashType) {
