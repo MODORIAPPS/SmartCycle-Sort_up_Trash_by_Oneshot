@@ -372,18 +372,25 @@ Future<bool> _asyncConfirmDialog(BuildContext mContext) async {
       return AlertDialog(
         title: Text(
             AppLocalizations.of(context).translate('auth_profile_logout_btn')),
-        content: const Text(''),
+        content: Text(
+            AppLocalizations.of(context).translate(
+                'auth_profile_logout_dialog_content')),
         actions: <Widget>[
           FlatButton(
-            child: Text(AppLocalizations.of(context)
-                .translate('camera_feed_back_submit_error_content')),
+            child: Text(
+              AppLocalizations.of(context)
+                  .translate('dialog_negative_default2'),
+              style: TextAssets.dialogText,
+            ),
             onPressed: () {
               Navigator.of(context).pop(false);
             },
           ),
           FlatButton(
-            child: Text(AppLocalizations.of(context)
-                .translate('auth_profile_logout_btn')),
+            child: Text(
+              AppLocalizations.of(context).translate('auth_profile_logout_btn'),
+              style: TextAssets.dialogText,
+            ),
             onPressed: () {
               AuthUtils().signOut();
               Navigator.of(context).pushNamedAndRemoveUntil(
