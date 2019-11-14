@@ -1,5 +1,5 @@
 {
-  "dialog_prepare_title": "准备中",
+  "dialog_prepare_title": "준비중",
   "dialog_prepare_content": "죄송합니다. 아직 준비중입니다.",
   "dialog_no_network_title": "네트워크 없음",
   "dialog_no_network_content": "네트워크가 필요한 작업이 있기 때문에 기능이 제한됩니다.",
@@ -55,7 +55,7 @@
   "act_error_title": "\uD83D\uDE25 죄송합니다.",
   "act_error_content": "문제가 발생했습니다.",
   "act_error_content2": "오류 원인은 다음과 같습니다.",
-  "act_error_content3": "다시 한번 시도해보시고 계속해서 발생하면\\n이 메시지를 스크린 샷하여 아래 이메일로\n보내주시면 도와드리겠습니다.",
+  "act_error_content3": "다시 한번 시도해보시고 계속해서 발생하면\n이 메시지를 스크린 샷하여 아래 이메일로\n보내주시면 도와드리겠습니다.",
   "search_appbar": "직접 탐색",
   "search_content1": "\uD83D\uDC40 검색하고자 하는 쓰레기를\n선택해주세요.",
   "search_content2": "이 서비스는 베타 서비스입니다. 추후 더 다양한 항목이 추가됩니다."

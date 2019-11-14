@@ -9,12 +9,13 @@ class MainSearchBar extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(
+            left: 15, right: 15, top: 15, bottom: 15),
         child: InkWell(
           child: Container(
             width: double.infinity,
             child: Padding(
-              padding: const EdgeInsets.all(13.0),
+              padding: const EdgeInsets.all(20.0),
               child: Row(
                 children: <Widget>[
                   Icon(Icons.search),

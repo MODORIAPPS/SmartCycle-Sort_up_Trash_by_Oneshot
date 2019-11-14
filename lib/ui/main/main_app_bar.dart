@@ -43,14 +43,14 @@ class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
                 )
               ],
             ),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => TutorialsPage(
-                      pageCode: 1,
-                    )),
-              );
-            },
+//            onTap: () {
+//              Navigator.of(context).push(
+//                MaterialPageRoute(
+//                    builder: (context) => TutorialsPage(
+//                      pageCode: 1,
+//                    )),
+//              );
+//            },
           ),
           InkWell(
             child: Container(
