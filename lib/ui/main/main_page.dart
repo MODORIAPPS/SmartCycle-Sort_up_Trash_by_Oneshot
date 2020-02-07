@@ -108,6 +108,7 @@ class _MainPageState extends State<MainPage> {
                           colors: Colors.orange,
                         ),
                   );
+
                 },
               ),
               IconButton(
@@ -119,20 +120,23 @@ class _MainPageState extends State<MainPage> {
                   width: 35,
                 ),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) =>
-                        QrDialog(
-                          title: AppLocalizations.of(context)
-                              .translate('dialog_qr_title'),
-                          description: AppLocalizations.of(context)
-                              .translate('dialog_qr_content'),
-                          posiBtn: AppLocalizations.of(context)
-                              .translate('dialog_positive_default'),
-                          // userEmail
-                          url: user_email,
-                        ),
-                  );
+                  if(user_email != ""){
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          QrDialog(
+                            title: AppLocalizations.of(context)
+                                .translate('dialog_qr_title'),
+                            description: AppLocalizations.of(context)
+                                .translate('dialog_qr_content'),
+                            posiBtn: AppLocalizations.of(context)
+                                .translate('dialog_positive_default'),
+                            // userEmail
+                            url: user_email,
+                          ),
+                    );
+                  }
+
                 },
               )
             ],
@@ -220,7 +224,6 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
         ),
       ),
 
-      // TEST DATA
       (done)
           ? HistoryGridView(
         isSignIn: isSigned,

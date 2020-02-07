@@ -15,7 +15,7 @@ import 'package:smartcycle/model/SearchHistory.dart';
 /// 메소드명 뒤에 Test가 붙은 것들은 로컬 서버를 향하는 테스트 코드입니다.
 /// ex) getUserHistoryTest
 class SmartCycleServer {
-  static var test_base = "http://192.168.0.3:8080";
+  static var test_base = "http://192.168.42.46:8080";
   static var test_client_base = "$test_base/";
   static var base = 'http://smartcycle.ljhnas.com/';
   static var base_n = 'http://smartcycle.ljhnas.com';

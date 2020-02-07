@@ -31,8 +31,11 @@ class _HistoryGridViewState extends State<HistoryGridView> {
     super.initState();
 
     // %% ONLY FOR TEST %% getUserHistoryTest
+//    _getUserHistory = smartCycleServer
+//        .getUserHistory(widget.userEmail)
+//        .timeout(const Duration(seconds: 5));
     _getUserHistory = smartCycleServer
-        .getUserHistory(widget.userEmail)
+        .getUserHistoryTest(widget.userEmail)
         .timeout(const Duration(seconds: 5));
     //_getUserHistory = smartCycleServer.getUserHistory(widget.userEmail);
   }

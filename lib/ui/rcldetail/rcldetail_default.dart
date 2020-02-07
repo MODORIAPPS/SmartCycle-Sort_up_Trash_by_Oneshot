@@ -175,9 +175,10 @@ Widget StepWidget(String image, String step, int i) {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(34),
                 child: CachedNetworkImage(
-//              imageUrl: base + image,
                   // %% ONLY FOR TEST %% getImage
-                  imageUrl: SmartCycleServer.getServerImage(image),
+
+                  imageUrl: image,
+//                  imageUrl: SmartCycleServer.getServerImage(image),
                   placeholder: (context, url) => SCircularProgress(),
                   errorWidget: (context, url, error) =>
                       Icon(

@@ -25,15 +25,26 @@ class _RecycleDetailState extends State<RecycleDetail> {
 
   _RecycleDetailState({this.itemId});
 
+  void startRequest(){
+//    _getRclDetailData = SmartCycleServer()
+//        .getRclDetail(itemId)
+//        .timeout(const Duration(seconds: 5));
+
+
+    /// TEST
+    _getRclDetailData = SmartCycleServer()
+        .getRclDetailTest(itemId)
+        .timeout(const Duration(seconds: 5));
+  }
+
   @override
   void initState() {
     // %% ONLY FOR TEST %% getRclData
     super.initState();
-//    _getRclDetailData = SmartCycleServer().getRclDetailTest(2);
 
-    _getRclDetailData = SmartCycleServer()
-        .getRclDetail(itemId)
-        .timeout(const Duration(seconds: 5));
+    startRequest();
+
+
   }
 
   @override
@@ -70,9 +81,7 @@ class _RecycleDetailState extends State<RecycleDetail> {
                       color: Colors.blue,
                       textColor: Colors.white,
                       onPressed: () {
-                        _getRclDetailData = SmartCycleServer()
-                            .getRclDetail(2)
-                            .timeout(const Duration(seconds: 5));
+                        startRequest();
                         setState(() {});
                       },
                     ),

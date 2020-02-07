@@ -40,11 +40,17 @@ class MyApp extends StatelessWidget {
       supportedLocales: supportedLocales,
       localizationsDelegates: localizationsDelegates,
       localeResolutionCallback: (locale, supportedLocales) {
-        for (var supportedLocales in supportedLocales) {
-          if (supportedLocales.languageCode == locale.languageCode &&
-              supportedLocales.countryCode == locale.countryCode) {
-            return supportedLocales;
+
+        for (var locales in supportedLocales) {
+          if(locale == null){
+            return supportedLocales.first;
+          }else{
+            if (locales.languageCode == locale.languageCode &&
+                locales.countryCode == locale.countryCode) {
+              return locales;
+            }
           }
+
         }
         return supportedLocales.first;
       },

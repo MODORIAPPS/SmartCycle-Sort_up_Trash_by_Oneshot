@@ -16,7 +16,7 @@ var express = require('express'),
       ` 
       [
        
-    ]`;
+      ]`;
 
 
       res.send(sample_response);
@@ -208,11 +208,11 @@ var express = require('express'),
               ],
               "step": [
                   {
-                      "imageURL_step": "/1/1_1.jpg",
+                      "imageURL_step": "https://cdn.pixabay.com/photo/2020/02/04/22/29/owl-4819550_960_720.jpg",
                       "contents": "부피를 줄이기 위해 납작하게 구겨 주세요."
                   },
                   {
-                      "imageURL_step": "/1/1_0.jpg",
+                      "imageURL_step": "https://cdn.pixabay.com/photo/2020/02/04/22/29/owl-4819550_960_720.jpg",
                       "contents": "종이류에 분리 배출해 주세요. 만약 종이팩 수거함이 별도로 있다면 종이팩 수거함에 분리 배출해 주세요. 종이팩의 재활용률을 엄청나게 높일 수 있답니다."
                   }
               ],

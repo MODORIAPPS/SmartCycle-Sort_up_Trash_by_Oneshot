@@ -15,10 +15,16 @@ class MainDoYouKnow extends StatefulWidget {
 class _MainDoYouKnowState extends State<MainDoYouKnow> {
   Future<DoYouKnows> _getDoYouKnow;
 
+  void callRequest(){
+//    _getDoYouKnow =
+//        SmartCycleServer().getDoYouKnow().timeout(const Duration(seconds: 10));
+    _getDoYouKnow =
+        SmartCycleServer().getDoYouKnowTest().timeout(const Duration(seconds: 10));
+  }
+
   @override
   void initState() {
-    _getDoYouKnow =
-        SmartCycleServer().getDoYouKnow().timeout(const Duration(seconds: 10));
+    callRequest();
   }
 
   @override
@@ -46,9 +52,9 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
                     color: Colors.blue,
                     textColor: Colors.white,
                     onPressed: () {
-                      _getDoYouKnow = SmartCycleServer()
-                          .getDoYouKnow()
-                          .timeout(const Duration(seconds: 10));
+
+                      callRequest();
+
                       setState(() {});
                     },
                   ),
