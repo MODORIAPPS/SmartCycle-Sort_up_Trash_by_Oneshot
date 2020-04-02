@@ -17,11 +17,14 @@
 <div>
  <img width="200" src="./app_screenshots/ios_main_notLogined.png">
  <img width="200" src="./app_screenshots/ios_main_logined.png">
+ <img width="200" src="./app_screenshots/ios_main_logined2.png">
 </div>
 
+<br>
 사진과 같이 메인화면에서 하단에 있는 카메라 버튼을 누르면 촬영으로 이동합니다.
 촬영후 사진에는 없지만 제출후 인공지능 판독 결과가 나오고 사용자는 인공지능이 올바르게 인식했는지 확인합니다.
 올바르게 인식하면 바로 분리수거 설명화면으로 이동하고, 그렇지 않으면 인공지능 피드백 화면에서 자신이 찾던 쓰레기 종류를 직접 선택합니다.
+<br>
 
 <div>
  <img width="200" src="./app_screenshots/android_camera.png">
@@ -43,8 +46,8 @@ SmartCycle에서는 검색기능과 더불어 흔하게 쓰면서도 분리수�
 또한 잘못된 상식을 소개하며 사용자가 바로잡기를 권유합니다.
 
 <div>
-<img width="200" src="./app_screenshots/android_doyouknow_main.png">
-<img width="200" src="./app_screenshots/android_doyouknow_detail.png">
+<img width="200" src="./app_screenshots/ios_doyouknow_main.png">
+<img width="200" src="./app_screenshots/ios_doyouknow_detail.png">
 </div>
 
 ## 다국어 지원
@@ -58,7 +61,7 @@ Flutter 프레임 워크로 제작되었으므로 앞서 보여드린 바와 같
 
 
 ## License
-이 소스코드는 오픈소스가 아닙니다. 
+이 소스코드는 오픈소스가 아닙니다.
 오직 <a href="https://tacademy.skplanet.com/front/exhibition/listExhibition.action">스마틴 앱 챌린지(STAC)</a>에 참가하는 학생들만이 사용할 수 있습니다.
 
 참가 학생이 아니지만 사용하고 싶은 분은 <b>kwonkiseok7@gmail.com</b> 으로 연락부탁드립니다.

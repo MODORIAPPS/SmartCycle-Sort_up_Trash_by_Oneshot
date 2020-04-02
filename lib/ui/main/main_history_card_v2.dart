@@ -42,7 +42,7 @@ class NewHistoryCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: CachedNetworkImage(
-                      imageUrl: SmartCycleServer.getPresentImage(itemImage),
+                      imageUrl: SmartCycleServer.getPresentImageTest(itemImage),
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),

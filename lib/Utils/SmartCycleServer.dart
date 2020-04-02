@@ -15,7 +15,7 @@ import 'package:smartcycle/model/SearchHistory.dart';
 /// 메소드명 뒤에 Test가 붙은 것들은 로컬 서버를 향하는 테스트 코드입니다.
 /// ex) getUserHistoryTest
 class SmartCycleServer {
-  static var test_base = "http://192.168.42.46:8080";
+  static var test_base = "http://172.30.1.1:8080";
   static var test_client_base = "$test_base/";
   static var base = 'http://smartcycle.ljhnas.com/';
   static var base_n = 'http://smartcycle.ljhnas.com';
@@ -41,6 +41,10 @@ class SmartCycleServer {
     String img = base_n + "/latelyPictures/" + image;
     print(img);
     return img;
+  }
+
+  static String getPresentImageTest(String image){
+    return "https://cdn.pixabay.com/photo/2020/03/12/17/33/wash-hands-4925790_960_720.jpg";
   }
 
   // %%%% 최근 검색한 분리수거 %%%%
