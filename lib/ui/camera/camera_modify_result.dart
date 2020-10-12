@@ -261,7 +261,7 @@ _showSubmitDialog(BuildContext mContext, String _value) {
                   content: "도와주셔서 감사합니다. 더 나은 서비스를 만드는데 큰 도움이 될 것입니다.",
                   colors: Colors.green,
                 );
-                Navigator.of(mContext).pushReplacement(
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) =>
                         RecycleDetail(

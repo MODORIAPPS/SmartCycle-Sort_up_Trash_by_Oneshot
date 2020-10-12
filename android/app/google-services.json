@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "285306495565-rs34g3bn2q0tqcht8r1k25m06c4isk8d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dimipo.smartcycle",
+            "certificate_hash": "46adc1bde66354bee5161956c4454adc25b037e9"
+          }
+        },
+        {
           "client_id": "285306495565-oin3dkfdia1fkpri2qatdujisarce8bk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -29,7 +37,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDV-b2wjjkT6Dio73BvJQQcwHFwsop8F84"
+          "current_key": "AIzaSyBFOseBqvvFvrV__JmpA0u4lZzcfh7OE_A"
         }
       ],
       "services": {
@@ -38,6 +46,13 @@
             {
               "client_id": "285306495565-39qa0jcvc7rm01iq9r8uucujk97rcl0m.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "285306495565-f2gd255kgrrrc3ta2c9bgtsprrut22mp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dimipo.smartcycle"
+              }
             }
           ]
         }

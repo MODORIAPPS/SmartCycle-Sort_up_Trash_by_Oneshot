@@ -45,7 +45,7 @@ Widget _title(RclDetail rclDetail, BuildContext context) {
     children: <Widget>[
       CachedNetworkImage(
 //              imageUrl: rclDetail.imageURL,
-        imageUrl: SmartCycleServer.base_n + "/pictures" + rclDetail.imageURL,
+        imageUrl: SmartCycleServer.base_n + "/pictures" + rclDetail.imageURL + ".jpg",
         placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) =>
             Align(

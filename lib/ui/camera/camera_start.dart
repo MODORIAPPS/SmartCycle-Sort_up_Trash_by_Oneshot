@@ -47,8 +47,15 @@ class _CameraAppState extends State<CameraActvity> {
   }
 
   getImageFromAlbum(ImageSource source) async {
-    var imageFile =
-    await ImagePicker.pickImage(source: source, imageQuality: 50);
+    var imageFile;
+    try{
+      imageFile = await ImagePicker.pickImage(source: source, imageQuality: 50);
+    }catch(e){
+      print(e.toString());
+      imageFile = await ImagePicker.pickImage(source: source);
+    }
+
+
 
     if (imageFile != null) {
       goCrop(imageFile);

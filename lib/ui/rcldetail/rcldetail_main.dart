@@ -26,15 +26,15 @@ class _RecycleDetailState extends State<RecycleDetail> {
   _RecycleDetailState({this.itemId});
 
   void startRequest(){
-//    _getRclDetailData = SmartCycleServer()
-//        .getRclDetail(itemId)
-//        .timeout(const Duration(seconds: 5));
-
-
-    /// TEST
     _getRclDetailData = SmartCycleServer()
-        .getRclDetailTest(itemId)
+        .getRclDetail(itemId)
         .timeout(const Duration(seconds: 5));
+
+
+//    /// TEST
+//    _getRclDetailData = SmartCycleServer()
+//        .getRclDetailTest(itemId)
+//        .timeout(const Duration(seconds: 5));
   }
 
   @override
@@ -46,11 +46,11 @@ class _RecycleDetailState extends State<RecycleDetail> {
 
 
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+//
+//  @override
+//  void dispose() {
+//    super.dispose();
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +67,8 @@ class _RecycleDetailState extends State<RecycleDetail> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
+              print("error");
+              print(snapshot.error.toString());
               return Align(
                 alignment: Alignment.center,
                 child: Column(
@@ -89,6 +91,7 @@ class _RecycleDetailState extends State<RecycleDetail> {
                 ),
               );
             } else {
+              print(snapshot.data);
               pages.add(RclDetailDefault(
                 rclDetail: snapshot.data,
                 trashNumber: widget.itemID,

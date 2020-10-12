@@ -19,7 +19,7 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
 //    _getDoYouKnow =
 //        SmartCycleServer().getDoYouKnow().timeout(const Duration(seconds: 10));
     _getDoYouKnow =
-        SmartCycleServer().getDoYouKnowTest().timeout(const Duration(seconds: 10));
+        SmartCycleServer().getDoYouKnow().timeout(const Duration(seconds: 10));
   }
 
   @override

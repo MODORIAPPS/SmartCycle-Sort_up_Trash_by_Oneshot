@@ -34,7 +34,10 @@ class SmartCycleServer {
   }
 
   static String getServerImage(String image) {
-    return base_n + "/pictures" + image;
+    String img = base_n + "/pictures/${image.substring(0,1)}/" + image + ".jpg";
+    print(img);
+    return img;
+    // return base_n + "/pictures/" + image;
   }
 
   static String getPresentImage(String image) {
@@ -151,12 +154,17 @@ class SmartCycleServer {
     // ("받은 쓰레기 이름" + TrashType().getTrashName(itemId));
     //print(response.body);
     final jsonData = json.decode(response.body.toString());
-    RclDetails data = RclDetails.fromJson(jsonData);
+    RclDetail data = RclDetail.fromJson(jsonData);
+    // RclDetails data = RclDetails.fromJson(jsonData);
+
+
     //rclData = data.rcls[0];
     //print(data.rcls[0].name.toString());
-    print(data.rcls[0].information.step[0].imageURL_step.toString());
+    //print(data.rcls[0].information.step[0].imageURL_step.toString());
+    print(data.information.step[0].imageURL_step.toString());
 
-    return data.rcls[0];
+    // return data.rcls[0];
+    return data;
     //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
   }
 

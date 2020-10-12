@@ -16,7 +16,7 @@ class DoYouKnowCardForTablet extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         child: Container(
-          width: 550,
+          width: 500,
           child: Stack(
             children: <Widget>[
               Stack(

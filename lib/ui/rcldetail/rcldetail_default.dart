@@ -177,8 +177,8 @@ Widget StepWidget(String image, String step, int i) {
                 child: CachedNetworkImage(
                   // %% ONLY FOR TEST %% getImage
 
-                  imageUrl: image,
-//                  imageUrl: SmartCycleServer.getServerImage(image),
+//                  imageUrl: image,
+                  imageUrl: SmartCycleServer.getServerImage(image),
                   placeholder: (context, url) => SCircularProgress(),
                   errorWidget: (context, url, error) =>
                       Icon(

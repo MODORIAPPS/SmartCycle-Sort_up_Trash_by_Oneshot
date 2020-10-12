@@ -40,7 +40,8 @@ class RclDetail {
       published_date: json['published_date'] as String,
       id: json['id'] as String,
       name: json['name'] as String,
-      imageURL: json['imageURL'] as String,
+//      imageURL: json['imageURl'] as String,
+      imageURL: (json['imageURl'] == null) ? "s" : json['imageURl'] as String,
       v: json['__v'] as int,
     );
   }
@@ -97,7 +98,8 @@ class Step {
 
   factory Step.fromJson(Map<String, dynamic> json) {
     return Step(
-        imageURL_step: json['imageURL_step'],
+//        imageURL_step: json['imageURL_step'],
+        imageURL_step: (json['imageURL_step'] == null ) ? "s" : json['imageURL_step'] as String,
         contents: json['contents']);
   }
 }
