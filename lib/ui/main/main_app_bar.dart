@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:smartcycle/Utils/TabletDetector.dart';
 import 'package:smartcycle/ui/tutorials/TutorialsPage.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/styles/Styles.dart';
@@ -20,9 +21,10 @@ class _SmartCycleAppBarState extends State<SmartCycleAppBar> {
   @override
   Widget build(BuildContext context) {
     print(widget.isSignIn);
+    double margin = TabletDetector.isTablet(context) ? 30 : 15;
 
     return Padding(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+      padding: EdgeInsets.only(left: margin, right: margin, top: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

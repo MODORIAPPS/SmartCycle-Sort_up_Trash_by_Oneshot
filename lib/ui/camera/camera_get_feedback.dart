@@ -19,7 +19,7 @@ class CameraFeedBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black87),
@@ -119,16 +119,13 @@ class CameraFeedBack extends StatelessWidget {
                           } else {
                             showDialog(
                               context: context,
-                              builder: (BuildContext context) =>
-                                  SmartDialog(
-                                    title: AppLocalizations.of(context)
-                                        .translate(
-                                        'camera_feed_back_submit_error_title'),
-                                    content: AppLocalizations.of(context)
-                                        .translate(
-                                        'camera_feed_back_submit_error_content'),
-                                    colors: Colors.red,
-                                  ),
+                              builder: (BuildContext context) => SmartDialog(
+                                title: AppLocalizations.of(context).translate(
+                                    'camera_feed_back_submit_error_title'),
+                                content: AppLocalizations.of(context).translate(
+                                    'camera_feed_back_submit_error_content'),
+                                colors: Colors.red,
+                              ),
                             );
                           }
                         },
@@ -143,8 +140,8 @@ class CameraFeedBack extends StatelessWidget {
   }
 }
 
-_showSubmitDialog(BuildContext mContext, String _value, File imageFile,
-    String user_email) {
+_showSubmitDialog(
+    BuildContext mContext, String _value, File imageFile, String user_email) {
   showDialog(
       context: mContext,
       builder: (context) {
@@ -194,14 +191,13 @@ _showSubmitDialog(BuildContext mContext, String _value, File imageFile,
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) =>
-                      SmartDialog(
-                        title: AppLocalizations.of(context)
-                            .translate('dialog_feedback_title'),
-                        content: AppLocalizations.of(context)
-                            .translate('dialog_feedback_content'),
-                        colors: Colors.green,
-                      ),
+                  builder: (BuildContext context) => SmartDialog(
+                    title: AppLocalizations.of(context)
+                        .translate('dialog_feedback_title'),
+                    content: AppLocalizations.of(context)
+                        .translate('dialog_feedback_content'),
+                    colors: Colors.green,
+                  ),
                 );
                 SmartCycleServer().saveHistory(imageFile, user_email, false,
                     controller.text.toString(), false);

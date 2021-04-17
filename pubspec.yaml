@@ -14,7 +14,7 @@ description: A new Flutter application amde with flutter.
 version: 1.1.6
 
 environment:
-  sdk: ">=2.2.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,6 +22,8 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
+
+  # intl: ^0.17.0-nullsafety.2
   flutter_cupertino_localizations: ^1.0.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -34,7 +36,8 @@ dependencies:
   googleapis: any
   googleapis_auth: any
   google_sign_in: any
-  firebase_auth:
+  firebase_core: ^0.7.0
+  firebase_auth: ^0.20.1
   qr_flutter: any
   lamp:
   url_launcher:
@@ -48,7 +51,8 @@ dependencies:
   cached_network_image: ^2.0.0-rc
 
 
-
+dependency_overrides:
+  intl: ^0.17.0-nullsafety.2
 
 
 dev_dependencies:

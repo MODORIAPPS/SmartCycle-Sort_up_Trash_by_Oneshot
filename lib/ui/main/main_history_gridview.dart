@@ -37,22 +37,22 @@ class _HistoryGridViewState extends State<HistoryGridView> {
 //    _getUserHistory = smartCycleServer
 //        .getUserHistoryTest(widget.userEmail)
 //        .timeout(const Duration(seconds: 5));
-  }
+        }
 
-  @override
-  Widget build(BuildContext context) {
-    print("사용자 사용 기록 이메일 상태" + widget.userEmail.toString());
-    return widget.isSignIn
-        ? FutureBuilder<SearchHistorys>(
-      future: _getUserHistory,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            print("사용자 사용 기록 오류" + snapshot.error.toString());
-          }
-          return !snapshot.hasError
-              ? (snapshot.data.historys.length != 0)
-              ? _historyGridView(context, snapshot.data)
+        @override
+        Widget build(BuildContext context) {
+          print("사용자 사용 기록 이메일 상태" + widget.userEmail.toString());
+          return widget.isSignIn
+              ? FutureBuilder<SearchHistorys>(
+            future: _getUserHistory,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasError) {
+                  print("사용자 사용 기록 오류" + snapshot.error.toString());
+                }
+                return !snapshot.hasError
+                    ? (snapshot.data.historys.length != 0)
+                    ? _historyGridView(context, snapshot.data)
               : Align(
             alignment: Alignment.center,
             child: Column(

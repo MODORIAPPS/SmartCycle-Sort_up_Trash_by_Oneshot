@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
+import 'package:smartcycle/Utils/TabletDetector.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/model/RcleDetail.dart';
 import 'package:smartcycle/ui/rcldetail/rcldetail_pageview_card.dart';
@@ -41,6 +42,7 @@ class RclDetailPageView extends StatelessWidget {
 }
 
 Widget _title(RclDetail rclDetail, BuildContext context) {
+  bool isTablet = TabletDetector.isTablet(context);
   return Stack(
     children: <Widget>[
       CachedNetworkImage(
@@ -71,7 +73,7 @@ Widget _title(RclDetail rclDetail, BuildContext context) {
       Align(
         alignment: Alignment.centerLeft,
         child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 30),
+            padding: EdgeInsets.only(left: (isTablet) ? 30 : 15, right: 30),
             child: Column(
               children: <Widget>[
                 Text(
@@ -117,40 +119,44 @@ Widget _title(RclDetail rclDetail, BuildContext context) {
 
 Widget _showMaterials(RclDetail rclDetail, BuildContext context,
     List<Widget> compoWidget) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+  double margin = TabletDetector.isTablet(context) ? 30 : 15;
+  return Padding(
+    padding: EdgeInsets.only(left: margin, right: margin),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
 
-        children: <Widget>[
-          Icon(
-            Icons.search,
-            size: 28,
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Text(
-            rclDetail.name + "을(를) 구성하는 요소",
-            style: header2,
-          ),
-        ],
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      new ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-          Column(
-            children: compoWidget,
-          ),
-        ],
-      ),
-    ],
+          children: <Widget>[
+            Icon(
+              Icons.search,
+              size: 28,
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Text(
+              rclDetail.name + "을(를) 구성하는 요소",
+              style: header2,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        new ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Column(
+              children: compoWidget,
+            ),
+          ],
+        ),
+      ],
+    ),
   );
 }
 

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:smartcycle/assets.dart';
-import 'package:smartcycle/styles/Styles.dart';
 
 class QrDialog extends StatelessWidget {
   final String title, description, negaBtn, posiBtn, url;
@@ -62,14 +60,8 @@ class QrDialog extends StatelessWidget {
               ),
               QrImage(
                 data: url,
-                size: 0.5 * MediaQuery
-                    .of(context)
-                    .size
-                    .height -
-                    MediaQuery
-                        .of(context)
-                        .viewInsets
-                        .bottom,
+                size: 0.5 * MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).viewInsets.bottom,
               ),
             ],
           ),

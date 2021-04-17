@@ -2,6 +2,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
+import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/ScaleRoute.dart';
 import 'package:smartcycle/Utils/SmartDialog.dart';
 import 'package:smartcycle/Utils/TabletDetector.dart';
@@ -60,20 +61,19 @@ class _MainPageState extends State<MainPage> {
                 context,
                 ScaleRoute(
                     widget: CameraActvity(
-                      userEmail: user_email,
-                    )),
+                  userEmail: user_email,
+                )),
               );
             } else {
               showDialog(
                 context: context,
-                builder: (BuildContext context) =>
-                    SmartDialog(
-                      title: AppLocalizations.of(context)
-                          .translate('dialog_login_need_title'),
-                      content: AppLocalizations.of(context)
-                          .translate('dialog_login_need_content'),
-                      colors: Colors.orange,
-                    ),
+                builder: (BuildContext context) => SmartDialog(
+                  title: AppLocalizations.of(context)
+                      .translate('dialog_login_need_title'),
+                  content: AppLocalizations.of(context)
+                      .translate('dialog_login_need_content'),
+                  colors: Colors.orange,
+                ),
               );
             }
           },
@@ -99,16 +99,14 @@ class _MainPageState extends State<MainPage> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (BuildContext context) =>
-                        SmartDialog(
-                          title: AppLocalizations.of(context)
-                              .translate('dialog_prepare_title'),
-                          content: AppLocalizations.of(context)
-                              .translate('dialog_prepare_content'),
-                          colors: Colors.orange,
-                        ),
+                    builder: (BuildContext context) => SmartDialog(
+                      title: AppLocalizations.of(context)
+                          .translate('dialog_prepare_title'),
+                      content: AppLocalizations.of(context)
+                          .translate('dialog_prepare_content'),
+                      colors: Colors.orange,
+                    ),
                   );
-
                 },
               ),
               IconButton(
@@ -120,23 +118,21 @@ class _MainPageState extends State<MainPage> {
                   width: 35,
                 ),
                 onPressed: () {
-                  if(user_email != ""){
+                  if (user_email != "") {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) =>
-                          QrDialog(
-                            title: AppLocalizations.of(context)
-                                .translate('dialog_qr_title'),
-                            description: AppLocalizations.of(context)
-                                .translate('dialog_qr_content'),
-                            posiBtn: AppLocalizations.of(context)
-                                .translate('dialog_positive_default'),
-                            // userEmail
-                            url: user_email,
-                          ),
+                      builder: (BuildContext context) => QrDialog(
+                        title: AppLocalizations.of(context)
+                            .translate('dialog_qr_title'),
+                        description: AppLocalizations.of(context)
+                            .translate('dialog_qr_content'),
+                        posiBtn: AppLocalizations.of(context)
+                            .translate('dialog_positive_default'),
+                        // userEmail
+                        url: user_email,
+                      ),
                     );
                   }
-
                 },
               )
             ],
@@ -146,6 +142,7 @@ class _MainPageState extends State<MainPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.data) {
+              print(snapshot.data.toString());
               // already signed
 
               print("유저 로그인 되어있음");
@@ -156,8 +153,9 @@ class _MainPageState extends State<MainPage> {
                 future: _userInfo,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
+                    // print(snapshot.data);
                     user_email = snapshot.data.email;
-                    return mainColumn(context, snapshot.data.photoUrl, true,
+                    return mainColumn(context, snapshot.data.photoURL, true,
                         true, snapshot.data.email);
                   } else {
                     return mainColumn(context, "NO", false, false, "NO");
@@ -181,6 +179,7 @@ class _MainPageState extends State<MainPage> {
 Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
     bool done, String email) {
   double height = TabletDetector.isTablet(context) ? 400 : 180;
+  double margin = TabletDetector.isTablet(context) ? 30 : 15;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -197,7 +196,7 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
       ),
       MainSearchBar(),
       Padding(
-        padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+        padding: EdgeInsets.only(left: margin, right: margin, top: margin),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -208,16 +207,13 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
           ],
         ),
       ),
-      Container(
-        height: height,
-        child: MainDoYouKnow(),
-      ),
+      Container(height: height, child: MainDoYouKnow()),
 
       SizedBox(
-        height: 14,
+        height: 15,
       ),
       Padding(
-        padding: EdgeInsets.only(left: 15),
+        padding: EdgeInsets.only(left: margin),
         child: Text(
           AppLocalizations.of(context).translate('main_search_history'),
           style: TextAssets.mainBold,
@@ -226,10 +222,10 @@ Widget mainColumn(BuildContext context, String photoUrl, bool isSigned,
 
       (done)
           ? HistoryGridView(
-        isSignIn: isSigned,
-        userEmail: email,
-      )
-          : Text(AppLocalizations.of(context).translate('main_connect_server')),
+              isSignIn: isSigned,
+              userEmail: email,
+            )
+          : SCircularProgress(),
     ],
   );
 }
@@ -241,14 +237,13 @@ Future<Widget> networkCheck(BuildContext context) async {
     // noNetwork
     return showDialog(
       context: context,
-      builder: (BuildContext context) =>
-          SmartDialog(
-            title:
+      builder: (BuildContext context) => SmartDialog(
+        title:
             AppLocalizations.of(context).translate('dialog_no_network_title'),
-            content:
+        content:
             AppLocalizations.of(context).translate('dialog_no_network_content'),
-            colors: Colors.red,
-          ),
+        colors: Colors.red,
+      ),
     );
   }
 }

@@ -53,7 +53,7 @@ class AuthUtils {
 
   Future<bool> isSignIn() async {
     bool check = await _googleSignIn.isSignedIn();
-    print(check);
+    print("Login Check $check");
     return check;
   }
 

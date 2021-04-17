@@ -1,10 +1,5 @@
 import 'dart:convert';
-import 'dart:convert' as prefix0;
 import 'dart:io';
-
-import 'package:camera/camera.dart';
-import 'package:googleapis/customsearch/v1.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
 import 'package:smartcycle/model/RcleDetail.dart';
@@ -16,8 +11,8 @@ import 'package:smartcycle/model/SearchHistory.dart';
 /// ex) getUserHistoryTest
 class SmartCycleServer {
   static var test_base = "http://172.30.1.1:8080";
-  static var test_client_base = "$test_base/";
-  static var base = 'http://smartcycle.ljhnas.com/';
+  static var test_client_base = "$test_base";
+  static var base = 'http://smartcycle.ljhnas.com';
   static var base_n = 'http://smartcycle.ljhnas.com';
   HttpClient client;
 
@@ -138,41 +133,44 @@ class SmartCycleServer {
     HttpClientResponse response = await request.close();
     String reply = await response.transform(utf8.decoder).join();
     print(reply);
-    final jsondata = DoYouKnows.fromJson(json.decode(reply));
+    final jsonData = DoYouKnows.fromJson(json.decode(reply));
     if (response.statusCode == 200) {
-      return jsondata;
+      return jsonData;
     }
   }
 
   Future<RclDetail> getRclDetail(int itemId) async {
-    //print("요청 진입 : " + itemId.toString());
-    http.Response response = await http.get(
-        Uri.encodeFull('http://smartcycle.ljhnas.com/trash/info/$itemId'),
-        headers: {"Accept": "application/json"});
+    // what is the difference??
+    // var uri = Uri.http
+    Uri uri = Uri.http('ttp://smartcycle.ljhnas.com','/trash/info/$itemId');
+    http.Response response = await http.get(uri, headers: {"Accept": "application/json"});
 
     //printch
     // ("받은 쓰레기 이름" + TrashType().getTrashName(itemId));
     //print(response.body);
-    final jsonData = json.decode(response.body.toString());
-    RclDetail data = RclDetail.fromJson(jsonData);
-    // RclDetails data = RclDetails.fromJson(jsonData);
+    print(response.body);
+    final jsonData = json.decode(response.body);
+    print(jsonData);
+    // RclDetail data = RclDetail.fromJson(jsonData);
+    RclDetails data = RclDetails.fromJson(jsonData);
 
 
     //rclData = data.rcls[0];
     //print(data.rcls[0].name.toString());
-    //print(data.rcls[0].information.step[0].imageURL_step.toString());
-    print(data.information.step[0].imageURL_step.toString());
-
-    // return data.rcls[0];
-    return data;
+    print(data.rcls[0].information.step[0].imageURL_step.toString());
+    // print(data.information.step[0].imageURL_step.toString());
+    print(data.rcls[0]);
+    return data.rcls[0];
+    // return data;
     //print("데이터가 잘 전송되고 있어요." + detailData['step2Content']);
   }
 
   // %% ONLY FOR TEST %% rclDetail
   Future<RclDetail> getRclDetailTest(int itemId) async {
-    print("요청 진입 : " + itemId.toString());
+    // print("요청 진입 : " + itemId.toString());
+
     http.Response response = await http.get(
-        Uri.encodeFull('${test_client_base}test/getRclDetail'),
+        Uri.http("$test_client_base","/test/getRclDetail"),
         headers: {"Accept": "application/json"});
 
     //printch
@@ -208,11 +206,8 @@ class SmartCycleServer {
       'name': '$fileName',
       'userEmail': '$userEmail'
     };
-//    var json = prefix0.json.encode(jsonData);
-//
-//    // 'http://smartcycle.ljhnas.com';
-//    print(jsonData);
-    await http.post(base_n + "/trash/phone/what", body: jsonData).then((res) {
+
+    await http.post(Uri.http(base_n, "/trash/phone/what"), body: jsonData).then((res) {
       print(res.statusCode);
       print("상욱쨩이 나에게 보낸 이미지에 대한 답장이당 <3 ${res.body.toString()}");
       map = jsonDecode(res.body);
@@ -243,7 +238,7 @@ class SmartCycleServer {
 
     print("클라이언트가 전송한 쓰레기 타입 : " + jsonData['trash']);
     String ker = isNormal ? "success" : "wrong";
-    await http.post(base_n + "/trash/$ker", body: jsonData).then((res) {
+    await http.post(Uri.http(base_n, "/trash/$ker"), body: jsonData).then((res) {
       print(res.statusCode);
       response = res;
       print("사용기록 저장 ${res.body.toString()}");

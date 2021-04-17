@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/serviceconsumermanagement/v1.dart';
 import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
 import 'package:smartcycle/Utils/TabletDetector.dart';
@@ -74,8 +75,11 @@ class _MainDoYouKnowState extends State<MainDoYouKnow> {
                 scrollDirection: Axis.horizontal,
                 itemCount: snapshot.data.datas.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return DoYouKnowCardForTablet(
-                    doYouKnow: snapshot.data.datas[index],
+                  return Padding(
+                    padding: EdgeInsets.only(left: 30, right: 30),
+                    child: DoYouKnowCardForTablet(
+                      doYouKnow: snapshot.data.datas[index],
+                    ),
                   );
                 })
                 : CarouselSlider(

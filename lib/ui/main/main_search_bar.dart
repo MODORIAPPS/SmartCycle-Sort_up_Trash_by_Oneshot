@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartcycle/Utils/TabletDetector.dart';
 import 'package:smartcycle/app_localizations.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/ui/search/search_main.dart';
@@ -6,11 +7,11 @@ import 'package:smartcycle/ui/search/search_main.dart';
 class MainSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double margin = TabletDetector.isTablet(context) ? 30 : 15;
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: Padding(
-        padding: const EdgeInsets.only(
-            left: 15, right: 15, top: 15, bottom: 15),
+        padding: EdgeInsets.only(left: margin, right: margin, top: 15, bottom: 15),
         child: InkWell(
           child: Container(
             width: double.infinity,

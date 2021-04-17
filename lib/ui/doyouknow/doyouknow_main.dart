@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:smartcycle/Utils/TabletDetector.dart';
 import 'package:smartcycle/app_localizations.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/model/DoYouKnowDTO.dart';
@@ -169,12 +170,14 @@ Widget _contents(DoYouKnow doYouKnow, BuildContext context) {
     }
   }
 
+  double margin = TabletDetector.isTablet(context) ? 30 : 15;
+
   return SingleChildScrollView(
     primary: false,
     child: Column(
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(15),
+          padding: EdgeInsets.all(15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,10 +217,13 @@ Widget _contents(DoYouKnow doYouKnow, BuildContext context) {
           height: 2,
           color: Colors.black38,
         ),
-        ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            shrinkWrap: true,
-            children: contentWidgets),
+        Padding(
+          padding: EdgeInsets.only(left: margin, right: margin),
+          child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children: contentWidgets),
+        ),
       ],
     ),
   );

@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
     return Stack(
       children: <Widget>[
         CachedNetworkImage(
-          imageUrl: "https://source.unsplash.com/lpjb_UMOyx8/1080x1920",
+          imageUrl: "https://source.unsplash.com/lpjb_UMOyx8/720x1280",
           placeholder: (context, url) => SCircularProgress(),
           errorWidget: (context, url, error) => Icon(Icons.error),
           alignment: Alignment(-.2, 0),

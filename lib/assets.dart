@@ -106,12 +106,12 @@ class BlogTextStyles {
 
   static const TextStyle stepContent = TextStyle(
     color: Colors.black87,
-    fontSize: 17,
+    fontSize: 19,
     fontWeight: FontWeight.w600,
   );
 
   static const TextStyle stepContentW =
-  TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500);
+  TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500);
 
   static const TextStyle compositionTitle = TextStyle(
     color: Colors.white,

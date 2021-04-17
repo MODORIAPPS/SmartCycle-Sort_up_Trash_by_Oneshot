@@ -1,18 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/driveactivity/v2.dart';
 import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/AuthUtils.dart';
 import 'package:smartcycle/app_localizations.dart';
 import 'package:smartcycle/assets.dart';
-import 'package:smartcycle/main.dart';
-import 'package:smartcycle/model/GoogleProfileDTO.dart';
 import 'package:smartcycle/styles/Styles.dart';
-import 'package:smartcycle/ui/main/main_page.dart';
 import 'package:smartcycle/ui/nugudevice/nugu_add_device.dart';
 
-UserInfo userInfo;
+UserInfo? userInfo;
 
 class AuthProfile extends StatefulWidget {
   @override
@@ -20,7 +16,7 @@ class AuthProfile extends StatefulWidget {
 }
 
 class _AuthProfileState extends State<AuthProfile> {
-  Future<UserInfo> _userInfo;
+  Future<UserInfo>? _userInfo;
 
   @override
   void initState() {
@@ -82,7 +78,7 @@ Widget UserProfile(BuildContext context, UserInfo userinfo) {
                       ],
                       image: new DecorationImage(
                           fit: BoxFit.fill,
-                          image: NetworkImage(userinfo.photoUrl)))),
+                          image: NetworkImage(userinfo.photoURL)))),
               onTap: () {
                 // Toast message
 //                Navigator.of(context).push(
@@ -311,8 +307,7 @@ Widget noDeviceAvail(BuildContext context) {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) =>
-                        AddDevice(
+                    builder: (context) => AddDevice(
                           userInfo: userInfo,
                         )),
               );
@@ -372,9 +367,8 @@ Future<bool> _asyncConfirmDialog(BuildContext mContext) async {
       return AlertDialog(
         title: Text(
             AppLocalizations.of(context).translate('auth_profile_logout_btn')),
-        content: Text(
-            AppLocalizations.of(context).translate(
-                'auth_profile_logout_dialog_content')),
+        content: Text(AppLocalizations.of(context)
+            .translate('auth_profile_logout_dialog_content')),
         actions: <Widget>[
           FlatButton(
             child: Text(

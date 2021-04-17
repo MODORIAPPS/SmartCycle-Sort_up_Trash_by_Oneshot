@@ -5,11 +5,14 @@ import 'package:googleapis/blogger/v3.dart';
 import 'package:smartcycle/Utils/HexColor.dart';
 import 'package:smartcycle/Utils/SCircularProgress.dart';
 import 'package:smartcycle/Utils/SmartCycleServer.dart';
+import 'package:smartcycle/Utils/TabletDetector.dart';
 import 'package:smartcycle/Utils/TrashType.dart';
 import 'package:smartcycle/assets.dart';
 import 'package:smartcycle/main.dart';
 import 'package:smartcycle/model/RcleDetail.dart';
 import 'package:smartcycle/ui/camera/camera_start.dart';
+
+BuildContext mContext;
 
 class RclDetailDefault extends StatelessWidget {
   final RclDetail rclDetail;
@@ -22,6 +25,10 @@ class RclDetailDefault extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // context set
+    mContext = context;
+
     var compositionWidgets = List<Widget>();
     var stepWidgets = List<Widget>();
 
@@ -84,7 +91,7 @@ class RclDetailDefault extends StatelessWidget {
                 Container(
                   color: HexColor.fromHex('#84b1f5'),
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: EdgeInsets.only(left : (TabletDetector.isTablet(mContext) ? 30 : 15), top: 15, bottom: 15),
                     child: Column(
                       children: <Widget>[
                         _element(rclDetail),
@@ -123,7 +130,7 @@ class RclDetailDefault extends StatelessWidget {
 
 Widget CompositionWidget(String part, String value) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 2),
+    padding: EdgeInsets.only(bottom: 2),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -147,13 +154,14 @@ Widget CompositionWidget(String part, String value) {
 }
 
 Widget StepWidget(String image, String step, int i) {
-  var test_base = SmartCycleServer.test_base;
+
+  double margin = TabletDetector.isTablet(mContext) ? 30 : 15;
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Padding(
-        padding: const EdgeInsets.only(left: 15, bottom: 10),
+        padding: EdgeInsets.only(left: margin, bottom: 10),
         child: Container(
           color: Colors.amberAccent,
           child: Text(
@@ -167,8 +175,7 @@ Widget StepWidget(String image, String step, int i) {
         ),
       ),
       Padding(
-        padding:
-        const EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+        padding: EdgeInsets.only(left: margin, top: 10, bottom: 10, right: margin),
         child: Container(
           child: AspectRatio(
               aspectRatio: 1 / 1,
@@ -204,8 +211,7 @@ Widget StepWidget(String image, String step, int i) {
         ),
       ),
       Padding(
-        padding:
-        const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 25),
+        padding: EdgeInsets.only(left: margin, right: margin, top: 10, bottom: 25),
         child: Text(
           step,
           style: BlogTextStyles.stepContent,
@@ -216,10 +222,11 @@ Widget StepWidget(String image, String step, int i) {
 }
 
 Widget _doYouKnow(RclDetail rclDetail) {
+  double margin = TabletDetector.isTablet(mContext) ? 30 : 15;
   return Column(
     children: <Widget>[
       Padding(
-        padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+        padding: EdgeInsets.only(left: margin, right: margin, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -227,6 +234,9 @@ Widget _doYouKnow(RclDetail rclDetail) {
             Divider(
               color: Colors.black38,
               thickness: 1,
+            ),
+            SizedBox(
+              height: 5,
             ),
             Text(
               "알고계셨나요?",
@@ -241,13 +251,12 @@ Widget _doYouKnow(RclDetail rclDetail) {
       Container(
         color: HexColor.fromHex('#80ccbd'),
         child: Padding(
-            padding:
-            const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+            padding: EdgeInsets.only(left: margin, right: margin, top: 10, bottom: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  rclDetail.name + "이(가) 자연에서 완전히 분해되기까지 걸리는 시간",
+                  rclDetail.name + " 이(가) 자연에서 완전히 분해되기까지 걸리는 시간",
                   style: BlogTextStyles.stepContentW,
                 ),
                 SizedBox(
@@ -301,7 +310,7 @@ Widget _title(RclDetail rclDetail, int trashNumber) {
             height: 170,
           ),
           Padding(
-            padding: const EdgeInsets.all(15.0),
+            padding: EdgeInsets.only(left:(TabletDetector.isTablet(mContext) ? 30 : 15), top: 15, bottom: 15),
             child: Text(
               rclDetail.name + " 을(를) 분리수거 하는 방법",
               style: BlogTextStyles.title,

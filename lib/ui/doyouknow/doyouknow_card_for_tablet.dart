@@ -13,7 +13,7 @@ class DoYouKnowCardForTablet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: InkWell(
         child: Container(
           width: 500,

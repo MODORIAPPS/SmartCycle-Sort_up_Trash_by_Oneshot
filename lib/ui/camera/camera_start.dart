@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image/image.dart' as prefix1;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:lamp/lamp.dart';
 import 'package:path/path.dart';
@@ -32,6 +30,7 @@ class CameraActvity extends StatefulWidget {
 }
 
 class _CameraAppState extends State<CameraActvity> {
+  final ImagePicker imagePicker = ImagePicker();
   Future<void> _initializeControllerFuture;
   CameraController _controller;
   File _image;
@@ -48,14 +47,12 @@ class _CameraAppState extends State<CameraActvity> {
 
   getImageFromAlbum(ImageSource source) async {
     var imageFile;
-    try{
-      imageFile = await ImagePicker.pickImage(source: source, imageQuality: 50);
-    }catch(e){
+    try {
+      imageFile = await imagePicker.getImage(source: source, imageQuality: 50);
+    } catch (e) {
       print(e.toString());
-      imageFile = await ImagePicker.pickImage(source: source);
+      imageFile = await imagePicker.getImage(source: source);
     }
-
-
 
     if (imageFile != null) {
       goCrop(imageFile);
@@ -65,20 +62,18 @@ class _CameraAppState extends State<CameraActvity> {
   goCrop(File source) async {
     File croppedFile = await ImageCropper.cropImage(
         sourcePath: source.path,
-        ratioX: 1,
-        ratioY: 1,
-        toolbarTitle: "사진 편집하기",
-        toolbarColor: Colors.white,
-        maxWidth: 400,
-        maxHeight: 400);
+        aspectRatioPresets: [CropAspectRatioPreset.square],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: "사진 편집하기", toolbarColor: Colors.white),
+        iosUiSettings: IOSUiSettings(title: "사진 편집하기"),
+        compressQuality: 65);
 
     if (croppedFile != null) {
       setState(() {
         _image = croppedFile;
 
         Route route = MaterialPageRoute(
-            builder: (context) =>
-                CameraResult(
+            builder: (context) => CameraResult(
                   imageFile: _image,
                   userEmail: widget.userEmail,
                 ));
@@ -134,18 +129,18 @@ class _CameraAppState extends State<CameraActvity> {
 //                          child: CameraPreview(_controller),
 //                        ),
 //                      ))
-                  ClipRect(
-                      child: new OverflowBox(
-                          maxWidth: double.infinity,
-                          maxHeight: double.infinity,
-                          alignment: Alignment.center,
-                          child: new FittedBox(
-                              fit: BoxFit.cover,
+                      ClipRect(
+                          child: new OverflowBox(
+                              maxWidth: double.infinity,
+                              maxHeight: double.infinity,
                               alignment: Alignment.center,
-                              child: new Container(
-                                  width: size.width,
-                                  height: size.height,
-                                  child: CameraPreview(_controller)))))
+                              child: new FittedBox(
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.center,
+                                  child: new Container(
+                                      width: size.width,
+                                      height: size.height,
+                                      child: CameraPreview(_controller)))))
 //                      Center(
 //                          child: AspectRatio(
 //                            aspectRatio: _controller.value.aspectRatio,
@@ -254,21 +249,21 @@ class _CameraAppState extends State<CameraActvity> {
                                 child: InkWell(
                                   child: hasTorch
                                       ? IconButton(
-                                      onPressed: () {
-                                        _recognizeNotifyDialog(context);
-                                      },
-                                      icon: Icon(
-                                        Icons.warning,
-                                        color: Colors.amber,
-                                      ))
+                                          onPressed: () {
+                                            _recognizeNotifyDialog(context);
+                                          },
+                                          icon: Icon(
+                                            Icons.warning,
+                                            color: Colors.amber,
+                                          ))
                                       : IconButton(
-                                      onPressed: () {
-                                        _recognizeNotifyDialog(context);
-                                      },
-                                      icon: Icon(
-                                        Icons.warning,
-                                        color: Colors.amber,
-                                      )),
+                                          onPressed: () {
+                                            _recognizeNotifyDialog(context);
+                                          },
+                                          icon: Icon(
+                                            Icons.warning,
+                                            color: Colors.amber,
+                                          )),
                                   onTap: () {
                                     setState(() {
                                       if (hasTorch) {
@@ -374,8 +369,7 @@ Future<bool> _recognizeNotifyDialog(BuildContext mContext) async {
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                    builder: (context) =>
-                        TutorialsPage(
+                    builder: (context) => TutorialsPage(
                           pageCode: 2,
                         )),
               );
